@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5c6026b96e6fa11a641b51a6ba976f5e",
-    "content-hash": "5bd58fd976f1ee3e9611bc37c006ec46",
+    "hash": "809de62d41ade4c43b2e54b734f766de",
+    "content-hash": "d5f0b494723f9ecad40f7f0eb5624caf",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -216,6 +216,28 @@
                 "string"
             ],
             "time": "2015-11-06 14:35:42"
+        },
+        {
+            "name": "hug/group",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Longyy/hug-group.git",
+                "reference": "ca1f96cd2d5833f16e6fc671f318c328f8f24109"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Longyy/hug-group/zipball/ca1f96cd2d5833f16e6fc671f318c328f8f24109",
+                "reference": "ca1f96cd2d5833f16e6fc671f318c328f8f24109",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.3 || ^7.0"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "hug base library",
+            "time": "2017-02-17 02:06:16"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -3104,8 +3126,10 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": [],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "hug/group": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
