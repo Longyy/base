@@ -863,7 +863,7 @@ class Blueprint
      */
     public function rememberToken()
     {
-        return $this->string('sRememberToken', 100)->nullable();
+        return $this->string('remember_token', 100)->nullable();
     }
 
     /**

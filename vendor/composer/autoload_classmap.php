@@ -68,6 +68,7 @@ return array(
     'Doctrine\\Instantiator\\Instantiator' => $vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator/Instantiator.php',
     'Doctrine\\Instantiator\\InstantiatorInterface' => $vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator/InstantiatorInterface.php',
     'Dotenv' => $vendorDir . '/vlucas/phpdotenv/src/Dotenv.php',
+    'EntrustSetupTables' => $baseDir . '/database/migrations/2017_03_08_135842_entrust_setup_tables.php',
     'Faker\\Calculator\\Luhn' => $vendorDir . '/fzaninotto/faker/src/Faker/Calculator/Luhn.php',
     'Faker\\DefaultGenerator' => $vendorDir . '/fzaninotto/faker/src/Faker/DefaultGenerator.php',
     'Faker\\Documentor' => $vendorDir . '/fzaninotto/faker/src/Faker/Documentor.php',
