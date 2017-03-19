@@ -7,6 +7,8 @@ class IndexController extends Controller
 {
     public function index(Request $oRequest)
     {
+        
+        
         return view('admin.index');
     }
 }

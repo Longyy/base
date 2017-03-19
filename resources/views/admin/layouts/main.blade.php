@@ -21,7 +21,13 @@
     <section class="vbox">
         @include('admin.public.header')
 
-        @yield('content')
+        <section>
+            <section class="hbox stretch">
+                @include('admin.public.left-side')
+                @yield('content')
+                @include('admin.public.right-side')
+            </section>
+        </section>
 
         @include('admin.public.footer')
     </section>

@@ -1,30 +1,20 @@
+{{--{{dd($aPageMenu)}}--}}
 <header class="bg-dark dk header navbar navbar-fixed-top-xs">
     <div class="navbar-header aside-md"> <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen" data-target="#nav"> <i class="fa fa-bars"></i> </a> <a href="#" class="navbar-brand" data-toggle="fullscreen"><img src="/admin/images/logo.png" class="m-r-sm">Notebook</a> <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".nav-user"> <i class="fa fa-cog"></i> </a> </div>
     <ul class="nav navbar-nav hidden-xs">
-        <li class="dropdown"> <a href="#" class="dropdown-toggle dker" data-toggle="dropdown"> <i class="fa fa-building-o"></i> <span class="font-bold">Activity</span> </a>
-            <section class="dropdown-menu aside-xl on animated fadeInLeft no-borders lt">
-                <div class="wrapper lter m-t-n-xs"> <a href="#" class="thumb pull-left m-r"> <img src="/admin/images/avatar.jpg" class="img-circle"> </a>
-                    <div class="clear"> <a href="#"><span class="text-white font-bold">@Mike Mcalidek</a></span> <small class="block">Art Director</small> <a href="#" class="btn btn-xs btn-success m-t-xs">Upgrade</a> </div>
-                </div>
-                <div class="row m-l-none m-r-none m-b-n-xs text-center">
-                    <div class="col-xs-4">
-                        <div class="padder-v"> <span class="m-b-xs h4 block text-white">245</span> <small class="text-muted">Followers</small> </div>
-                    </div>
-                    <div class="col-xs-4 dk">
-                        <div class="padder-v"> <span class="m-b-xs h4 block text-white">55</span> <small class="text-muted">Likes</small> </div>
-                    </div>
-                    <div class="col-xs-4">
-                        <div class="padder-v"> <span class="m-b-xs h4 block text-white">2,035</span> <small class="text-muted">Photos</small> </div>
-                    </div>
-                </div>
-            </section>
-        </li>
-        <li class="m-t m-l">
-            sss
-        </li>
-        <li>
-            <div class="m-t m-l"> <a href="price.html" class="dropdown-toggle btn btn-xs btn-primary" title="Upgrade"><i class="fa fa-long-arrow-up"></i></a> </div>
-        </li>
+
+        <!-- 一级菜单 -->
+        @foreach ($aPageMenu as $aMenu)
+            @if($aMenu->iLevel == 0)
+                <li>
+                    <a href="#" class="dker"> <i class="fa fa-building-o"></i> <span class="font-bold">{{$aMenu->sName}}</span> </a>
+                </li>
+            @endif
+        @endforeach
+
+        {{--<li>--}}
+            {{--<div class="m-t m-l"> <a href="price.html" class="dropdown-toggle btn btn-xs btn-primary" title="Upgrade"><i class="fa fa-long-arrow-up"></i><span class="font-bold"></span>eee</a> </div>--}}
+        {{--</li>--}}
     </ul>
     <ul class="nav navbar-nav navbar-right hidden-xs nav-user">
         <li class="hidden-xs"> <a href="#" class="dropdown-toggle dk" data-toggle="dropdown"> <i class="fa fa-bell"></i> <span class="badge badge-sm up bg-danger m-l-n-sm count">2</span> </a>
