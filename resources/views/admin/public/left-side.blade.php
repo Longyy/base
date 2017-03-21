@@ -20,14 +20,14 @@
 
                             <!-- 二级和三级菜单 -->
                             @foreach ($aPageMenu as $aVal)
-                                @if($aVal->iLevel == 1)
+                                @if($aVal['iLevel'] == 1)
                                     {{--<li class="active">--}}
-                                    <li>
-                                        <a href="#layout"> <i class="fa fa-columns icon"> <b class="bg-warning"></b> </i> <span class="pull-right"> <i class="fa fa-angle-down text"></i> <i class="fa fa-angle-up text-active"></i> </span> <span>{{$aVal->sName}}</span> </a>
+                                    <li @if(isset($aVal['iActive'])) class="active" @endif>
+                                        <a href="{{$aVal['sUrl']}}"> <i class="fa fa-columns icon"> <b class="bg-warning"></b> </i> <span class="pull-right"> <i class="fa fa-angle-down text"></i> <i class="fa fa-angle-up text-active"></i> </span> <span>{{$aVal['sName']}}</span> </a>
                                     @foreach ($aPageMenu as $aVVal)
-                                        @if($aVVal->iLevel == 2 && $aVVal->iParentID == $aVal->iAutoID)
+                                        @if($aVVal['iLevel'] == 2 && $aVVal['iParentID'] == $aVal['iAutoID'])
                                                 <ul class="nav lt">
-                                                    <li> <a href="layout-c.html"> <i class="fa fa-angle-right"></i> <span>{{$aVVal->sName}}</span> </a> </li>
+                                                    <li> <a href="{{$aVVal['sUrl']}}"> <i class="fa fa-angle-right"></i> <span>{{$aVVal['sName']}}</span> </a> </li>
                                                 </ul>
                                         @endif
                                     @endforeach

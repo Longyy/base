@@ -5,9 +5,9 @@
 
         <!-- 一级菜单 -->
         @foreach ($aPageMenu as $aMenu)
-            @if($aMenu->iLevel == 0)
-                <li>
-                    <a href="#" class="dker"> <i class="fa fa-building-o"></i> <span class="font-bold">{{$aMenu->sName}}</span> </a>
+            @if($aMenu['iLevel'] == 0)
+                <li @if(isset($aMenu['iActive'])) class="active" @endif>
+                    <a href="#" class="dker"> <i class="fa fa-building-o"></i> <span class="h5 font-bold">{{$aMenu['sName']}}</span> </a>
                 </li>
             @endif
         @endforeach

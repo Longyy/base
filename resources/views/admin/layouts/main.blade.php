@@ -6,6 +6,7 @@
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <link rel="stylesheet" href="/admin/css/app.v2.css" type="text/css" />
+    <link rel="stylesheet" href="/admin/css/font.css" type="text/css" cache="false">
     <!--[if lt IE 9]>
     <script src="/admin/js/ie/html5shiv.js" cache="false"></script>
     <script src="/admin/js/ie/respond.min.js" cache="false"></script>

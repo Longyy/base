@@ -9,6 +9,7 @@ namespace App\Modules\Perm;
 use App\Models\Perm\CommonMenu;
 use App\Http\Helpers\Tools;
 use DB;
+use Request;
 
 class PermModules
 {
@@ -52,7 +53,28 @@ class PermModules
             $aAllMenuInfo = CommonMenu::select('*')
                 ->whereIn('iAutoID', $aAllPath)
                 ->orderBy('iLevel', 'asc')
-                ->get();
+                ->orderBy('iOrder', 'asc')
+                ->get()
+                ->toArray();
+            $aAllMenuInfo = Tools::useFieldAsKey($aAllMenuInfo, 'iAutoID');
+            $aActivePathID = [];
+            foreach($aAllMenuInfo as &$aInfo) {
+                $aInfo['sUrl'] = $aInfo['sParam'] ? $aInfo['sWebPath'] . '?' . http_build_query($aInfo['sParam']) : $aInfo['sWebPath'];
+                if(trim($aInfo['sWebPath'], '/') == Request::path()) {
+                    $aActivePathID = explode(',', trim($aInfo['sRelation'], ','));
+                }
+                if(Request::path() == 'backend') {
+                    $aActivePathID = [1,2,3];
+                }
+            }
+            unset($aInfo);
+
+            foreach($aActivePathID as $iVal) {
+                if(isset($aAllMenuInfo[$iVal])) {
+                    $aAllMenuInfo[$iVal]['iActive'] = 1;
+                }
+            }
+
         }
 
         return $aAllMenuInfo;
