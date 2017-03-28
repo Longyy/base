@@ -20,7 +20,6 @@ class PermModules
     public static function getPageMenu($iUserGroupID)
     {
         // 取该用户组下所有resource id
-
         $aPermInfo = DB::table('common_usergroup_perm')
             ->leftJoin('common_perm', 'common_usergroup_perm.iPermID', '=', 'common_perm.iAutoID')
             ->leftJoin('common_perm_resource', 'common_perm_resource.iPermID', '=', 'common_perm.iAutoID')
@@ -33,6 +32,7 @@ class PermModules
         $aAllMenuInfo = [];
         if(!empty($aPermInfo)) {
             $aResourceID = Tools::getFieldValues($aPermInfo, 'iAutoID');
+            // 取叶子菜单
             $aMenuInfo = CommonMenu::select('iAutoID', 'sRelation')
                 ->where('iType', 2)
                 ->where('iLeaf', 2)
@@ -43,6 +43,7 @@ class PermModules
 
             $aPath = Tools::getFieldValues($aMenuInfo, 'sRelation');
 
+            // 取所有菜单项
             $aAllPath = [];
             foreach($aPath as $sValue) {
                 $aAllPath = array_merge($aAllPath,
@@ -58,6 +59,8 @@ class PermModules
                 ->toArray();
             $aAllMenuInfo = Tools::useFieldAsKey($aAllMenuInfo, 'iAutoID');
             $aActivePathID = [];
+
+            // 构建菜单链接
             foreach($aAllMenuInfo as &$aInfo) {
                 $aInfo['sUrl'] = $aInfo['sParam'] ? $aInfo['sWebPath'] . '?' . http_build_query($aInfo['sParam']) : $aInfo['sWebPath'];
                 if(trim($aInfo['sWebPath'], '/') == Request::path()) {
@@ -69,15 +72,25 @@ class PermModules
             }
             unset($aInfo);
 
+            // 构建菜单路径及面包屑
+            $aBreadMenu = [];
             foreach($aActivePathID as $iVal) {
                 if(isset($aAllMenuInfo[$iVal])) {
                     $aAllMenuInfo[$iVal]['iActive'] = 1;
+                    $aBreadMenu[] = [
+                        'title' => $aAllMenuInfo[$iVal]['sName'],
+                        'link' => $aAllMenuInfo[$iVal]['sUrl'],
+                    ];
                 }
             }
-
         }
 
-        return $aAllMenuInfo;
+        $aResult = [
+            'aBreadMenu' => !empty($aBreadMenu) ? $aBreadMenu : [],
+            'aMainMenu' => !empty($aAllMenuInfo) ? $aAllMenuInfo : [],
+        ];
+
+        return $aResult;
     }
 
 

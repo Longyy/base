@@ -7305,14 +7305,14 @@ html {
 	overflow-x:hidden;
 }
 body {
-	font-family:"Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family:"Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size:13px;
 	color:#717171;
 	background-color:transparent;
 	-webkit-font-smoothing:antialiased;
 }
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-	font-family:"Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family:"Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 a {
 	color:#2e3e4e;

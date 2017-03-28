@@ -4,60 +4,82 @@
 
     <section id="content">
         <section class="vbox">
-            <header class="header bg-white b-b clearfix">
-                <div class="row m-t-sm">
-                    <div class="col-sm-8 m-b-xs">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-default" title="Refresh"><i class="fa fa-refresh"></i></button>
-                            <button type="button" class="btn btn-sm btn-default" title="Remove"><i class="fa fa-trash-o"></i></button>
-                            <button type="button" class="btn btn-sm btn-default" title="Filter" data-toggle="dropdown"><i class="fa fa-filter"></i> <span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
+
+
+
+            <section class="scrollable wrapper">
+
+                <ul class="breadcrumb">
+                    <li><a href="index.html"><i class="fa fa-home"></i> 系统设置</a></li>
+                    <li class="active">权限管理</li>
+                </ul>
+
+                <section class="panel panel-default panel-rounded4">
+                    <div class="panel-heading b-dark b-b bottom20">
+                        <h3 class="panel-title">权限管理</h3>
+                    </div>
+
+                    <div id="toolbar">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-inline" role="form">
+                                    <div class="form-group">
+                                        <span>状态: </span>
+                                        <input name="offset" class="form-control input-sm w70" type="number" value="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <span>年龄: </span>
+                                        <input name="limit" class="form-control input-sm w70" type="number" value="5">
+                                    </div>
+                                    <div class="form-group">
+                                        <input name="search" class="form-control input-sm " type="text" placeholder="名称">
+                                    </div>
+                                    <div class="form-group">
+                                        <button id="ok" type="submit" class="btn btn-sm btn-default">OK</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-4 text-right">
+                                <a href="#" class="btn btn-primary btn-s-md btn-sm">新增</a>
+                                <a href="#" class="btn btn-danger btn-s-md btn-sm">删除</a>
+                            </div>
                         </div>
-                        <a href="#modal-create" data-toggle="modal" class="btn btn-sm btn-default"><i class="fa fa-plus"></i> Create</a> </div>
-                    <div class="col-sm-4 m-b-xs">
-                        <div class="input-group">
-                            <input type="text" class="input-sm form-control search-text" placeholder="Search">
-                      <span class="input-group-btn">
-                      <button class="btn btn-sm btn-default" type="button" id="data-search">Go!</button>
-                      </span> </div>
-                    </div>
-                </div>
-            </header>
 
-            <section class="scrollable wrapper w-f">
-                <section class="panel panel-default">
-                    <div class="table-responsive">
-                        <!--<th class="th-sortable" data-sortfield="project" data-sortstatus="desc" data-toggle="class">Project <span class="th-sort"> <i class="fa fa-sort-down text"></i> <i class="fa fa-sort-up text-active"></i> <i class="fa fa-sort"></i> </span> </th>-->
-                        <table  id="datatables"  class="table table-striped table-hover m-b-none data-action">
-                            <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>规则名</th>
-                                <th>中文名</th>
-                                <th>状态</th>
-                                <th style="width:290px;">操作</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
                     </div>
+
+
+                    <table id="table"
+                           data-toggle="table"
+                           data-url="/backend/perm/user_group/get_list"
+                           data-side-pagination="server"
+                           data-pagination="true"
+                           data-page-size="5"
+                           data-page-list="[10, 20, 50]"
+                           data-pagination-first-text="首页"
+                           data-pagination-pre-text="上一页"
+                           data-pagination-next-text="下一页"
+                           data-pagination-last-text="尾页"
+                           data-query-params="queryParams"
+                           data-click-to-select="true"
+                           data-toolbar="#toolbar">
+                        <thead>
+                        <tr>
+                            <th data-field="state" data-checkbox="true"
+                                data-formatter="stateFormatter"></th>
+                            <th data-field="iAutoID">Name</th>
+                            <th data-field="sName">Stars</th>
+                            <th data-field="iType">Forks</th>
+                            <th data-field="iCreateTime">Description</th>
+                            <th data-field="iUpdateTime">Action</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                    </table>
                 </section>
             </section>
 
-            <footer class=" hide footer bg-white b-t">
-                <div class="text-center-xs">
-                    <p class="text-muted m-t">@平安科技 2017</p>
-                </div>
 
-            </footer>
         </section>
         <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
 
@@ -66,7 +88,7 @@
 
 @section('before-css')
     <link rel="stylesheet" href="/admin/js/datetimepicker/bootstrap-datetimepicker.min.css" type="text/css" cache="false">
-    <link rel="stylesheet" href="/admin/js/datatables/datatables.css" type="text/css" cache="false">
+    <link rel="stylesheet" href="/admin/js/bootstraptable/bootstrap-table.css" type="text/css" cache="false">
 @endsection
 
 @section('before-js')
@@ -80,7 +102,7 @@
     <script src="/admin/js/datetimepicker/bootstrap-datetimepicker.js" cache="false"></script>
     <script src="/admin/js/datetimepicker/bootstrap-datetimepicker.zh-CN.js" cache="false"></script>
     <!-- datatable -->
-    <script src="/admin/js/datatables/jquery.dataTables.js" cache="false"></script>
+    <script src="/admin/js/bootstraptable/bootstrap-table.js" cache="false"></script>
 
     <script>
         // 删除操作
@@ -115,7 +137,7 @@
                 method: 'post',
                 url: 'some.php',
                 data: {name:name, age:age},
-                dataType: 'json',
+                dataType: 'json'
             }).done(function(result){
                 if(result.status == 0) {
                     $('#modal-create').modal('hide');
@@ -163,71 +185,34 @@
 
         initComponent();
 
+        var $table = $('#table');
+        $ok = $('#ok');
+        $(function () {
+            $ok.click(function () {
+                $table.bootstrapTable('refresh');
+            });
+        });
+
+        function queryParams() {
+            var params = {};
+            $('#toolbar').find('input[name]').each(function () {
+                params[$(this).attr('name')] = $(this).val();
+            });
+            return params;
+        }
+
+        function stateFormatter(value, row, index) {
+
+            return value;
+        }
+
         // datatable
         $(document).ready( function () {
-            var id = 0;
-            var table = $('#datatables');
+//            var id = 0;
 
-            table.dataTable({
-//        "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
-//        "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-//        "sPaginationType": "bootstrap",//分页样式使用bootstrap
-                "order": [[ 1, "desc" ]],
-                "oLanguage": {//语言设置
-                    "sLengthMenu": "每页显示  _MENU_ 条记录",
-                    "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
-                    "oPaginate": {
-                        "sFirst": "首页",
-                        "sPrevious": "前一页",
-                        "sNext": "后一页",
-                        "sLast": "尾页"
-                    },
-                    "sZeroRecords": "抱歉， 没有找到",
-                    "sInfoEmpty": "没有数据"
-                },
-                "bProcessing": true, //当datatable获取数据时候是否显示正在处理提示信息。
-                "bServerSide": true, //客户端处理分页
-                "ajax": {
-                    "url": "/datatable.php",
-                    "type": "POST",
-                    "data": function(d) {
-                        d.myKey = "myValue"
-                        // d.custom = $("#myInput").val()
-                    }
-                },
-                "bStateSave": true, //开关，是否打开客户端状态记录功能。这个数据是记录在cookies中的，打开了这个记录后，即使刷新一次页面，或重新打开浏览器，之前的状态都是保存下来的
-                "aoColumnDefs": [
-                    {
-                        "aTargets": [0],
-                        "mData": null,
-                        "mRender": function(data, type, full) {
-                            var hiddenId = '<input type="hidden" name="id" value="'+full[0]+'"/>';
-                            return full[0] + hiddenId;
-                        }
-                    },
-                    { //给每个单独的列设置不同的填充，或者使用aoColumns也行
-                        "aTargets": [3],
-                        "mData": null,
-                        "bSortable": false,
-                        "bSearchable": false,
-                        "mRender": function (data, type, full) {
-                            if(full[3] == 1){
-                                return "使用中"
-                            }else if(full[3] == 0){
-                                return "禁用"
-                            }
-                        }
-                    },{
-                        "aTargets": [4],
-                        "mData": null,
-                        "bSortable": false,
-                        "bSearchable": false,
-                        "mRender": function (data, type, full) {
-                            return '<a data-toggle="modal" data-target="#myModal"  data-title="' + full[0] + '"  class="btn btn-success edit" href="#"><i class="icon-edit icon-white"></i>修改</a>' +'&nbsp;&nbsp;'+'<a   data-title="' + full[0] + '"  class="btn btn-primary" href="/config/edit?aid=' + full[0] + '"><i class="icon-wrench icon-white" ></i>配置</a>' +'&nbsp;&nbsp;'+'<a   alt="' + full[2] + '"  class="btn btn-info" href="#"  data-toggle="modal" data-target="#daima"><i class="icon-tasks icon-white"></i>代码</a>' +'&nbsp;&nbsp;'+'<a   data-title="' + full[0] + '"  class="btn btn-warning" href="/service/show?aid=' + full[0] + '"><i class="icon-user icon-white"></i>客服</a>';
-                        }
-                    }]
 
-            });
+
+
 
             $('#datatables tbody').on( 'click', 'tr a.edit', function () {
                 var id = $(this).parent().parent().find('input').val();

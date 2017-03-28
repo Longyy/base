@@ -1,13 +1,14 @@
 <?php
 
 // 后台路由
-Route::group(['namespace' => 'Admin', 'prefix' => 'backend', 'middleware' => 'auth'], function(){
-    Route::get('/', 'IndexController@index');
+Route::group(['namespace' => 'Admin', 'prefix' => 'backend', 'middleware' => 'auth'], function($oRouter){
+    $oRouter->get('/', 'IndexController@index');
 
     // 权限管理
-    Route::group(['namespace' => 'Perm', 'prefix' => 'perm'], function(){
+    $oRouter->group(['namespace' => 'Perm', 'prefix' => 'perm'], function($oRouter){
 
-        Route::get('user_group/list', 'UserGroupController@index');
+        $oRouter->get('user_group/list', 'UserGroupController@index');
+        $oRouter->get('user_group/get_list', 'UserGroupController@getList');
 
     });
 
