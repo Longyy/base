@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Admin\Perm;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Perm\CommonUserGroup;
+use App\Modules\Perm\UserGroupModules;
 use Response;
 
 class UserGroupController extends Controller
@@ -22,21 +23,35 @@ class UserGroupController extends Controller
     public function getList(Request $oRequest)
     {
         $data = CommonUserGroup::all()->toArray();
-//        $str = <<<EOD
-//{
-//  "list": [
-//    {
-//      "iAutoID": 1,
-//      "sName": "bootstrap-table",
-//      "iType": 2156,
-//      "iCreateTime": 633,
-//      "iUpdateTime": "An extended Bootstrap table with radio, checkbox, sort, pagination, and other added features."
-//    }
-//  ]
-//}
-//EOD;
-
-//        return Response::json(json_decode($str, true));
         return Response::json(['total' => 6, 'rows' => $data]);
+    }
+
+    public function edit(Request $oRequest)
+    {
+        $this->validate($oRequest, [
+            'iAutoID' => 'required|integer',
+        ]);
+
+        $oUserGroup = CommonUserGroup::find($oRequest->get('iAutoID'));
+        $aGroupType = UserGroupModules::getGroupType();
+
+        return view('admin.perm.user-group-edit', [
+            'data' => [
+                'user_group' => $oUserGroup->toArray(),
+                'group_type' => $aGroupType,
+            ]]);
+    }
+
+    public function update(Request $oRequest)
+    {
+        $this->validate($oRequest, [
+            'iAutoID' => 'required|integer',
+            'sName' => 'required|string|min:1',
+            'iType' => 'integer',
+        ]);
+
+        $oUserGroup = CommonUserGroup::find($oRequest->get('iAutoID'));
+        $mResult = $oUserGroup->save($oRequest->all());
+
     }
 }

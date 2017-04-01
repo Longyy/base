@@ -1,0 +1,79 @@
+.dataTables_length {
+    float:left;
+}
+.dataTables_wrapper {
+    overflow:hidden;
+}
+.dataTables_info {
+    float:left;
+}
+.dataTables_paginate {
+    float:right;
+}
+
+.breadcrumb {
+    background-color: inherit;
+    border:none;
+    padding: 0;
+}
+.b-b5 {
+    border-bottom: 5px solid #74ad46;
+}
+.nav>li.active>a {
+    border-bottom: 3px solid #74ad46;
+    padding-bottom:12px;
+    background: none !important;
+}
+.nav>li>a:hover {
+    background: none !important;
+}
+
+.panel-rounded4 {
+    border-radius:4px;
+}
+.panel-heading {
+    background: none !important;
+    color: #717171 !important;
+    padding: 10px 0;
+}
+.panel-default {
+    padding:15px;
+}
+.panel-title {
+    font-weight:bold;
+}
+.b-dark {
+    border-color:#717171 !important;
+}
+.w70 {
+    width: 70px !important;
+}
+.bottom20 {
+    margin-bottom:20px !important;
+}
+
+#toolbar {
+    width:100%;
+}
+
+.bs-bars {
+    float:none !important;
+}
+
+.edit-form-width {
+    width:60%;
+}
+.margin-left-20 {
+    margin-left:20px;
+}
+
+.col-center-block {
+    float: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.main-alert {
+    margin-top:-85px;
+    height:70px;
+}

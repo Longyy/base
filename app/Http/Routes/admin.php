@@ -9,6 +9,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'backend', 'middleware' => 'au
 
         $oRouter->get('user_group/list', 'UserGroupController@index');
         $oRouter->get('user_group/get_list', 'UserGroupController@getList');
+        $oRouter->get('user_group/edit', 'UserGroupController@edit');
+        $oRouter->post('user_group/update', 'UserGroupController@update');
 
     });
 

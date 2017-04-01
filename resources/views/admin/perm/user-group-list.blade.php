@@ -67,12 +67,12 @@
                         <tr>
                             <th data-field="state" data-checkbox="true"
                                 data-formatter="stateFormatter"></th>
-                            <th data-field="iAutoID">Name</th>
-                            <th data-field="sName">Stars</th>
-                            <th data-field="iType">Forks</th>
-                            <th data-field="iCreateTime">Description</th>
-                            <th data-field="iUpdateTime">Action</th>
-                            <th>操作</th>
+                            <th data-field="iAutoID">ID</th>
+                            <th data-field="sName">名称</th>
+                            <th data-field="iType">类型</th>
+                            <th data-field="iCreateTime">创建时间</th>
+                            <th data-field="iUpdateTime">更新时间</th>
+                            <th data-formatter="addActionBtn">操作</th>
                         </tr>
                         </thead>
                     </table>
@@ -204,6 +204,10 @@
         function stateFormatter(value, row, index) {
 
             return value;
+        }
+
+        function addActionBtn(value, row) {
+            return '<a href="/backend/perm/user_group/edit?iAutoID=' + row.iAutoID + '" class="btn btn-default btn-xs">编辑</a>';
         }
 
         // datatable
