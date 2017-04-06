@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-4 text-right">
-                                <a href="#" class="btn btn-primary btn-s-md btn-sm">新增</a>
+                                <a href="/backend/perm/user_group/create" class="btn btn-primary btn-s-md btn-sm">新增</a>
                                 <a href="#" class="btn btn-danger btn-s-md btn-sm">删除</a>
                             </div>
                         </div>

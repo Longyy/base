@@ -51,7 +51,49 @@ class UserGroupController extends Controller
         ]);
 
         $oUserGroup = CommonUserGroup::find($oRequest->get('iAutoID'));
-        $mResult = $oUserGroup->save($oRequest->all());
-
+        if($oUserGroup->update($oRequest->all())) {
+            $aResult = [
+                'code' => 0,
+                'msg' => '更新成功！',
+            ];
+        } else {
+            $aResult = [
+                'code' => 1,
+                'msg' => '更新失败！',
+            ];
+        }
+        return Response::json($aResult);
     }
+
+    public function create(Request $oRequest)
+    {
+        $aGroupType = UserGroupModules::getGroupType();
+
+        return view('admin.perm.user-group-add', [
+            'data' => [
+                'group_type' => $aGroupType,
+            ]]);
+    }
+
+    public function save(Request $oRequest)
+    {
+        $this->validate($oRequest, [
+            'sName' => 'required|string|min:1|unique:common_usergroup,sName',
+            'iType' => 'integer',
+        ]);
+
+        if(CommonUserGroup::create($oRequest->all())) {
+            $aResult = [
+                'code' => 0,
+                'msg' => '新增成功！',
+            ];
+        } else {
+            $aResult = [
+                'code' => 1,
+                'msg' => '新增失败！',
+            ];
+        }
+        return Response::json($aResult);
+    }
+
 }

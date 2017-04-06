@@ -5,17 +5,18 @@ var $alert = $('#alert'),
     $span = $('#span'),
     $cancel = $('#cancel');
 
+function goBack() {
+    window.location.href = document.referrer;
+}
 $(function(){
 
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
-    function goBack() {
-        window.history.back();
-    }
+
 
     function showLoading()
     {
@@ -47,7 +48,7 @@ $(function(){
                     cancelLoading();
                     goBack();
                 });
-            }, 3000);
+            }, 2000);
 
         } else {
             $alert.removeClass('alert-success')
@@ -59,7 +60,7 @@ $(function(){
                     $alert.css({"margin-top":"-85px"});
                     cancelLoading();
                 });
-            }, 3000);
+            }, 2000);
         }
         return false;
     });

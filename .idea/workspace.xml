@@ -2,87 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="aee89d9f-da29-4573-8263-7fbd05e12ab7" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Modules/Perm/UserGroupModules.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/css/common.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/custom/common.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/al.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/ar.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/bg.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/ca.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/cs.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/cs.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/da.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/de.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/de.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/el.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/el.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/en.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/en.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/es.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/eu.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/fa.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/fi.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/fi.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/fr.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/fr.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/he.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/he.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/hr.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/hr.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/hu.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/hu.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/id.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/id.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/it.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/it.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/ja.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/ja.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/ko.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/lt.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/lt.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/lv.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/lv.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/ms.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/ms.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/nl.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/nl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/no.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/pl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/pt-br.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/pt-pt.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/ro.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/ro.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/ru.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/ru.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/sk.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/sk.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/sl.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/sl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/sq.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/sr.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/sr.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/sv.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/sv.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/th.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/tr.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/ua.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/ua.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/uk.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/uk.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/zh_cn.extra.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/zh_cn.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/i18n/zh_tw.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/parsley.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/parsley.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/parsley.js.map" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/admin/js/parsley/parsley.min.js.map" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/perm/user-group-edit.blade.php" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/admin/js/parsley/parsley.extend.js" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/perm/user-group-add.blade.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/Perm/UserGroupController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/Perm/UserGroupController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Routes/admin.php" afterPath="$PROJECT_DIR$/app/Http/Routes/admin.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/parsley/parsley.min.js" afterPath="$PROJECT_DIR$/public/admin/js/parsley/parsley.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Models/BaseModel.php" afterPath="$PROJECT_DIR$/app/Models/BaseModel.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Models/Perm/CommonUserGroup.php" afterPath="$PROJECT_DIR$/app/Models/Perm/CommonUserGroup.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/custom/common.js" afterPath="$PROJECT_DIR$/public/admin/js/custom/common.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/layouts/main.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/layouts/main.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/perm/user-group-edit.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/perm/user-group-edit.blade.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/perm/user-group-list.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/perm/user-group-list.blade.php" />
     </list>
     <ignored path="base.iws" />
@@ -108,8 +36,18 @@
       <file leaf-file-name="admin.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Routes/admin.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="12" column="71" selection-start-line="12" selection-start-column="71" selection-end-line="12" selection-end-column="71" />
+            <state relative-caret-position="294">
+              <caret line="14" column="67" selection-start-line="14" selection-start-column="67" selection-end-line="14" selection-end-column="67" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="user-group-add.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/admin/perm/user-group-add.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="295">
+              <caret line="98" column="51" selection-start-line="98" selection-start-column="51" selection-end-line="98" selection-end-column="51" />
               <folding />
             </state>
           </provider>
@@ -118,8 +56,8 @@
       <file leaf-file-name="UserGroupController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/Perm/UserGroupController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="819">
-              <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+            <state relative-caret-position="158">
+              <caret line="81" column="31" selection-start-line="81" selection-start-column="24" selection-end-line="81" selection-end-column="31" />
               <folding>
                 <element signature="e#139#175#0#PHP" expanded="true" />
               </folding>
@@ -127,21 +65,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/admin/layouts/main.blade.php">
+      <file leaf-file-name="user-group-list.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/admin/perm/user-group-list.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="410">
-              <caret line="35" column="47" selection-start-line="35" selection-start-column="47" selection-end-line="35" selection-end-column="47" />
+            <state relative-caret-position="147">
+              <caret line="216" column="0" selection-start-line="216" selection-start-column="0" selection-end-line="216" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="common.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/admin/css/common.css">
+      <file leaf-file-name="BaseModel.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Models/BaseModel.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="557">
-              <caret line="78" column="1" selection-start-line="78" selection-start-column="1" selection-end-line="78" selection-end-column="1" />
+            <state relative-caret-position="336">
+              <caret line="21" column="1" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/admin/layouts/main.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="336">
+              <caret line="34" column="14" selection-start-line="34" selection-start-column="14" selection-end-line="34" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -150,11 +98,9 @@
       <file leaf-file-name="user-group-edit.blade.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/admin/perm/user-group-edit.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="333">
-              <caret line="93" column="0" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
-              <folding>
-                <element signature="e#230#251#0#HTML" expanded="true" />
-              </folding>
+            <state relative-caret-position="144">
+              <caret line="88" column="37" selection-start-line="88" selection-start-column="37" selection-end-line="88" selection-end-column="37" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -162,8 +108,8 @@
       <file leaf-file-name="common.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/admin/js/custom/common.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-547">
-              <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
+            <state relative-caret-position="168">
+              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -203,14 +149,17 @@
         <option value="$PROJECT_DIR$/app/Modules/Perm/PermModules.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/public/left-side.blade.php" />
         <option value="$PROJECT_DIR$/public/admin/css/app.v2.css" />
-        <option value="$PROJECT_DIR$/resources/views/admin/perm/user-group-list.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/public/header.blade.php" />
         <option value="$PROJECT_DIR$/app/Modules/Perm/UserGroupModules.php" />
-        <option value="$PROJECT_DIR$/app/Http/Routes/admin.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/Perm/UserGroupController.php" />
         <option value="$PROJECT_DIR$/public/admin/css/common.css" />
         <option value="$PROJECT_DIR$/resources/views/admin/layouts/main.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/perm/user-group-edit.blade.php" />
+        <option value="$PROJECT_DIR$/app/Models/Perm/CommonUserGroup.php" />
+        <option value="$PROJECT_DIR$/app/Models/BaseModel.php" />
+        <option value="$PROJECT_DIR$/resources/views/admin/perm/user-group-list.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/Perm/UserGroupController.php" />
+        <option value="$PROJECT_DIR$/resources/views/admin/perm/user-group-add.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Routes/admin.php" />
         <option value="$PROJECT_DIR$/public/admin/js/custom/common.js" />
       </list>
     </option>
@@ -230,10 +179,10 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1382" />
-    <option name="height" value="744" />
+    <option name="x" value="1" />
+    <option name="y" value="1" />
+    <option name="width" value="1364" />
+    <option name="height" value="726" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -289,7 +238,7 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
+              <option name="myItemId" value="vendor" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -303,15 +252,11 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
+              <option name="myItemId" value="vendor" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="admin" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
+              <option name="myItemId" value="hug" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -325,19 +270,7 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="admin" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="custom" />
+              <option name="myItemId" value="storage" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -351,7 +284,29 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="base" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="base" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -369,7 +324,11 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -377,7 +336,75 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
+              <option name="myItemId" value="perm" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="base" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="base" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="base" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="base" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="base" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="base" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Http" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="base" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="base" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Http" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Routes" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -395,15 +422,16 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Laravel\workspace\base\public\admin\js\parsley" />
+      <recent name="D:\Laravel\workspace\base\app\Http\Controllers\Admin" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Laravel\workspace\base\resources\views\admin\perm" />
       <recent name="D:\Laravel\workspace\base\public\admin\js\parsley" />
       <recent name="D:\Laravel\workspace\base\public\admin\js\prettyphoto" />
       <recent name="D:\Laravel\workspace\base\public\admin\js\bootstraptable" />
       <recent name="D:\Laravel\workspace\base\database\migrations" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Laravel\workspace\base\public\admin\js\parsley" />
-      <recent name="D:\Laravel\workspace\base\app\Http\Controllers\Admin" />
     </key>
   </component>
   <component name="RunManager">
@@ -462,19 +490,23 @@
       <workItem from="1490676176477" duration="7813000" />
       <workItem from="1490756525108" duration="13047000" />
       <workItem from="1490972351802" duration="6537000" />
-      <workItem from="1491017955757" duration="8667000" />
+      <workItem from="1491017955757" duration="9151000" />
+      <workItem from="1491400235750" duration="459000" />
+      <workItem from="1491403164839" duration="698000" />
+      <workItem from="1491404248292" duration="5141000" />
+      <workItem from="1491476713597" duration="4467000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="94301000" />
+    <option name="totallyTimeSpent" value="105550000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <frame x="1" y="1" width="1364" height="726" extended-state="0" />
+    <editor active="false" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1522694" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25593472" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -509,21 +541,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/database/factories/ModelFactory.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="19" column="6" selection-start-line="19" selection-start-column="6" selection-end-line="19" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2017_03_08_135842_entrust_setup_tables.php" />
-    <entry file="file://$PROJECT_DIR$/config/entrust.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1218">
-          <caret line="64" column="19" selection-start-line="64" selection-start-column="19" selection-end-line="64" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/app.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1680">
@@ -738,7 +755,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="199">
           <caret line="1595" column="16" selection-start-line="1595" selection-start-column="16" selection-end-line="1595" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -746,14 +762,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="557">
           <caret line="37" column="45" selection-start-line="37" selection-start-column="45" selection-end-line="37" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/admin/perm/user-group-list.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4326">
-          <caret line="206" column="9" selection-start-line="206" selection-start-column="9" selection-end-line="206" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -771,14 +779,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/Perm/CommonUserGroup.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Modules/Perm/PermModules.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="587">
@@ -790,7 +790,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
           <caret line="21" column="33" selection-start-line="21" selection-start-column="33" selection-end-line="21" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -815,62 +814,99 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/admin/js/app.v2.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="2593" column="33" selection-start-line="2593" selection-start-column="27" selection-end-line="2593" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/admin/css/common.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1638">
+          <caret line="78" column="1" selection-start-line="78" selection-start-column="1" selection-end-line="78" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2478">
+          <caret line="144" column="26" selection-start-line="144" selection-start-column="4" selection-end-line="144" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/BaseModel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="21" column="1" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/Perm/CommonUserGroup.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="14" column="34" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/Perm/UserGroupController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="819">
-          <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+        <state relative-caret-position="158">
+          <caret line="81" column="31" selection-start-line="81" selection-start-column="24" selection-end-line="81" selection-end-column="31" />
           <folding>
             <element signature="e#139#175#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Routes/admin.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/perm/user-group-add.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="12" column="71" selection-start-line="12" selection-start-column="71" selection-end-line="12" selection-end-column="71" />
+        <state relative-caret-position="295">
+          <caret line="98" column="51" selection-start-line="98" selection-start-column="51" selection-end-line="98" selection-end-column="51" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/admin/js/app.v2.js">
+    <entry file="file://$PROJECT_DIR$/app/Http/Routes/admin.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="2593" column="33" selection-start-line="2593" selection-start-column="27" selection-end-line="2593" selection-end-column="33" />
+        <state relative-caret-position="294">
+          <caret line="14" column="67" selection-start-line="14" selection-start-column="67" selection-end-line="14" selection-end-column="67" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/admin/layouts/main.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="35" column="47" selection-start-line="35" selection-start-column="47" selection-end-line="35" selection-end-column="47" />
+        <state relative-caret-position="336">
+          <caret line="34" column="14" selection-start-line="34" selection-start-column="14" selection-end-line="34" selection-end-column="14" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/admin/css/common.css">
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/perm/user-group-list.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="557">
-          <caret line="78" column="1" selection-start-line="78" selection-start-column="1" selection-end-line="78" selection-end-column="1" />
+        <state relative-caret-position="147">
+          <caret line="216" column="0" selection-start-line="216" selection-start-column="0" selection-end-line="216" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/admin/perm/user-group-edit.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="333">
-          <caret line="93" column="0" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
-          <folding>
-            <element signature="e#230#251#0#HTML" expanded="true" />
-          </folding>
+        <state relative-caret-position="144">
+          <caret line="88" column="37" selection-start-line="88" selection-start-column="37" selection-end-line="88" selection-end-column="37" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/admin/js/custom/common.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-547">
-          <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
+        <state relative-caret-position="168">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
         </state>
       </provider>

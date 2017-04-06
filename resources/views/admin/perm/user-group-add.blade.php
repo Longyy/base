@@ -5,8 +5,6 @@
     <section id="content">
         <section class="vbox">
 
-
-
             <section class="scrollable wrapper">
 
                 <div id="alert" role="alert" style="display:none;" class=" main-alert alert alert-danger center-block col-md-4 pull-right alert-dismissible fade in">
@@ -19,7 +17,7 @@
                     <li class="active">权限管理</li>
                 </ul>
 <form id="form" action="/backend/perm/user_group/update" method="post" data-parsley-validate>
-    <input type="hidden" name="iAutoID" value="{{$data['user_group']['iAutoID']}}"/>
+    <input type="hidden" name="iAutoID" value=""/>
                 <section class="panel panel-default panel-rounded4">
                     <div class="panel-heading b-dark b-b bottom20">
                         <h3 class="panel-title">权限管理</h3>
@@ -31,7 +29,7 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">名称</label>
                                 <div class="col-sm-9">
-                                    <input type="text" name="sName" value="{{$data['user_group']['sName']}}" required class="form-control" placeholder="">
+                                    <input type="text" name="sName" value="" required class="form-control" placeholder="">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -40,7 +38,7 @@
                                     <select name="iType" required class="form-control m-t">
                                         <option value="">--请选择--</option>
                                         @foreach($data['group_type'] as $key => $val)
-                                            <option value="{{$key}}" @if($key == $data['user_group']['iType'])selected @endif>{{$val}}</option>
+                                            <option value="{{$key}}">{{$val}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -92,14 +90,13 @@
         {
             $form = $('#form');
             var data = {
-                iAutoID: $form.find("input[name='iAutoID']").val(),
                 sName: $form.find("input[name='sName']").val(),
                 iType: $form.find("select[name='iType']").val()
             };
             var resultInfo = {};
             $.ajax({
                 type: 'POST',
-                url: '/backend/perm/user_group/update',
+                url: '/backend/perm/user_group/save',
                 cache: false,
                 async: false,
                 dataType: 'json',
