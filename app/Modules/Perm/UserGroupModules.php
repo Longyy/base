@@ -8,6 +8,7 @@
 
 namespace App\Modules\Perm;
 
+use App\Models\Perm\CommonUserGroup;
 
 class UserGroupModules
 {

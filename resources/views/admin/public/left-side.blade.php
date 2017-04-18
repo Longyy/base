@@ -11,7 +11,7 @@
                                 @if($aVal['iLevel'] == 1)
                                     {{--<li class="active">--}}
                                     <li @if(isset($aVal['iActive'])) class="active" @endif>
-                                        <a href="{{$aVal['sUrl']}}"> <i class="fa fa-columns icon hide"> <b class="bg-warning"></b> </i> <span class="pull-right"> <i class="fa fa-angle-down text"></i> <i class="fa fa-angle-up text-active"></i> </span> <span>{{$aVal['sName']}}</span> </a>
+                                        <a href="{{$aVal['sUrl']}}"> <i class="fa {{$aVal['sIcon']}} icon"> <b class="b-b b-light"></b> </i> <span class="pull-right"> <i class="fa fa-angle-down text"></i> <i class="fa fa-angle-up text-active"></i> </span> <span>{{$aVal['sName']}}</span> </a>
                                     @foreach ($aPageMenu['aMainMenu'] as $aVVal)
                                         @if($aVVal['iLevel'] == 2 && $aVVal['iParentID'] == $aVal['iAutoID'])
                                                 <ul class="nav lt">
@@ -37,7 +37,9 @@
                     <section class="panel bg-white">
                         <header class="panel-heading b-b b-dark ">可用角色</header>
                         <div class="panel-body animated fadeInRight">
-                            <p><a href="#" class="btn btn-sm btn-default">系统用户组</a></p>
+                            @foreach($aProfile['aTempGroup'] as $aItem)
+                                <p><a href="#" class="btn btn-sm btn-default">{{$aItem['sGroupName']}}</a></p>
+                            @endforeach
                         </div>
                     </section>
                 </section>

@@ -8132,7 +8132,7 @@ overflow-y:hidden;
 border:none;
 }
 .nav-xs .nav-primary>ul>li>a span {
-color:#fff !important;
+color:#999 !important;
 display:table-cell;
 vertical-align:middle;
 height:55px;
@@ -8152,7 +8152,7 @@ font-size:19px;
 margin:0;
 line-height:55px;
 border:none !important;
-color:#fff !important;
+color:#999 !important;
 }
 .nav-xs .nav-primary>ul>li>a i b {
 left:0 !important;
