@@ -31,17 +31,22 @@
                     <!-- / nav --> </div><div class="slimScrollBar" style="width: 5px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 0px; height: 493px; background: rgb(51, 51, 51);"></div><div class="slimScrollRail" style="width: 5px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; opacity: 0.2; z-index: 90; right: 0px; background: rgb(51, 51, 51);"></div></div>
         </section>
         <footer class="footer lt hidden-xs b-t b-light">
-            <a href="#nav" data-toggle="class:nav-xs" class="pull-right btn btn-sm btn-default btn-icon"> <i class="fa fa-angle-left text"></i> <i class="fa fa-angle-right text-active"></i> </a>
-            <div class="btn-group hidden-nav-xs">
-                <div class="btn-group hidden-nav-xs">
-                    <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown"> 切换项目 <span class="caret"></span> </button>
-                    <ul class="dropdown-menu text-left">
-                        <li><a href="#">Project</a></li>
-                        <li><a href="#">Another Project</a></li>
-                        <li><a href="#">More Projects</a></li>
-                    </ul>
-                </div>
+
+            <div id="chat" class="dropup">
+                <section class="dropdown-menu on aside-md m-l-n">
+                    <section class="panel bg-white">
+                        <header class="panel-heading b-b b-dark ">可用角色</header>
+                        <div class="panel-body animated fadeInRight">
+                            <p><a href="#" class="btn btn-sm btn-default">系统用户组</a></p>
+                        </div>
+                    </section>
+                </section>
             </div>
+            <div class="btn-group hidden-nav-xs">
+                <button type="button" title="切换角色" class="btn btn-sm btn-default" data-toggle="dropdown" data-target="#chat">切换角色</button>
+            </div>
+            <a href="#nav" data-toggle="class:nav-xs" class="pull-right btn btn-sm btn-default btn-icon"> <i class="fa fa-angle-left text"></i> <i class="fa fa-angle-right text-active"></i> </a>
+
         </footer>
     </section>
 </aside>

@@ -96,4 +96,23 @@ class UserGroupController extends Controller
         return Response::json($aResult);
     }
 
+    public function delete(Request $oRequest)
+    {
+        $this->validate($oRequest, [
+            'sAutoID' => 'required|string|min:1',
+        ]);
+        if(CommonUserGroup::whereIn('iAutoID', explode(',', $oRequest->input('sAutoID')))->delete()) {
+            $aResult = [
+                'code' => 0,
+                'msg' => '删除成功！',
+            ];
+        } else {
+            $aResult = [
+                'code' => 1,
+                'msg' => '删除失败！',
+            ];
+        }
+        return Response::json($aResult);
+    }
+
 }

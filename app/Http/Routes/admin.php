@@ -13,6 +13,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'backend', 'middleware' => 'au
         $oRouter->post('user_group/update', 'UserGroupController@update');
         $oRouter->get('user_group/create', 'UserGroupController@create');
         $oRouter->post('user_group/save', 'UserGroupController@save');
+        $oRouter->post('user_group/delete', 'UserGroupController@delete');
 
     });
 

@@ -5,13 +5,12 @@
     <section id="content">
         <section class="vbox">
 
-
-
             <section class="scrollable wrapper">
 
                 <ul class="breadcrumb">
-                    <li><a href="index.html"><i class="fa fa-home"></i> 系统设置</a></li>
-                    <li class="active">权限管理</li>
+                    @foreach($aPageMenu['aBreadMenu'] as $menu)
+                        <li class="@if($menu['level'] == 2) active @endif"><a href="{{$menu['link']}}">@if($menu['level'] == 0) <i class="fa fa-home"></i> @endif  {{$menu['title']}}</a></li>
+                    @endforeach
                 </ul>
 
                 <section class="panel panel-default panel-rounded4">
@@ -41,8 +40,8 @@
                                 </div>
                             </div>
                             <div class="col-sm-4 text-right">
-                                <a href="/backend/perm/user_group/create" class="btn btn-primary btn-s-md btn-sm">新增</a>
-                                <a href="#" class="btn btn-danger btn-s-md btn-sm">删除</a>
+                                <a href="/backend/perm/user_group/create" class="btn btn-primary  btn-sm">新增</a>
+                                <a href="#" class="btn btn-danger btn-sm delete">删除</a>
                             </div>
                         </div>
 
@@ -79,7 +78,6 @@
                 </section>
             </section>
 
-
         </section>
         <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
 
@@ -89,6 +87,7 @@
 @section('before-css')
     <link rel="stylesheet" href="/admin/js/datetimepicker/bootstrap-datetimepicker.min.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/bootstraptable/bootstrap-table.css" type="text/css" cache="false">
+    <link rel="stylesheet" href="/admin/js/jquery-confirm/jquery-confirm.css" type="text/css" cache="false">
 @endsection
 
 @section('before-js')
@@ -103,51 +102,11 @@
     <script src="/admin/js/datetimepicker/bootstrap-datetimepicker.zh-CN.js" cache="false"></script>
     <!-- datatable -->
     <script src="/admin/js/bootstraptable/bootstrap-table.js" cache="false"></script>
+    <script src="/admin/js/jquery-confirm/jquery-confirm.js" cache="false"></script>
+
+    <script src="/admin/js/custom/common.js"></script>
 
     <script>
-        // 删除操作
-        $('.data-action .operation a').on('click', function(){
-            alert($(this).attr('class'));
-            return true;
-        });
-
-        // 搜索
-        $('#data-search').on('click', function(event){
-            alert($('.search-text').val());
-            event.preventDefault();
-        });
-
-        // 排序
-        $('.th-sortable').on('click', function(event) {
-            if($(this).data('sortstatus') == 'desc') {
-                alert($(this).data('sortfield') + ' asc');
-                $(this).data('sortstatus', 'asc');
-            } else {
-                alert($(this).data('sortfield') + ' desc');
-                $(this).data('sortstatus', 'desc');
-            }
-        });
-
-        // 创建
-        $('#form-create-submit').on('click', function(event) {
-            initComponent();
-            var name = 'longyy';
-            var age = 28;
-            $.ajax({
-                method: 'post',
-                url: 'some.php',
-                data: {name:name, age:age},
-                dataType: 'json'
-            }).done(function(result){
-                if(result.status == 0) {
-                    $('#modal-create').modal('hide');
-                } else {
-                    showInfo('create-warning', 'warning', result.msg);
-                }
-                $('#form-create-submit').button('reset');
-            });
-        });
-
         // 日期
         $('.form-date').datetimepicker({
             format: 'yyyy-mm-dd',
@@ -161,29 +120,6 @@
             forceParse: 0
         });
 
-        // 重置表单
-        $('#modal-create').on('hidden.bs.modal', function(){
-            initComponent();
-            $('#form-create')[0].reset();
-        });
-
-        // 显示提示信息
-        function showInfo(position, infoType, info){
-            var infoclass = '';
-            if(infoType == 'warning') {
-                infoclass = 'alert-danger';
-            } else {
-                infoclass = 'alert-success';
-            }
-            $('#'+position).removeClass('alert-success alert-danger ').addClass(infoclass).show().find('div').text(info);
-        }
-
-        // 初始化模态框
-        function initComponent() {
-            $('#create-warning').hide();
-        }
-
-        initComponent();
 
         var $table = $('#table');
         $ok = $('#ok');
@@ -210,38 +146,61 @@
             return '<a href="/backend/perm/user_group/edit?iAutoID=' + row.iAutoID + '" class="btn btn-default btn-xs">编辑</a>';
         }
 
-        // datatable
         $(document).ready( function () {
-//            var id = 0;
+
+        });
 
 
+        $('.delete').on('click', function () {
+            $.alert({
+                title: '提示',
+                content: '确认删除？',
+                animation: 'top',
+                closeAnimation: 'bottom',
+                backgroundDismiss: true,
+                buttons: {
+                    'confirm': {
+                        text: '确定',
+                        btnClass: 'btn-blue',
+                        action: function () {
+                            alert(JSON.stringify($table.bootstrapTable('getSelections')));
+                            var selected = $table.bootstrapTable('getSelections');
+                            var selectedId = [];
+                            $.each(selected, function(index,value){
+                                selectedId[index] = value.iAutoID;
+                            });
 
+                            var data = {
+                                sAutoID: selectedId.join(',')
+                            };
 
+                            $.ajax({
+                                type: 'POST',
+                                url: '/backend/perm/user_group/delete',
+                                cache: false,
+                                async: false,
+                                dataType: 'json',
+                                data: data,
+                                success: function(result){
+                                    alert(result.msg);
+                                    $table.bootstrapTable('refresh');
+                                },
+                                error: function(XMLHttpRequest, textStatus, errorThrown){
+                                    console.log(XMLHttpRequest.status);
+                                    console.log(XMLHttpRequest.readyState);
+                                    console.log(textStatus);
+                                }
+                            });
 
-            $('#datatables tbody').on( 'click', 'tr a.edit', function () {
-                var id = $(this).parent().parent().find('input').val();
-                data = {id:id};
-                $.ajax({
-                    type: 'GET',
-                    data: data,
-                    url: '/json/edit.php',
-                    dataType: 'json',
-                    success: function(json){
-                        if(json.status) {
-                            $("#myModal #Id").val(json.data.Id);
-                            $("#myModal #Name").val(json.data.Name);
-                            $("#myModal #Title").val(json.data.Title);
-                            $("#myModal #Condition").val(json.data.Condition);
-                            if(json.data.Status==1){$("#myModal #Status").attr("checked","checked");
-                            }else{$("#myModal #Status").attr("checked",false);}
-                        } else {
-                            alert(json.msg);
+                        }
+                    },
+                    'cancel': {
+                        text:'取消',
+                        action: function(){
                         }
                     }
-                });
-                $('#myModal').modal({keyboard:false,show:true});
+                }
             });
-
         });
 
     </script>

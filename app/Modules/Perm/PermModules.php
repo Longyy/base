@@ -80,6 +80,7 @@ class PermModules
                     $aBreadMenu[] = [
                         'title' => $aAllMenuInfo[$iVal]['sName'],
                         'link' => $aAllMenuInfo[$iVal]['sUrl'],
+                        'level' => $aAllMenuInfo[$iVal]['iLevel'],
                     ];
                 }
             }
