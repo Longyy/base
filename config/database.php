@@ -115,12 +115,21 @@ return [
     'redis' => [
 
         'cluster' => false,
-
         'default' => [
-            'host'     => '127.0.0.1',
-            'port'     => 6379,
-            'database' => 0,
+            'host'     => env('REDIS_WRITE_HOST_DEFAULT'),
+            'port'     => env('REDIS_WRITE_PORT_DEFAULT'),
+            'database' => env('REDIS_WRITE_DATABASE_DEFAULT'),
         ],
+        'store' => [
+            'host'     => env('REDIS_WRITE_HOST_DEFAULT'),
+            'port'     => env('REDIS_WRITE_PORT_DEFAULT'),
+            'database' => env('REDIS_WRITE_DATABASE_DEFAULT'),
+        ],
+        'session' => [
+            'host'     => env('REDIS_WRITE_HOST_DEFAULT'),
+            'port'     => env('REDIS_WRITE_PORT_DEFAULT'),
+            'database' => env('REDIS_WRITE_DATABASE_DEFAULT'),
+        ]
 
     ],
 
