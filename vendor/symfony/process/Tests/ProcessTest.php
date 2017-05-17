@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Process\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Exception\LogicException;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Exception\RuntimeException;
@@ -21,7 +22,7 @@ use Symfony\Component\Process\Process;
 /**
  * @author Robert Schönthal <seroscho@googlemail.com>
  */
-class ProcessTest extends \PHPUnit_Framework_TestCase
+class ProcessTest extends TestCase
 {
     private static $phpBin;
     private static $process;
@@ -31,7 +32,7 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         $phpBin = new PhpExecutableFinder();
-        self::$phpBin = 'phpdbg' === PHP_SAPI ? 'php' : $phpBin->find();
+        self::$phpBin = getenv('SYMFONY_PROCESS_PHP_TEST_BINARY') ?: ('phpdbg' === PHP_SAPI ? 'php' : $phpBin->find());
         if ('\\' !== DIRECTORY_SEPARATOR) {
             // exec is mandatory to deal with sending a signal to the process
             // see https://github.com/symfony/symfony/issues/5030 about prepending
@@ -54,6 +55,9 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
 
     public function testThatProcessDoesNotThrowWarningDuringRun()
     {
+        if ('\\' === DIRECTORY_SEPARATOR) {
+            $this->markTestSkipped('This test is transient on Windows');
+        }
         @trigger_error('Test Error', E_USER_NOTICE);
         $process = $this->getProcess(self::$phpBin." -r 'sleep(3)'");
         $process->run();
@@ -192,9 +196,6 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetStreamAsInput($code, $size)
     {
-        if ('\\' === DIRECTORY_SEPARATOR) {
-            $this->markTestIncomplete('This test fails with a timeout on Windows, can someone investigate please?');
-        }
         $expected = str_repeat(str_repeat('*', 1024), $size).'!';
         $expectedLength = (1024 * $size) + 1;
 
@@ -210,6 +211,24 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedLength, strlen($p->getOutput()));
         $this->assertEquals($expectedLength, strlen($p->getErrorOutput()));
+    }
+
+    public function testLiveStreamAsInput()
+    {
+        $stream = fopen('php://memory', 'r+');
+        fwrite($stream, 'hello');
+        rewind($stream);
+
+        $p = $this->getProcess(sprintf('%s -r %s', self::$phpBin, escapeshellarg('stream_copy_to_stream(STDIN, STDOUT);')));
+        $p->setInput($stream);
+        $p->start(function ($type, $data) use ($stream) {
+            if ('hello' === $data) {
+                fclose($stream);
+            }
+        });
+        $p->wait();
+
+        $this->assertSame('hello', $p->getOutput());
     }
 
     /**
@@ -791,10 +810,7 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
 
     public function testIdleTimeoutNotExceededWhenOutputIsSent()
     {
-        if ('\\' === DIRECTORY_SEPARATOR) {
-            $this->markTestIncomplete('This test fails with a timeout on Windows, can someone investigate please?');
-        }
-        $process = $this->getProcess(sprintf('%s -r %s', self::$phpBin, escapeshellarg('while (true) {echo "foo\n"; usleep(10000);}')));
+        $process = $this->getProcess(sprintf('%s -r %s', self::$phpBin, escapeshellarg('while (true) {echo \'foo \'; usleep(1000);}')));
         $process->setTimeout(1);
         $process->start();
 
@@ -802,15 +818,15 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
             usleep(1000);
         }
 
-        $process->setIdleTimeout(0.1);
+        $process->setIdleTimeout(0.5);
 
         try {
             $process->wait();
             $this->fail('A timeout exception was expected.');
-        } catch (ProcessTimedOutException $ex) {
-            $this->assertTrue($ex->isGeneralTimeout(), 'A general timeout is expected.');
-            $this->assertFalse($ex->isIdleTimeout(), 'No idle timeout is expected.');
-            $this->assertEquals(1, $ex->getExceededTimeout());
+        } catch (ProcessTimedOutException $e) {
+            $this->assertTrue($e->isGeneralTimeout(), 'A general timeout is expected.');
+            $this->assertFalse($e->isIdleTimeout(), 'No idle timeout is expected.');
+            $this->assertEquals(1, $e->getExceededTimeout());
         }
     }
 
@@ -911,7 +927,14 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
     public function testMethodsThatNeedARunningProcess($method)
     {
         $process = $this->getProcess('foo');
-        $this->setExpectedException('Symfony\Component\Process\Exception\LogicException', sprintf('Process must be started before calling %s.', $method));
+
+        if (method_exists($this, 'expectException')) {
+            $this->expectException('Symfony\Component\Process\Exception\LogicException');
+            $this->expectExceptionMessage(sprintf('Process must be started before calling %s.', $method));
+        } else {
+            $this->setExpectedException('Symfony\Component\Process\Exception\LogicException', sprintf('Process must be started before calling %s.', $method));
+        }
+
         $process->{$method}();
     }
 
@@ -928,7 +951,7 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideMethodsThatNeedATerminatedProcess
-     * @expectedException Symfony\Component\Process\Exception\LogicException
+     * @expectedException \Symfony\Component\Process\Exception\LogicException
      * @expectedExceptionMessage Process must be terminated before calling
      */
     public function testMethodsThatNeedATerminatedProcess($method)
@@ -1065,7 +1088,14 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
     {
         $p = $this->getProcess('foo');
         $p->disableOutput();
-        $this->setExpectedException($exception, $exceptionMessage);
+
+        if (method_exists($this, 'expectException')) {
+            $this->expectException($exception);
+            $this->expectExceptionMessage($exceptionMessage);
+        } else {
+            $this->setExpectedException($exception, $exceptionMessage);
+        }
+
         if ('mustRun' === $startMethod) {
             $this->skipIfNotEnhancedSigchild();
         }
@@ -1166,21 +1196,30 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * provides default method names for simple getter/setter.
+     * @dataProvider provideVariousIncrementals
      */
-    public function methodProvider()
+    public function testIncrementalOutputDoesNotRequireAnotherCall($stream, $method)
     {
-        $defaults = array(
-            array('CommandLine'),
-            array('Timeout'),
-            array('WorkingDirectory'),
-            array('Env'),
-            array('Stdin'),
-            array('Input'),
-            array('Options'),
-        );
+        $process = $this->getProcess(self::$phpBin.' -r '.escapeshellarg('$n = 0; while ($n < 3) { file_put_contents(\''.$stream.'\', $n, 1); $n++; usleep(1000); }'), null, null, null, null);
+        $process->start();
+        $result = '';
+        $limit = microtime(true) + 3;
+        $expected = '012';
 
-        return $defaults;
+        while ($result !== $expected && microtime(true) < $limit) {
+            $result .= $process->$method();
+        }
+
+        $this->assertSame($expected, $result);
+        $process->stop();
+    }
+
+    public function provideVariousIncrementals()
+    {
+        return array(
+            array('php://stdout', 'getIncrementalOutput'),
+            array('php://stderr', 'getIncrementalErrorOutput'),
+        );
     }
 
     /**
@@ -1205,7 +1244,7 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
             } catch (RuntimeException $e) {
                 $this->assertSame('This PHP has been compiled with --enable-sigchild. You must use setEnhanceSigchildCompatibility() to use this method.', $e->getMessage());
                 if ($enhance) {
-                    $process->setEnhanceSigChildCompatibility(true);
+                    $process->setEnhanceSigchildCompatibility(true);
                 } else {
                     self::$notEnhancedSigchild = true;
                 }
@@ -1225,7 +1264,12 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
             if (!$expectException) {
                 $this->markTestSkipped('PHP is compiled with --enable-sigchild.');
             } elseif (self::$notEnhancedSigchild) {
-                $this->setExpectedException('Symfony\Component\Process\Exception\RuntimeException', 'This PHP has been compiled with --enable-sigchild.');
+                if (method_exists($this, 'expectException')) {
+                    $this->expectException('Symfony\Component\Process\Exception\RuntimeException');
+                    $this->expectExceptionMessage('This PHP has been compiled with --enable-sigchild.');
+                } else {
+                    $this->setExpectedException('Symfony\Component\Process\Exception\RuntimeException', 'This PHP has been compiled with --enable-sigchild.');
+                }
             }
         }
     }

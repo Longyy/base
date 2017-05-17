@@ -23,18 +23,10 @@
                             <div class="col-sm-8">
                                 <div class="form-inline" role="form">
                                     <div class="form-group">
-                                        <span>状态: </span>
-                                        <input name="offset" class="form-control input-sm w70" type="number" value="0">
+                                        <input name="sName" class="form-control input-sm " type="text" placeholder="名称">
                                     </div>
                                     <div class="form-group">
-                                        <span>年龄: </span>
-                                        <input name="limit" class="form-control input-sm w70" type="number" value="5">
-                                    </div>
-                                    <div class="form-group">
-                                        <input name="search" class="form-control input-sm " type="text" placeholder="名称">
-                                    </div>
-                                    <div class="form-group">
-                                        <button id="ok" type="submit" class="btn btn-sm btn-default">OK</button>
+                                        <button id="ok" type="submit" class="btn btn-sm btn-default">搜索</button>
                                     </div>
 
                                 </div>
@@ -107,24 +99,12 @@
     <script src="/admin/js/custom/common.js"></script>
 
     <script>
-        // 日期
-        $('.form-date').datetimepicker({
-            format: 'yyyy-mm-dd',
-            language:  'zh-CN',
-            weekStart: 1,
-            todayBtn:  1,
-            autoclose: 1,
-            todayHighlight: 1,
-            startView: 2,
-            minView: 2,
-            forceParse: 0
-        });
-
 
         var $table = $('#table');
         $ok = $('#ok');
         $(function () {
             $ok.click(function () {
+                alert('xx');
                 $table.bootstrapTable('refresh');
             });
         });

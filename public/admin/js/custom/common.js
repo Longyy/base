@@ -30,39 +30,39 @@ $(function(){
         $span.removeClass('show inline');
         $cancel.removeAttr('disabled');
     }
-
-    $('#form').parsley().on('form:success', function() {
-        showLoading();
-    }).on('form:submit', function() {
-        var result = submitData();
-        $msg.text(result.msg);
-        if(result.code == 0) {
-
-            $alert.removeClass('alert-danger')
-                .addClass('alert-success')
-                .toggle()
-                .animate({marginTop:"0"},500);
-            setTimeout(function(){
-                $alert.fadeOut(300, function(){
-                    $alert.css({"margin-top":"-85px"});
-                    cancelLoading();
-                    goBack();
-                });
-            }, 2000);
-
-        } else {
-            $alert.removeClass('alert-success')
-                .addClass('alert-danger')
-                .toggle()
-                .animate({marginTop:"0"},100);
-            setTimeout(function(){
-                $alert.fadeOut(300, function(){
-                    $alert.css({"margin-top":"-85px"});
-                    cancelLoading();
-                });
-            }, 2000);
-        }
-        return false;
-    });
+    //
+    // $('#form').parsley().on('form:success', function() {
+    //     showLoading();
+    // }).on('form:submit', function() {
+    //     var result = submitData();
+    //     $msg.text(result.msg);
+    //     if(result.code == 0) {
+    //
+    //         $alert.removeClass('alert-danger')
+    //             .addClass('alert-success')
+    //             .toggle()
+    //             .animate({marginTop:"0"},500);
+    //         setTimeout(function(){
+    //             $alert.fadeOut(300, function(){
+    //                 $alert.css({"margin-top":"-85px"});
+    //                 cancelLoading();
+    //                 goBack();
+    //             });
+    //         }, 2000);
+    //
+    //     } else {
+    //         $alert.removeClass('alert-success')
+    //             .addClass('alert-danger')
+    //             .toggle()
+    //             .animate({marginTop:"0"},100);
+    //         setTimeout(function(){
+    //             $alert.fadeOut(300, function(){
+    //                 $alert.css({"margin-top":"-85px"});
+    //                 cancelLoading();
+    //             });
+    //         }, 2000);
+    //     }
+    //     return false;
+    // });
 
 });

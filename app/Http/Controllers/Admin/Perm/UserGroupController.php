@@ -22,6 +22,9 @@ class UserGroupController extends Controller
 
     public function getList(Request $oRequest)
     {
+        $this->validate($oRequest, [
+            'sName' => 'string|max:20',
+        ]);
         $data = CommonUserGroup::all()->toArray();
         return Response::json(['total' => 6, 'rows' => $data]);
     }

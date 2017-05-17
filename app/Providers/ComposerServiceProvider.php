@@ -12,14 +12,7 @@ use Illuminate\Support\ServiceProvider;
 class ComposerServiceProvider extends ServiceProvider
 {
     public function boot(){
-        view()->composer(
-            '*',
-            'App\Http\ViewComposers\MenuComposer'
-        );
-        view()->composer(
-            '*',
-            'App\Http\ViewComposers\ProfileComposer'
-        );
+        view()->composer('*', 'App\Http\ViewComposers\GlobalComposer');
     }
 
     public function register()

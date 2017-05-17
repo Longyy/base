@@ -7,8 +7,9 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
-        "hug/group": "dev-master",
-        "zizaco/entrust": "5.2.x-dev"
+        "zizaco/entrust": "5.2.x-dev",
+        "paf/estate": "master",
+        "paf/logservice": "master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -48,7 +49,11 @@
         ]
     },
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "secure-http": false
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "repositories": [
+        { "type": "composer", "url": "http://114.55.234.2:8080" }
+    ]
 }

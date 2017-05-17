@@ -58,12 +58,12 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     protected $startTime;
     protected $loadClassCache;
 
-    const VERSION = '2.7.10';
-    const VERSION_ID = 20710;
+    const VERSION = '2.7.28-DEV';
+    const VERSION_ID = 20728;
     const MAJOR_VERSION = 2;
     const MINOR_VERSION = 7;
-    const RELEASE_VERSION = 10;
-    const EXTRA_VERSION = '';
+    const RELEASE_VERSION = 28;
+    const EXTRA_VERSION = 'DEV';
 
     const END_OF_MAINTENANCE = '05/2018';
     const END_OF_LIFE = '05/2019';
@@ -302,6 +302,9 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     {
         if (null === $this->name) {
             $this->name = preg_replace('/[^a-zA-Z0-9_]+/', '', basename($this->rootDir));
+            if (ctype_digit($this->name[0])) {
+                $this->name = '_'.$this->name;
+            }
         }
 
         return $this->name;
@@ -465,8 +468,8 @@ abstract class Kernel implements KernelInterface, TerminableInterface
                 $hierarchy[] = $name;
             }
 
-            foreach ($hierarchy as $bundle) {
-                $this->bundleMap[$bundle] = $bundleMap;
+            foreach ($hierarchy as $hierarchyBundle) {
+                $this->bundleMap[$hierarchyBundle] = $bundleMap;
                 array_pop($bundleMap);
             }
         }
@@ -531,8 +534,15 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     protected function getKernelParameters()
     {
         $bundles = array();
+        $bundlesMetadata = array();
+
         foreach ($this->bundles as $name => $bundle) {
             $bundles[$name] = get_class($bundle);
+            $bundlesMetadata[$name] = array(
+                'parent' => $bundle->getParent(),
+                'path' => $bundle->getPath(),
+                'namespace' => $bundle->getNamespace(),
+            );
         }
 
         return array_merge(
@@ -544,6 +554,7 @@ abstract class Kernel implements KernelInterface, TerminableInterface
                 'kernel.cache_dir' => realpath($this->getCacheDir()) ?: $this->getCacheDir(),
                 'kernel.logs_dir' => realpath($this->getLogDir()) ?: $this->getLogDir(),
                 'kernel.bundles' => $bundles,
+                'kernel.bundles_metadata' => $bundlesMetadata,
                 'kernel.charset' => $this->getCharset(),
                 'kernel.container_class' => $this->getContainerClass(),
             ),
@@ -662,10 +673,7 @@ abstract class Kernel implements KernelInterface, TerminableInterface
             $dumper->setProxyDumper(new ProxyDumper(md5($cache->getPath())));
         }
 
-        $content = $dumper->dump(array('class' => $class, 'base_class' => $baseClass, 'file' => $cache->getPath()));
-        if (!$this->debug) {
-            $content = static::stripComments($content);
-        }
+        $content = $dumper->dump(array('class' => $class, 'base_class' => $baseClass, 'file' => $cache->getPath(), 'debug' => $this->debug));
 
         $cache->write($content, $container->getResources());
     }

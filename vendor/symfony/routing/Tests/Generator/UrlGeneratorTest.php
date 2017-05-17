@@ -11,13 +11,14 @@
 
 namespace Symfony\Component\Routing\Tests\Generator;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
 
-class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
+class UrlGeneratorTest extends TestCase
 {
     public function testAbsoluteUrlWithPort80()
     {
@@ -208,7 +209,7 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGenerateForRouteWithInvalidOptionalParameterNonStrictWithLogger()
     {
         $routes = $this->getRoutes('test', new Route('/testing/{foo}', array('foo' => '1'), array('foo' => 'd+')));
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
         $logger->expects($this->once())
             ->method('error');
         $generator = $this->getGenerator($routes, array(), $logger);
@@ -297,10 +298,22 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testQueryParamSameAsDefault()
     {
-        $routes = $this->getRoutes('test', new Route('/test', array('default' => 'value')));
+        $routes = $this->getRoutes('test', new Route('/test', array('page' => 1)));
 
-        $this->assertSame('/app.php/test', $this->getGenerator($routes)->generate('test', array('default' => 'foo')));
-        $this->assertSame('/app.php/test', $this->getGenerator($routes)->generate('test', array('default' => 'value')));
+        $this->assertSame('/app.php/test?page=2', $this->getGenerator($routes)->generate('test', array('page' => 2)));
+        $this->assertSame('/app.php/test', $this->getGenerator($routes)->generate('test', array('page' => 1)));
+        $this->assertSame('/app.php/test', $this->getGenerator($routes)->generate('test', array('page' => '1')));
+        $this->assertSame('/app.php/test', $this->getGenerator($routes)->generate('test'));
+    }
+
+    public function testArrayQueryParamSameAsDefault()
+    {
+        $routes = $this->getRoutes('test', new Route('/test', array('array' => array('foo', 'bar'))));
+
+        $this->assertSame('/app.php/test?array%5B0%5D=bar&array%5B1%5D=foo', $this->getGenerator($routes)->generate('test', array('array' => array('bar', 'foo'))));
+        $this->assertSame('/app.php/test?array%5Ba%5D=foo&array%5Bb%5D=bar', $this->getGenerator($routes)->generate('test', array('array' => array('a' => 'foo', 'b' => 'bar'))));
+        $this->assertSame('/app.php/test', $this->getGenerator($routes)->generate('test', array('array' => array('foo', 'bar'))));
+        $this->assertSame('/app.php/test', $this->getGenerator($routes)->generate('test', array('array' => array(1 => 'bar', 0 => 'foo'))));
         $this->assertSame('/app.php/test', $this->getGenerator($routes)->generate('test'));
     }
 
@@ -346,7 +359,7 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
 
         // The default requirement for 'x' should not allow the separator '.' in this case because it would otherwise match everything
         // and following optional variables like _format could never match.
-        $this->setExpectedException('Symfony\Component\Routing\Exception\InvalidParameterException');
+        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Routing\Exception\InvalidParameterException');
         $generator->generate('test', array('x' => 'do.t', 'y' => '123', 'z' => 'bar', '_format' => 'xml'));
     }
 
