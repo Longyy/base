@@ -32,7 +32,7 @@ return array(
     'App\\Models\\Perm\\CommonMenu' => $baseDir . '/app/Models/Perm/CommonMenu.php',
     'App\\Models\\Perm\\CommonUserGroup' => $baseDir . '/app/Models/Perm/CommonUserGroup.php',
     'App\\Models\\Perm\\UsersGroup' => $baseDir . '/app/Models/Perm/UsersGroup.php',
-    'App\\Models\\User' => $baseDir . '/app/Models/User.php',
+    'App\\Models\\User' => $baseDir . '/app/Models/UserModules.phples.php',
     'App\\Modules\\Auth\\Auth' => $baseDir . '/app/Modules/Auth/Auth.php',
     'App\\Modules\\Perm\\PermModules' => $baseDir . '/app/Modules/Perm/PermModules.php',
     'App\\Modules\\Perm\\ProfileModules' => $baseDir . '/app/Modules/Perm/ProfileModules.php',

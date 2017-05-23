@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Administrator
+ * UserModules: Administrator
  * Date: 2017/4/25
  * Time: 22:44
  */
@@ -14,5 +14,10 @@ class Auth
     private static function getUser()
     {
 
+    }
+
+    private static function postLogin()
+    {
+        return [];
     }
 }

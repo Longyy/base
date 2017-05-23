@@ -19,7 +19,7 @@ class Swift_Bug34Test extends \PHPUnit_Framework_TestCase
 
         $message->setBody('<img src="'.$cid.'" />', 'text/html');
 
-        $message->setTo(array('user@domain.tld' => 'User'));
+        $message->setTo(array('user@domain.tld' => 'UserModules'));
 
         $message->setFrom(array('other@domain.tld' => 'Other'));
         $message->setSender(array('other@domain.tld' => 'Other'));
@@ -36,7 +36,7 @@ class Swift_Bug34Test extends \PHPUnit_Framework_TestCase
         'Date: '.$date."\r\n".
         'Subject: test subject'."\r\n".
         'From: Other <other@domain.tld>'."\r\n".
-        'To: User <user@domain.tld>'."\r\n".
+        'To: UserModules <user@domain.tld>'."\r\n".
         'MIME-Version: 1.0'."\r\n".
         'Content-Type: multipart/alternative;'."\r\n".
         ' boundary="'.$boundary.'"'."\r\n".

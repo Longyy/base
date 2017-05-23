@@ -235,7 +235,7 @@ class PasswordBroker implements PasswordBrokerContract
         $user = $this->users->retrieveByCredentials($credentials);
 
         if ($user && ! $user instanceof CanResetPasswordContract) {
-            throw new UnexpectedValueException('User must implement CanResetPassword interface.');
+            throw new UnexpectedValueException('UserModules must implement CanResetPassword interface.');
         }
 
         return $user;

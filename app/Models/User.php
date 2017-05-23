@@ -47,4 +47,10 @@ class User extends Model
         return $oUser->update($aData);
     }
 
+    public static function getUserByName($sName)
+    {
+        $oUser = new static;
+        return $oUser->where(['sName' => $sName])->first();
+    }
+
 }

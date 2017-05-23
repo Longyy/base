@@ -14,7 +14,7 @@ class GenericUser implements UserContract
     protected $attributes;
 
     /**
-     * Create a new generic User object.
+     * Create a new generic UserModules object.
      *
      * @param  array  $attributes
      * @return void

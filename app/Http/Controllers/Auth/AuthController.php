@@ -1,11 +1,15 @@
 <?php
 namespace App\Http\Controllers\Auth;
 
+use App\Modules\Auth\UserModules;
 use Illuminate\Http\Request;
+use Estate\Exceptions\WebException;
 use App\Http\Controllers\RootController;
 
 class AuthController extends RootController
 {
+    protected $sHomeUrl = '/backend';
+    protected $sRedirectTo = '/auth/login';
     /**
      * 登录页面
      * @param Request $oRequest
@@ -19,12 +23,17 @@ class AuthController extends RootController
      * 提交登录
      * @param Request $oRequest
      */
-    public function postLogin(array $oRequest = [])
+    public function postLogin(Request $oRequest)
     {
-        dd($oRequest);
-        $aField = $this->validate($oRequest, [
-
+        $aFieldValue = $this->validate($oRequest,[
+            'username' => 'required|string|max:20',
+            'password' => 'required|string',
+            'remember' => 'string|max:2',
+        ], [
+            'username.required' => '姓名必填',
+            'password.required' => '密码必填',
         ]);
+        return redirect(UserModules::postLogin($aFieldValue, $oRequest) ? $this->sHomeUrl : $this->sRedirectTo);
     }
 
     /**

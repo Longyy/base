@@ -41,7 +41,7 @@ class FunctionEnumerator extends Enumerator
         }
 
         if ($input->getOption('user')) {
-            $label     = 'User Functions';
+            $label     = 'UserModules Functions';
             $functions = $this->getFunctions('user');
         } elseif ($input->getOption('internal')) {
             $label     = 'Internal Functions';

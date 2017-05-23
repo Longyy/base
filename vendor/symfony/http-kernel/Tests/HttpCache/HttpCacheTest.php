@@ -1030,7 +1030,7 @@ class HttpCacheTest extends HttpCacheTestCase
     {
         $count = 0;
         $this->setNextResponse(200, array('Cache-Control' => 'max-age=10000'), '', function ($request, $response) use (&$count) {
-            $response->headers->set('Vary', 'Accept User-Agent Foo');
+            $response->headers->set('Vary', 'Accept UserModules-Agent Foo');
             $response->headers->set('Cache-Control', 'public, max-age=10');
             $response->headers->set('X-Response-Count', ++$count);
             $response->setContent($request->headers->get('USER_AGENT'));
@@ -1054,7 +1054,7 @@ class HttpCacheTest extends HttpCacheTestCase
     {
         $count = 0;
         $this->setNextResponse(200, array('Cache-Control' => 'max-age=10000'), '', function ($request, $response) use (&$count) {
-            $response->headers->set('Vary', 'Accept User-Agent Foo');
+            $response->headers->set('Vary', 'Accept UserModules-Agent Foo');
             $response->headers->set('Cache-Control', 'public, max-age=10');
             $response->headers->set('X-Response-Count', ++$count);
             $response->setContent($request->headers->get('USER_AGENT'));

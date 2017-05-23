@@ -23,7 +23,7 @@
                 {!! csrf_field() !!}
                 <div class="form-group">
                     <label class="control-label">用户</label>
-                    <input type="username" name="email" placeholder="请输入用户名" class="form-control input-lg">
+                    <input type="text" name="username" placeholder="请输入用户名" class="form-control input-lg">
                 </div>
                 <div class="form-group">
                     <label class="control-label">密码</label>

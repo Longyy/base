@@ -79,7 +79,7 @@ class Process
     /**
      * Exit codes translation table.
      *
-     * User-defined errors must use exit codes in the 64-113 range.
+     * UserModules-defined errors must use exit codes in the 64-113 range.
      *
      * @var array
      */
@@ -102,9 +102,9 @@ class Process
         135 => 'Bus error: "access to undefined portion of memory object"',
         136 => 'Floating point exception: "erroneous arithmetic operation"',
         137 => 'Kill (terminate immediately)',
-        138 => 'User-defined 1',
+        138 => 'UserModules-defined 1',
         139 => 'Segmentation violation',
-        140 => 'User-defined 2',
+        140 => 'UserModules-defined 2',
         141 => 'Write to pipe with no one reading',
         142 => 'Signal raised by alarm',
         143 => 'Termination (request to terminate)',
