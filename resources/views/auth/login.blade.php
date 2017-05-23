@@ -18,12 +18,12 @@
 <section id="content" class="m-t-lg wrapper-md animated fadeInUp">
     <div class="container aside-xxl"> <a class="navbar-brand block" href="index.html">Notebook</a>
         <section class="panel panel-default bg-white m-t-lg">
-            <header class="panel-heading text-center"> <strong>Sign in</strong> </header>
+            <header class="panel-heading text-center"> <strong>登录</strong> </header>
             <form action="/auth/login" method="post" class="panel-body wrapper-lg">
                 {!! csrf_field() !!}
                 <div class="form-group">
                     <label class="control-label">用户</label>
-                    <input type="email" name="email" placeholder="请输入邮箱" class="form-control input-lg">
+                    <input type="username" name="email" placeholder="请输入用户名" class="form-control input-lg">
                 </div>
                 <div class="form-group">
                     <label class="control-label">密码</label>

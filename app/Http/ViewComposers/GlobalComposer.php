@@ -22,11 +22,11 @@ class GlobalComposer
 
     public function __construct()
     {
-        $this->oUser = Auth::user();
     }
 
     public function compose(View $oView)
     {
+        dd('xx');
         // 用户信息
         $iUserGroupID = 1;
         $oView->with('aPageMenu', PermModules::getPageMenu($iUserGroupID));

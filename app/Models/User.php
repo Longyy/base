@@ -2,45 +2,49 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Authenticatable;
-//use Hug\Group\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Foundation\Auth\Access\Authorizable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Estate\Database\Eloquent\Model;
+use Estate\Exceptions\ServiceException;
 
-class User extends Model implements AuthenticatableContract,
-                                    AuthorizableContract,
-                                    CanResetPasswordContract
+class User extends Model
 {
-    use Authenticatable, Authorizable, CanResetPassword;
+    protected $table = 'user';
 
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'users';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['name', 'email', 'password', 'groupid'];
-
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = ['password', 'remember_token'];
-
+    protected $fillable = ['sName', 'sEmail', 'sMobile', 'sPassword', 'sRememberToken', 'iGroupID'];
+    protected $hidden = ['sPassword', 'sRememberToken'];
     protected $orderable  = ['*'];
     protected $rangeable  = ['*'];
-    protected $columnable = ['id', 'name', 'email', 'password', 'groupid'];
+    protected $columnable = ['iAutoID', 'sName', 'sEmail', 'sMobile', 'sPassword', 'sRememberToken', 'iGroupID', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
 
+    /**
+     * @param array $aWhere   option  条件值
+     * @param int   $iPerPage option  分页大小
+     * @param array $aColumns option  字段选择
+     * @param array $aOrders  option  字段排序
+     * @param array $aRanges  option  字段范围查询
+     * @return mixed
+     */
+    public static function findAll(array $aWhere = [], $iPerPage = 10, array $aColumns = [], $aOrders = [], array $aRanges = [])
+    {
+        $oUser = new static;
+        foreach($aWhere as $sKey => $mValue) {
+            $oUser = $oUser->where($sKey, $mValue);
+        }
+        return $oUser->withOrder($aOrders)->withRange($aRanges)->paginate($iPerPage, $aColumns);
+    }
+
+    /**
+     * 更新
+     * @param $iAutoID
+     * @param array $aData
+     * @return mixed
+     * @throws ServiceException
+     */
+    public static function updateByID($iAutoID, array $aData)
+    {
+        if($oUser = self::find($iAutoID)) {
+            throw new ServiceException('ROW_NOT_FOUND');
+        }
+        return $oUser->update($aData);
+    }
 
 }
