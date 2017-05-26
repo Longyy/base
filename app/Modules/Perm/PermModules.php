@@ -10,6 +10,7 @@ use App\Models\Perm\CommonMenu;
 use App\Http\Helpers\Tools;
 use DB;
 use Request;
+use CustomAuth;
 
 class PermModules
 {
@@ -17,8 +18,9 @@ class PermModules
      * 取菜单
      * @param $iUserGroupID
      */
-    public static function getPageMenu($iUserGroupID)
+    public static function getPageMenu()
     {
+        $iUserGroupID = CustomAuth::getMainGroupID();
         // 取该用户组下所有resource id
         $aPermInfo = DB::table('common_usergroup_perm')
             ->leftJoin('common_perm', 'common_usergroup_perm.iPermID', '=', 'common_perm.iAutoID')

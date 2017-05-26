@@ -8,8 +8,6 @@ use App\Http\Controllers\RootController;
 
 class AuthController extends RootController
 {
-    protected $sHomeUrl = '/backend';
-    protected $sRedirectTo = '/auth/login';
     /**
      * 登录页面
      * @param Request $oRequest
@@ -33,7 +31,8 @@ class AuthController extends RootController
             'username.required' => '姓名必填',
             'password.required' => '密码必填',
         ]);
-        return redirect(UserModules::postLogin($aFieldValue, $oRequest) ? $this->sHomeUrl : $this->sRedirectTo);
+        return redirect(UserModules::postLogin($aFieldValue, $oRequest)
+            ? UserModules::getHomeUrl() : UserModules::getLoginUrl());
     }
 
     /**

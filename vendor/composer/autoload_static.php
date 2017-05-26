@@ -325,7 +325,7 @@ class ComposerStaticInite076afe45cb086ab2da8c82077e278c9
         'App\\Models\\Perm\\CommonUserGroup' => __DIR__ . '/../..' . '/app/Models/Perm/CommonUserGroup.php',
         'App\\Models\\Perm\\UsersGroup' => __DIR__ . '/../..' . '/app/Models/Perm/UsersGroup.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
-        'App\\Modules\\Auth\\Auth' => __DIR__ . '/../..' . '/app/Modules/Auth/Auth.php',
+        'App\\Modules\\Auth\\Auth' => __DIR__ . '/../..',
         'App\\Modules\\Perm\\PermModules' => __DIR__ . '/../..' . '/app/Modules/Perm/PermModules.php',
         'App\\Modules\\Perm\\ProfileModules' => __DIR__ . '/../..' . '/app/Modules/Perm/ProfileModules.php',
         'App\\Modules\\Perm\\UserGroupModules' => __DIR__ . '/../..' . '/app/Modules/Perm/UserGroupModules.php',

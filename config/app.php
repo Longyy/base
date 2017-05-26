@@ -147,6 +147,7 @@ return [
         App\Providers\ComposerServiceProvider::class,
 
         Zizaco\Entrust\EntrustServiceProvider::class,
+        App\Providers\CustomAuthServiceProvider::class,
     ],
 
     /*
@@ -197,6 +198,7 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
 
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+        'CustomAuth'   => App\Facades\Auth\Auth::class,
 
     ],
 

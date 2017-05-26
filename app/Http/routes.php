@@ -10,4 +10,4 @@ Route::post('auth/login', 'Auth\AuthController@postLogin');
 //Route::post('auth/register', 'Auth\AuthController@postRegister');
 //
 //
-//include_once __DIR__ . '/Routes/admin.php';
+include_once __DIR__ . '/Routes/admin.php';

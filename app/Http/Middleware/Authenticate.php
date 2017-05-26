@@ -2,8 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Modules\Auth\UserModules;
 use Closure;
-use Illuminate\Contracts\Auth\Guard;
+use CustomAuth;
 
 class Authenticate
 {
@@ -12,7 +13,6 @@ class Authenticate
      *
      * @var Guard
      */
-    protected $auth;
 
     /**
      * Create a new filter instance.
@@ -20,9 +20,9 @@ class Authenticate
      * @param  Guard  $auth
      * @return void
      */
-    public function __construct(Guard $auth)
+    public function __construct()
     {
-        $this->auth = $auth;
+
     }
 
     /**
@@ -34,11 +34,11 @@ class Authenticate
      */
     public function handle($request, Closure $next)
     {
-        if ($this->auth->guest()) {
+        if (CustomAuth::guest()) {
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {
-                return redirect()->guest('auth/login');
+                return redirect()->guest(UserModules::getHomeUrl());
             }
         }
 

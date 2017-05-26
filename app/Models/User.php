@@ -53,4 +53,9 @@ class User extends Model
         return $oUser->where(['sName' => $sName])->first();
     }
 
+    public static function getUserByToken($sToken)
+    {
+        $oUer = new static;
+        return $oUer->where(['sRememberToken' => $sToken])->first();
+    }
 }

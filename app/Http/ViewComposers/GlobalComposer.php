@@ -10,7 +10,7 @@ namespace App\Http\ViewComposers;
 
 use App\Modules\Perm\PermModules;
 use Illuminate\Contracts\View\View;
-
+use CustomAuth;
 /**
  * 处理页面公共数据
  * Class GlobalComposer
@@ -26,10 +26,8 @@ class GlobalComposer
 
     public function compose(View $oView)
     {
-        dd('xx');
         // 用户信息
-        $iUserGroupID = 1;
-        $oView->with('aPageMenu', PermModules::getPageMenu($iUserGroupID));
+        $oView->with('aPageMenu', PermModules::getPageMenu());
         // 菜单信息
 
         // 站点信息
