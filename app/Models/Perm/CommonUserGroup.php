@@ -1,16 +1,16 @@
 <?php
 namespace App\Models\Perm;
 
-use App\Models\BaseModel;
-use Hug\Group\Database\Eloquent\Model;
+use Estate\Database\Eloquent\Model;
+use Estate\Exceptions\ServiceException;
 
 class CommonUserGroup extends Model
 {
 //    protected $connection = 'zt_db';
-    protected $fillable   = ['sName', 'iType', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
+    protected $fillable   = ['iParentID', 'iLevel', 'sRelation', 'sName', 'iType', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
     protected $orderable  = ['*'];
     protected $rangeable  = ['*'];
-    protected $columnable = ['iAutoID', 'sName', 'iType', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
+    protected $columnable = ['iAutoID','iParentID', 'iLevel', 'sRelation',  'sName', 'iType', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
 
     protected $table = 'common_usergroup';
 

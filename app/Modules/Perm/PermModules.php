@@ -21,6 +21,9 @@ class PermModules
     public static function getPageMenu()
     {
         $iUserGroupID = CustomAuth::getMainGroupID();
+
+        // 
+
         // 取该用户组下所有resource id
         $aPermInfo = DB::table('common_usergroup_perm')
             ->leftJoin('common_perm', 'common_usergroup_perm.iPermID', '=', 'common_perm.iAutoID')

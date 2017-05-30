@@ -31,7 +31,7 @@ return array(
     'App\\Models\\BaseModel' => $baseDir . '/app/Models/BaseModel.php',
     'App\\Models\\Perm\\CommonMenu' => $baseDir . '/app/Models/Perm/CommonMenu.php',
     'App\\Models\\Perm\\CommonUserGroup' => $baseDir . '/app/Models/Perm/CommonUserGroup.php',
-    'App\\Models\\Perm\\UsersGroup' => $baseDir . '/app/Models/Perm/UsersGroup.php',
+    'App\\Models\\Perm\\UserGroup' => $baseDir . '/app/Models/Perm/UserGroupphp',
     'App\\Models\\User' => $baseDir . '/app/Models/UserModules.phples.php',
     'App\\Modules\\Auth\\Auth' => $baseDir . '/app/Modules/Auth/CustomAuth.php',
     'App\\Modules\\Perm\\PermModules' => $baseDir . '/app/Modules/Perm/PermModules.php',

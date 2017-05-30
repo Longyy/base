@@ -9,7 +9,7 @@
 namespace App\Modules\Perm;
 
 use App\Models\Perm\CommonUserGroup;
-use App\Models\Perm\UsersGroup;
+use App\Models\Perm\UserGroup;
 
 class ProfileModules
 {
@@ -21,10 +21,10 @@ class ProfileModules
         // 所属用户组
         $oGroup = CommonUserGroup::find($oUser->groupid);
         // 临时用户组
-        $oTempGroup = UsersGroup::select('*')
+        $oTempGroup = UserGroup::select('*')
             ->where('iUserID', $oUser->id)
             ->where('iExpireTime', '>=', time())
-            ->where('iGroupType', UsersGroup::GROUP_TYPE_TEMP)
+            ->where('iGroupType', UserGroup::GROUP_TYPE_TEMP)
             ->where('iStatus', 1)
             ->get()
             ->toArray();

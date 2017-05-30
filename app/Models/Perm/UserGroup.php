@@ -8,17 +8,25 @@
 
 namespace App\Models\Perm;
 
-use App\Models\BaseModel;
+use Estate\Database\Eloquent\Model;
+use Estate\Exceptions\ServiceException;
 
-class UsersGroup extends BaseModel
+class UserGroup extends Model
 {
     protected $fillable   = ['iUserID', 'iGroupType', 'iGroupID', 'sGroupName', 'iExpireTime', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
     protected $orderable  = ['*'];
     protected $rangeable  = ['*'];
     protected $columnable = ['iAutoID', 'iUserID', 'iGroupType', 'iGroupID', 'sGroupName', 'iExpireTime', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
 
-    protected $table = 'users_group';
+    protected $table = 'user_group';
 
     const GROUP_TYPE_TEMP = 1; // 临时用户组
     const GROUP_TYPE_EXT = 2; // 扩展用户组
+
+    public static function getUserGroup($iUserID)
+    {
+        $oGroup = new static;
+        return $oGroup->where('iUserID', $iUserID)->where('iExpireTime', '<', time())->get();
+
+    }
 }
