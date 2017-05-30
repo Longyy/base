@@ -12,12 +12,17 @@ use Estate\Database\Eloquent\Model;
 use Estate\Exceptions\ServiceException;
 
 
-class CommonRolePerm extends Model
+class CommonRoleUserGroupRelation extends Model
 {
     protected $fillable   = [ 'iRoleID', 'iGroupID',  'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
     protected $orderable  = ['*'];
     protected $rangeable  = ['*'];
     protected $columnable = ['iAutoID', 'iRoleID', 'iGroupID',  'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
 
-    protected $table = 'common_role_perm';
+    protected $table = 'common_role_usergroup_relation';
+
+    public static function getRoleIDByGroupIDs($aGroupID)
+    {
+       return static::whereIn('iGroupID', $aGroupID)->lists('iRoleID');
+    }
 }

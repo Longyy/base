@@ -24,4 +24,25 @@ class CommonMenu extends Model
         'sIcon', 'iOrder', 'iHome', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
 
     protected $table = 'common_menu';
+
+    /**
+     * @param array $aWhere   option  条件值
+     * @param int   $iPerPage option  分页大小
+     * @param array $aColumns option  字段选择
+     * @param array $aOrders  option  字段排序
+     * @param array $aRanges  option  字段范围查询
+     * @return mixed
+     */
+    public static function findAll(array $aWhere = [], $iPerPage = 10, array $aColumns = [], $aOrders = [], array $aRanges = [])
+    {
+        $oMenu = new static;
+        foreach($aWhere as $sKey => $mValue) {
+            if(is_array($mValue)) {
+                $oMenu = $oMenu->whereIn($sKey, $mValue);
+            } else {
+                $oMenu = $oMenu->where($sKey, $mValue);
+            }
+        }
+        return $oMenu->withOrder($aOrders)->withRange($aRanges)->paginate($iPerPage, $aColumns);
+    }
 }

@@ -25,8 +25,7 @@ class UserGroup extends Model
 
     public static function getUserGroup($iUserID)
     {
-        $oGroup = new static;
-        return $oGroup->where('iUserID', $iUserID)->where('iExpireTime', '<', time())->get();
+        return static::where('iUserID', $iUserID)->where('iExpireTime', '>', time())->get();
 
     }
 }

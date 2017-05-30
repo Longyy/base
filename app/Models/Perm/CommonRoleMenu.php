@@ -19,5 +19,10 @@ class CommonRoleMenu extends Model
     protected $rangeable  = ['*'];
     protected $columnable = [ 'iAutoID', 'iRoleID', 'iMenuID', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
 
-    protected $table = 'common_role';
+    protected $table = 'common_role_menu';
+
+    public static function getMenuIDByRoleIDs($aRoleID)
+    {
+        return static::whereIn('iRoleID', $aRoleID)->lists('iMenuID');
+    }
 }

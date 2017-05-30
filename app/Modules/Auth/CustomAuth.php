@@ -44,16 +44,27 @@ class CustomAuth implements Auth
         return $aUser ?: [];
     }
 
+    /**
+     * 设置用户组信息
+     * @return bool
+     */
     private function setUserGroup()
     {
         $aGroup = [];
         $oUserGroup = UserGroup::getUserGroup($this->getUserID());
-        if(is_array($oUserGroup)) {
-            $aUserGroup = $oUserGroup->toArray();
-            dd($aUserGroup);
+        if(count($oUserGroup)) {
+            foreach($oUserGroup as $oGroup) {
+                $aGroup[] = [
+                    'iGroupID' => $oGroup->iGroupID,
+                    'sGroupName' => $oGroup->sGroupName,
+                    'iGroupType' => $oGroup->iGroupType,
+                    'iExpireTime' => $oGroup->iExpireTime,
+                    'iPrepend' => $oGroup->iPrepend,
+                ];
+            }
         }
-
-
+        $this->aUser['aGroup'] = $aGroup;
+        return true;
     }
 
     public function getMainGroupID()
@@ -61,10 +72,24 @@ class CustomAuth implements Auth
         return $this->aUser['iGroupID'];
     }
 
-
-    public function getUserGroups()
+    private function getGroupInfo()
     {
+        return $this->aUser['aGroup'];
+    }
 
+
+    public function getPrependGroupIDs()
+    {
+        return array_column(
+            array_where($this->getGroupInfo(), function($sKey, $aValue) {
+            return $aValue['iPrepend'] ? true : false;
+        }), 'iGroupID');
+
+    }
+
+    public function getAllPermGroupIDs()
+    {
+        return array_merge([$this->getMainGroupID()], $this->getPrependGroupIDs());
     }
 
     public function getUserID()

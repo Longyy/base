@@ -8,6 +8,7 @@ namespace App\Modules\Perm;
  */
 use App\Models\Perm\CommonMenu;
 use App\Http\Helpers\Tools;
+use App\Models\Perm\CommonRoleUserGroupRelation;
 use DB;
 use Request;
 use CustomAuth;
@@ -20,9 +21,16 @@ class PermModules
      */
     public static function getPageMenu()
     {
-        $iUserGroupID = CustomAuth::getMainGroupID();
+        // 取用户组
+        $aUserGroupID = CustomAuth::getAllPermGroupIDs();
+        // 取角色
+        $aRoleID = CommonRoleUserGroupRelationModules::getRoleIDByGroupIDs($aUserGroupID);
+        // 取菜单
+        $aMenuID = CommonRoleMenuModules::getMenuIDByRoleIDs($aRoleID);
+        // 取菜单信息
+        $aMenuInfo = CommonMenuModules::getMenuInfoByID($aMenuID);
+        dd($aMenuInfo);
 
-        // 
 
         // 取该用户组下所有resource id
         $aPermInfo = DB::table('common_usergroup_perm')
