@@ -6,6 +6,8 @@ namespace App\Http\Helpers;
  * Date: 2017/3/14
  * Time: 23:39
  */
+use Route;
+
 class Tools
 {
     /**
@@ -46,5 +48,15 @@ class Tools
             }
         }
         return is_array(array_get($aResult, 0, null)) ? $aResult : array_unique($aResult);
+    }
+
+    public static function getDomain()
+    {
+        return env('DOMAIN_BASE', '');
+    }
+
+    public static function getCurrentRoute()
+    {
+        return Route::current()->getActionName();
     }
 }

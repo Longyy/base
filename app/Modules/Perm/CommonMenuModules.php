@@ -21,4 +21,16 @@ class CommonMenuModules
             ->get();
         return count($oMenuInfo) ? $oMenuInfo->toArray() : [];
     }
+
+    public static function getPathKey()
+    {
+        switch(env('APP_NAME', '')) {
+            case 'base-web':
+                $sKey = CommonMenu::$sWebPathKey;
+                break;
+            default:
+                break;
+        }
+        return $sKey;
+    }
 }

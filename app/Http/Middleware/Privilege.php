@@ -2,11 +2,14 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Helpers\Tools;
 use App\Modules\Auth\UserModules;
+use App\Modules\Perm\PermModules;
 use Closure;
 use CustomAuth;
+use Route;
 
-class Authenticate
+class Privilege
 {
     public function __construct()
     {
@@ -22,9 +25,10 @@ class Authenticate
      */
     public function handle($request, Closure $next)
     {
-        if (CustomAuth::guest()) {
+
+        if (! PermModules::check(Tools::getCurrentRoute())) {
             if ($request->ajax()) {
-                return response('Unauthorized.', 401);
+                return response('No Privilege.', 401);
             } else {
                 return redirect()->guest(UserModules::getHomeUrl());
             }

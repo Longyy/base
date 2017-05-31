@@ -25,6 +25,8 @@ class CommonMenu extends Model
 
     protected $table = 'common_menu';
 
+    public static $sWebPathKey = 'sWebPath';
+
     /**
      * @param array $aWhere   option  条件值
      * @param int   $iPerPage option  分页大小

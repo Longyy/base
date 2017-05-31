@@ -5,15 +5,14 @@
             <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 493px;"><div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="5px" data-color="#333333" style="overflow: hidden; width: auto; height: 493px;"> <!-- nav -->
                     <nav class="nav-primary hidden-xs">
                         <ul class="nav">
- 
+                            {{--{{dd($aPageMenu['aMainMenu'])}}--}}
                             <!-- 二级和三级菜单 -->
                             @foreach ($aPageMenu['aMainMenu'] as $aVal)
-                                @if($aVal['iLevel'] == 1)
-                                    {{--<li class="active">--}}
+                                @if($aVal['iLevel'] == 2)
                                     <li @if(isset($aVal['iActive'])) class="active" @endif>
                                         <a href="{{$aVal['sUrl']}}"> <i class="fa {{$aVal['sIcon']}} icon"> <b class="b-b b-light"></b> </i> <span class="pull-right"> <i class="fa fa-angle-down text"></i> <i class="fa fa-angle-up text-active"></i> </span> <span>{{$aVal['sName']}}</span> </a>
                                     @foreach ($aPageMenu['aMainMenu'] as $aVVal)
-                                        @if($aVVal['iLevel'] == 2 && $aVVal['iParentID'] == $aVal['iAutoID'])
+                                        @if($aVVal['iLevel'] == 3 && $aVVal['iParentID'] == $aVal['iAutoID'])
                                                 <ul class="nav lt">
                                                     <li> <a href="{{$aVVal['sUrl']}}"> <i class="fa fa-angle-right"></i> <span>{{$aVVal['sName']}}</span> </a> </li>
                                                 </ul>

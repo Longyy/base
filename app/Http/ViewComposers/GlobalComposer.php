@@ -27,9 +27,15 @@ class GlobalComposer
     public function compose(View $oView)
     {
         // 用户信息
-        $oView->with('aPageMenu', PermModules::getPageMenu());
+        $oView->with('aProfile', [
+            'sName' => '小王',
+            'sGroupName' => '系统用户组',
+            'aTempGroup' => [
+                ['sGroupName' => '临时用户组']
+            ]
+        ]);
         // 菜单信息
-
+        $oView->with('aPageMenu', PermModules::getPageMenu());
         // 站点信息
 
         

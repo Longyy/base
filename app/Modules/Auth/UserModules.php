@@ -31,6 +31,8 @@ class UserModules
         if($oUser = User::getUserByName($aParam['username'])) {
             // 密码
             if(bcrypt($aParam['password']) != $oUser->sPassword) {
+                // 初始化用户组
+                $oUser = self::initCurrentGroup($oUser);
                 // session
                 $oRequest->session()->put(self::SESSION_USER_KEY, $oUser->toArray());
                 // 记住我
@@ -53,6 +55,12 @@ class UserModules
         } else {
             throw new WebException('USER_OR_PASSWORD_ERROR');
         }
+    }
+
+    private static function initCurrentGroup($oUser)
+    {
+        $oUser->iCurrentGroupID = $oUser->iGroupID;
+        return $oUser;
     }
 
     /**

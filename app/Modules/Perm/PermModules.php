@@ -12,26 +12,56 @@ use App\Models\Perm\CommonRoleUserGroupRelation;
 use DB;
 use Request;
 use CustomAuth;
+use Route;
 
 class PermModules
 {
+    private static $aPermMap = [
+        self::PERM_TYPE_R => ['index', 'show'],
+        self::PERM_TYPE_C => ['create', 'store'],
+        self::PERM_TYPE_U => ['edit', 'update'],
+        self::PERM_TYPE_D => ['destroy'],
+    ];
+    private static $aActionMap = [
+        'index'   => self::PERM_TYPE_R,
+        'show'    => self::PERM_TYPE_R,
+        'create'  => self::PERM_TYPE_C,
+        'store'   => self::PERM_TYPE_C,
+        'edit'    => self::PERM_TYPE_U,
+        'update'  => self::PERM_TYPE_U,
+        'destroy' => self::PERM_TYPE_D,
+    ];
+    const PERM_TYPE_R = 1;
+    const PERM_TYPE_C = 2;
+    const PERM_TYPE_U = 4;
+    const PERM_TYPE_D = 8;
     /**
      * 取菜单
      * @param $iUserGroupID
      */
     public static function getPageMenu()
     {
-        // 取用户组
-        $aUserGroupID = CustomAuth::getAllPermGroupIDs();
-        // 取角色
-        $aRoleID = CommonRoleUserGroupRelationModules::getRoleIDByGroupIDs($aUserGroupID);
+        $aMainMenu = [];
+        $aRoleID = self::getUserRole();
         // 取菜单
         $aMenuID = CommonRoleMenuModules::getMenuIDByRoleIDs($aRoleID);
         // 取菜单信息
-        $aMenuInfo = CommonMenuModules::getMenuInfoByID($aMenuID);
-        dd($aMenuInfo);
+        $aMainMenu = CommonMenuModules::getMenuInfoByID($aMenuID);
 
-
+        // 处理菜单
+        if(is_array($aMainMenu)) {
+            $aBusinessType = CommonBusinessTypeModules::getBusinessType();
+            $sPathKey = CommonMenuModules::getPathKey();
+            $sRoutes = Tools::getCurrentRoute();
+            foreach($aMainMenu as &$aVal) {
+                $sDomain = isset($aBusinessType[$aVal['iBusinessType']]) ? $aBusinessType[$aVal['iBusinessType']]['sDomain']
+                    : Tools::getDomain();
+                $aVal['sUrl'] = sprintf('%s://%s/%s%s', 'http', $sDomain, $aVal[$sPathKey], $aVal['sParam']);
+//                $aVal['iActive'] = sprintf('%s@%s', )
+            }
+            unset($aVal);
+        }
+/*
         // 取该用户组下所有resource id
         $aPermInfo = DB::table('common_usergroup_perm')
             ->leftJoin('common_perm', 'common_usergroup_perm.iPermID', '=', 'common_perm.iAutoID')
@@ -98,13 +128,37 @@ class PermModules
                 }
             }
         }
-
+*/
         $aResult = [
             'aBreadMenu' => !empty($aBreadMenu) ? $aBreadMenu : [],
-            'aMainMenu' => !empty($aAllMenuInfo) ? $aAllMenuInfo : [],
+            'aMainMenu' => !empty($aMainMenu) ? $aMainMenu : [],
         ];
 
         return $aResult;
+    }
+
+    public static function getUserRole()
+    {
+        // 取用户组
+        $aUserGroupID = CustomAuth::getAllPermGroupIDs();
+        // 取角色
+        $aRoleID = CommonRoleUserGroupRelationModules::getRoleIDByGroupIDs($aUserGroupID);
+        return $aRoleID;
+    }
+
+    public static function check($sResourceUrl)
+    {
+        list($sController, $sAction) = explode('@', $sResourceUrl);
+        if(! isset(self::$aActionMap[$sAction])) {
+            return false;
+        }
+        $aResource = CommonResourceModules::getResourceByController($sController);
+        if(!$aResource) {
+            return false;
+        }
+        $aRoleID = self::getUserRole();
+
+
     }
 
 

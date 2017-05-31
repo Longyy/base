@@ -18,7 +18,9 @@ class CustomAuth implements Auth
     public $aUser = [];
     public function __construct()
     {
+        // 初始化用户信息
         $this->aUser = $this->user();
+        // 初始化用户组信息
         $this->setUserGroup();
     }
 
@@ -89,7 +91,12 @@ class CustomAuth implements Auth
 
     public function getAllPermGroupIDs()
     {
-        return array_merge([$this->getMainGroupID()], $this->getPrependGroupIDs());
+        return array_merge([$this->getCurrentGroupID()], $this->getPrependGroupIDs());
+    }
+
+    public function getCurrentGroupID()
+    {
+        return $this->aUser['iCurrentGroupID'];
     }
 
     public function getUserID()

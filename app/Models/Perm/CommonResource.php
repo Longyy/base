@@ -22,4 +22,6 @@ class CommonResource extends Model
         'iShow', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
 
     protected $table = 'common_resource';
+
+
 }

@@ -7,7 +7,7 @@
 
         <!-- 一级菜单 -->
         @foreach ($aPageMenu['aMainMenu'] as $aMenu)
-            @if($aMenu['iLevel'] == 0)
+            @if($aMenu['iLevel'] == 1)
                 <li @if(isset($aMenu['iActive'])) class="active" @endif>
                     <a href="#" class=""><span class="h5 font-bold">{{$aMenu['sName']}}</span> </a>
                 </li>
