@@ -5,11 +5,11 @@
             <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 493px;"><div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="5px" data-color="#333333" style="overflow: hidden; width: auto; height: 493px;"> <!-- nav -->
                     <nav class="nav-primary hidden-xs">
                         <ul class="nav">
-                            {{--{{dd($aPageMenu['aMainMenu'])}}--}}
+{{--                            {{dd($aPageMenu['aMenuLevel'])}}--}}
                             <!-- 二级和三级菜单 -->
                             @foreach ($aPageMenu['aMainMenu'] as $aVal)
-                                @if($aVal['iLevel'] == 2)
-                                    <li @if(isset($aVal['iActive'])) class="active" @endif>
+                                @if($aVal['iLevel'] == 2 && $aVal['iParentID'] == $aPageMenu['aMenuLevel'][0])
+                                    <li @if($aVal['iActive'] == 1) class="active" @endif>
                                         <a href="{{$aVal['sUrl']}}"> <i class="fa {{$aVal['sIcon']}} icon"> <b class="b-b b-light"></b> </i> <span class="pull-right"> <i class="fa fa-angle-down text"></i> <i class="fa fa-angle-up text-active"></i> </span> <span>{{$aVal['sName']}}</span> </a>
                                     @foreach ($aPageMenu['aMainMenu'] as $aVVal)
                                         @if($aVVal['iLevel'] == 3 && $aVVal['iParentID'] == $aVal['iAutoID'])
@@ -34,17 +34,20 @@
             <div id="chat" class="dropup">
                 <section class="dropdown-menu on aside-md m-l-n">
                     <section class="panel bg-white">
-                        <header class="panel-heading b-b b-dark ">可用角色</header>
+                        <header class="panel-heading b-b b-dark ">可用组别</header>
                         <div class="panel-body animated fadeInRight">
                             @foreach($aProfile['aTempGroup'] as $aItem)
-                                <p><a href="#" class="btn btn-sm btn-default">{{$aItem['sGroupName']}}</a></p>
+                                <p><a href="" data-id="{{$aItem['iGroupID']}}" onclick="submitGroupChange(this);" class="btn btn-sm btn-default"><i class="fa fa-circle text-success m-t-xs"></i>&nbsp;{{$aItem['sGroupName']}}</a></p>
                             @endforeach
+                            <form id="form_change_group" method="post" action="/backend/change_group">
+                                <input type="hidden" id="group_id" value="" name="group_id"/>
+                            </form>
                         </div>
                     </section>
                 </section>
             </div>
             <div class="btn-group hidden-nav-xs">
-                <button type="button" title="切换角色" class="btn btn-sm btn-default" data-toggle="dropdown" data-target="#chat">切换角色</button>
+                <button type="button" title="切换用户组" class="btn btn-sm btn-default" data-toggle="dropdown" data-target="#chat">切换用户组</button>
             </div>
             <a href="#nav" data-toggle="class:nav-xs" class="pull-right btn btn-sm btn-default btn-icon"> <i class="fa fa-angle-left text"></i> <i class="fa fa-angle-right text-active"></i> </a>
 

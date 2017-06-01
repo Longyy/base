@@ -25,12 +25,11 @@ class Privilege
      */
     public function handle($request, Closure $next)
     {
-
         if (! PermModules::check(Tools::getCurrentRoute())) {
             if ($request->ajax()) {
-                return response('No Privilege.', 401);
+                return response('No Privilege.', 403);
             } else {
-                return redirect()->guest(UserModules::getHomeUrl());
+                abort(403, 'No Privilege.');
             }
         }
 

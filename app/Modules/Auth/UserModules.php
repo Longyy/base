@@ -86,6 +86,13 @@ class UserModules
         return Request::session()->get(self::SESSION_USER_KEY);
     }
 
+    public static function setSessionUser($sKey, $sValue)
+    {
+        $aUser = self::getSessionUser();
+        $aUser[$sKey] = $sValue;
+        return Request::session()->put(self::SESSION_USER_KEY, $aUser);
+    }
+
     public static function getRememberTokenUser()
     {
         $aUser = [];
@@ -100,6 +107,16 @@ class UserModules
     public static function getRememberToken()
     {
         return Request::cookie()->get(self::REMEMBER_TOKEN_NAME);
+    }
+
+    public static function updateUserCurrentGroup($iUserID, $mValue)
+    {
+        if($oUser = User::find($iUserID)) {
+            if($oUser->update(['iCurrentGroupID', $mValue])) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

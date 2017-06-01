@@ -65,4 +65,12 @@ $(function(){
     //     return false;
     // });
 
+
 });
+
+function submitGroupChange(obj)
+{
+    var group_id = $(obj).data("id");
+    $("#group_id").val(group_id);
+    $("#form_change_group").submit();
+}

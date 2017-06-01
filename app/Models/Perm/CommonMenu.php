@@ -14,12 +14,12 @@ use Estate\Exceptions\ServiceException;
 
 class CommonMenu extends Model
 {
-    protected $fillable   = [ 'sName', 'iType', 'iBusinessType', 'iCommon', 'iParentID', 'iLevel', 'sRelation',
+    protected $fillable   = [ 'sName', 'iType', 'iBusinessType', 'iDisplay', 'iParentID', 'iLevel', 'sRelation',
         'sAndroidPath', 'sIosPath', 'sH5Path', 'sWebPath', 'sParam', 'iJumpType', 'sRealUrl', 'iLeaf', 'iShow',
         'sIcon', 'iOrder', 'iHome', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
     protected $orderable  = ['*'];
     protected $rangeable  = ['*'];
-    protected $columnable = [ 'iAutoID', 'sName', 'iType', 'iBusinessType', 'iCommon', 'iParentID', 'iLevel', 'sRelation',
+    protected $columnable = [ 'iAutoID', 'sName', 'iType', 'iBusinessType', 'iDisplay', 'iParentID', 'iLevel', 'sRelation',
         'sAndroidPath', 'sIosPath', 'sH5Path', 'sWebPath', 'sParam', 'iJumpType', 'sRealUrl', 'iLeaf', 'iShow',
         'sIcon', 'iOrder', 'iHome', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
 

@@ -9,7 +9,7 @@
 
                 <ul class="breadcrumb">
                     @foreach($aPageMenu['aBreadMenu'] as $menu)
-                        <li class="@if($menu['level'] == 2) active @endif"><a href="{{$menu['link']}}">@if($menu['level'] == 0) <i class="fa fa-home"></i> @endif  {{$menu['title']}}</a></li>
+                        <li class="@if($menu['iLevel'] == 3) active @endif"><a href="{{$menu['sUrl']}}">@if($menu['iLevel'] == 1) <i class="fa fa-home"></i> @endif  {{$menu['sName']}}</a></li>
                     @endforeach
                 </ul>
 

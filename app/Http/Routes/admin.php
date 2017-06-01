@@ -1,8 +1,9 @@
 <?php
 
 // 后台路由
-Route::group(['namespace' => 'Admin', 'prefix' => 'backend', 'middleware' => 'auth'], function($oRouter){
+Route::group(['namespace' => 'Admin', 'prefix' => 'backend', 'middleware' => ['auth', 'privilege']], function($oRouter){
     $oRouter->get('/', 'IndexController@index');
+    $oRouter->post('/change_group', 'IndexController@changeGroup');
 
     // 权限管理
     $oRouter->group(['namespace' => 'Perm', 'prefix' => 'perm'], function($oRouter){

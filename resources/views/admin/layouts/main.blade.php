@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="app">
+<html lang="zh" class="app">
 <head>
     <meta charset="utf-8" />
     <title>TITLE - @yield('title')</title>

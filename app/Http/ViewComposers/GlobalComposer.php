@@ -18,8 +18,6 @@ use CustomAuth;
  */
 class GlobalComposer
 {
-    protected $oUser;
-
     public function __construct()
     {
     }
@@ -28,11 +26,9 @@ class GlobalComposer
     {
         // 用户信息
         $oView->with('aProfile', [
-            'sName' => '小王',
-            'sGroupName' => '系统用户组',
-            'aTempGroup' => [
-                ['sGroupName' => '临时用户组']
-            ]
+            'sName' => CustomAuth::getUserInfo()['sName'],
+            'sGroupName' => CustomAuth::getCurrentGroupName(),
+            'aTempGroup' => CustomAuth::getAvailableGroup(),
         ]);
         // 菜单信息
         $oView->with('aPageMenu', PermModules::getPageMenu());

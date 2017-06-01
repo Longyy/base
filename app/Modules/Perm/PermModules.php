@@ -8,6 +8,7 @@ namespace App\Modules\Perm;
  */
 use App\Models\Perm\CommonMenu;
 use App\Http\Helpers\Tools;
+use App\Models\Perm\CommonRolePerm;
 use App\Models\Perm\CommonRoleUserGroupRelation;
 use DB;
 use Request;
@@ -17,7 +18,7 @@ use Route;
 class PermModules
 {
     private static $aPermMap = [
-        self::PERM_TYPE_R => ['index', 'show'],
+        self::PERM_TYPE_R => ['index', 'show', 'getList'],
         self::PERM_TYPE_C => ['create', 'store'],
         self::PERM_TYPE_U => ['edit', 'update'],
         self::PERM_TYPE_D => ['destroy'],
@@ -25,16 +26,17 @@ class PermModules
     private static $aActionMap = [
         'index'   => self::PERM_TYPE_R,
         'show'    => self::PERM_TYPE_R,
+        'getList' => self::PERM_TYPE_R,
         'create'  => self::PERM_TYPE_C,
         'store'   => self::PERM_TYPE_C,
         'edit'    => self::PERM_TYPE_U,
         'update'  => self::PERM_TYPE_U,
         'destroy' => self::PERM_TYPE_D,
     ];
-    const PERM_TYPE_R = 1;
-    const PERM_TYPE_C = 2;
-    const PERM_TYPE_U = 4;
-    const PERM_TYPE_D = 8;
+    const PERM_TYPE_R = 1; // 0001
+    const PERM_TYPE_C = 2; // 0010
+    const PERM_TYPE_U = 4; // 0100
+    const PERM_TYPE_D = 8; // 1000
     /**
      * 取菜单
      * @param $iUserGroupID
@@ -47,91 +49,38 @@ class PermModules
         $aMenuID = CommonRoleMenuModules::getMenuIDByRoleIDs($aRoleID);
         // 取菜单信息
         $aMainMenu = CommonMenuModules::getMenuInfoByID($aMenuID);
-
         // 处理菜单
+        $aActivePath = [];
         if(is_array($aMainMenu)) {
             $aBusinessType = CommonBusinessTypeModules::getBusinessType();
             $sPathKey = CommonMenuModules::getPathKey();
-            $sRoutes = Tools::getCurrentRoute();
             foreach($aMainMenu as &$aVal) {
                 $sDomain = isset($aBusinessType[$aVal['iBusinessType']]) ? $aBusinessType[$aVal['iBusinessType']]['sDomain']
                     : Tools::getDomain();
-                $aVal['sUrl'] = sprintf('%s://%s/%s%s', 'http', $sDomain, $aVal[$sPathKey], $aVal['sParam']);
-//                $aVal['iActive'] = sprintf('%s@%s', )
+                $sPath = sprintf('%s://%s/%s', 'http', $sDomain, trim($aVal[$sPathKey], '/') );
+                $aVal['sUrl'] = sprintf('%s%s', $sPath, $aVal['sParam']);
+                if(Request::url() == $sPath) {
+                    $aVal['iActive'] = 1;
+                    $aActivePath = explode(',', trim($aVal['sRelation'], ','));
+                } else {
+                    $aVal['iActive'] = 0;
+                }
             }
             unset($aVal);
+            // 设置active menu
+            $aMainMenu = array_map(function($aVal) use ($aActivePath) {
+                $aVal['iActive'] = in_array($aVal['iAutoID'], $aActivePath) ? 1 : 0;
+                return $aVal;
+            }, $aMainMenu);
+            // 设置面包屑导航
+            $aBreadMenu = array_where($aMainMenu, function($sKey, $aVal) use ($aActivePath) {
+                return $aVal['iActive'] ? true : false;
+            });
         }
-/*
-        // 取该用户组下所有resource id
-        $aPermInfo = DB::table('common_usergroup_perm')
-            ->leftJoin('common_perm', 'common_usergroup_perm.iPermID', '=', 'common_perm.iAutoID')
-            ->leftJoin('common_perm_resource', 'common_perm_resource.iPermID', '=', 'common_perm.iAutoID')
-            ->where('common_usergroup_perm.iGroupID', $iUserGroupID)
-            ->where('common_usergroup_perm.iPermType', 1)
-            ->where('common_usergroup_perm.iValue', 2)
-            ->where('common_perm.iHasReource', 2)
-            ->select('common_perm_resource.*')
-            ->get();
-        $aAllMenuInfo = [];
-        if(!empty($aPermInfo)) {
-            $aResourceID = Tools::getFieldValues($aPermInfo, 'iAutoID');
-            // 取叶子菜单
-            $aMenuInfo = CommonMenu::select('iAutoID', 'sRelation')
-                ->where('iType', 2)
-                ->where('iLeaf', 2)
-                ->where('iShow', 2)
-                ->whereIn('iResourceID', $aResourceID)
-                ->get()
-                ->toArray();
-
-            $aPath = Tools::getFieldValues($aMenuInfo, 'sRelation');
-
-            // 取所有菜单项
-            $aAllPath = [];
-            foreach($aPath as $sValue) {
-                $aAllPath = array_merge($aAllPath,
-                    array_filter(explode(',', $sValue))
-                );
-            }
-            $aAllPath = array_unique($aAllPath);
-            $aAllMenuInfo = CommonMenu::select('*')
-                ->whereIn('iAutoID', $aAllPath)
-                ->orderBy('iLevel', 'asc')
-                ->orderBy('iOrder', 'asc')
-                ->get()
-                ->toArray();
-            $aAllMenuInfo = Tools::useFieldAsKey($aAllMenuInfo, 'iAutoID');
-            $aActivePathID = [];
-
-            // 构建菜单链接
-            foreach($aAllMenuInfo as &$aInfo) {
-                $aInfo['sUrl'] = $aInfo['sParam'] ? $aInfo['sWebPath'] . '?' . http_build_query($aInfo['sParam']) : $aInfo['sWebPath'];
-                if(trim($aInfo['sWebPath'], '/') == Request::path()) {
-                    $aActivePathID = explode(',', trim($aInfo['sRelation'], ','));
-                }
-                if(Request::path() == 'backend') {
-                    $aActivePathID = [1,2,3];
-                }
-            }
-            unset($aInfo);
-
-            // 构建菜单路径及面包屑
-            $aBreadMenu = [];
-            foreach($aActivePathID as $iVal) {
-                if(isset($aAllMenuInfo[$iVal])) {
-                    $aAllMenuInfo[$iVal]['iActive'] = 1;
-                    $aBreadMenu[] = [
-                        'title' => $aAllMenuInfo[$iVal]['sName'],
-                        'link' => $aAllMenuInfo[$iVal]['sUrl'],
-                        'level' => $aAllMenuInfo[$iVal]['iLevel'],
-                    ];
-                }
-            }
-        }
-*/
         $aResult = [
             'aBreadMenu' => !empty($aBreadMenu) ? $aBreadMenu : [],
             'aMainMenu' => !empty($aMainMenu) ? $aMainMenu : [],
+            'aMenuLevel' => $aActivePath,
         ];
 
         return $aResult;
@@ -149,18 +98,48 @@ class PermModules
     public static function check($sResourceUrl)
     {
         list($sController, $sAction) = explode('@', $sResourceUrl);
-        if(! isset(self::$aActionMap[$sAction])) {
-            return false;
+        $sTempAction = ! isset(self::$aActionMap[$sAction]) ? $sAction : '';
+        if(! ($aResource = CommonResourceModules::getResourceByController($sController, $sTempAction))) {
+            return true;
         }
-        $aResource = CommonResourceModules::getResourceByController($sController);
-        if(!$aResource) {
-            return false;
+        $aPerm = self::getPerm($aResource['iAutoID'], self::getUserRole());
+        // 用户所属的多个角色都有该资源的权限，取其大者
+        if($sTempAction && count($aPerm)) {
+            return true;
         }
-        $aRoleID = self::getUserRole();
-
-
+        $bHasPerm = false;
+        foreach($aPerm as $aVal) {
+            if(self::hasPerm($aVal['iPerm'], self::$aActionMap[$sAction])) {
+                $bHasPerm = true;
+            }
+        }
+        return $bHasPerm;
     }
 
+    /**
+     * 根据资源和角色获取权限信息
+     * @param $iResourceID
+     * @param $aRoleID
+     * @return array
+     */
+    public static function getPerm($iResourceID, $aRoleID)
+    {
+        $oPerm = CommonRolePerm::where('iResourceID', $iResourceID)
+            ->whereIn('iRoleID', $aRoleID)
+            ->get();
+        return count($oPerm) ? $oPerm->toArray() : [];
+    }
 
+    /**
+     * 鉴权
+     * @param $iTotalPerm
+     * @param $iCurrentPerm
+     * @return bool
+     */
+    public static function hasPerm($iTotalPerm, $iCurrentPerm)
+    {
+//        授权值 = 授权码 & 授权值
+        return (intval($iTotalPerm) & intval($iCurrentPerm)) == $iCurrentPerm ? true : false;
+    }
 
 }

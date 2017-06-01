@@ -9,6 +9,7 @@
 namespace App\Modules\Auth;
 
 use App\Contracts\Auth\Auth;
+use App\Http\Helpers\Tools;
 use App\Models\Perm\UserGroup;
 use App\Models\User;
 use Request;
@@ -62,10 +63,11 @@ class CustomAuth implements Auth
                     'iGroupType' => $oGroup->iGroupType,
                     'iExpireTime' => $oGroup->iExpireTime,
                     'iPrepend' => $oGroup->iPrepend,
+                    'iMain' => 0,
                 ];
             }
         }
-        $this->aUser['aGroup'] = $aGroup;
+        $this->aUser['aGroup'] = Tools::useFieldAsKey($aGroup, 'iGroupID');
         return true;
     }
 
@@ -99,8 +101,69 @@ class CustomAuth implements Auth
         return $this->aUser['iCurrentGroupID'];
     }
 
+    public function getCurrentGroupName()
+    {
+        $iGroupID = $this->getCurrentGroupID();
+        if($iGroupID == $this->getMainGroupID()) {
+            return $this->aUser['sGroupName'];
+        } else {
+            if(isset($this->aUser['aGroup'][$iGroupID])) {
+                return $this->aUser['aGroup'][$iGroupID]['sGroupName'];
+            } else {
+                return '';
+            }
+        }
+    }
+
+    /**
+     * 取可切换用户组
+     */
+    public function getAvailableGroup()
+    {
+        $iCurrentGroupID = $this->getCurrentGroupID();
+        $aGroupInfo = $this->getGroupInfo();
+        // 用户当前在临时用户组
+        if(isset($aGroupInfo[$iCurrentGroupID])) {
+            $aGroupInfo = array_where($aGroupInfo, function($sKey, $aValue) use ($iCurrentGroupID) {
+                return  $iCurrentGroupID != $sKey && $aValue['iPrepend'] == 1 ? true : false;
+            });
+            $aGroupInfo[$this->aUser['iGroupID']] = [
+                'iGroupID' => $this->aUser['iGroupID'],
+                'sGroupName' => $this->aUser['sGroupName'],
+                'iGroupType' => 0,
+                'iExpireTime' => 0,
+                'iPrepend' => 0,
+                'iMain' => 1,
+            ];
+        }
+        return $aGroupInfo;
+    }
+
     public function getUserID()
     {
         return $this->aUser['iAutoID'];
     }
+
+    public function getUserInfo()
+    {
+        return $this->aUser;
+    }
+
+    public function changeGroup($iGroupID)
+    {
+        if($this->getCurrentGroupID() == $iGroupID) {
+            return true;
+        }
+        if(!isset($this->getAvailableGroup()[$iGroupID])) {
+            return false;
+        }
+        // 更新session
+        UserModules::setSessionUser('iCurrentGroupID', $iGroupID);
+        // 更新数据库
+        UserModules::updateUserCurrentGroup($this->getUserID(), $iGroupID);
+        return true;
+    }
+
+
+
 }
