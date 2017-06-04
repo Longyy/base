@@ -67,6 +67,7 @@ class PermModules
                 }
             }
             unset($aVal);
+
             // 设置active menu
             $aMainMenu = array_map(function($aVal) use ($aActivePath) {
                 $aVal['iActive'] = in_array($aVal['iAutoID'], $aActivePath) ? 1 : 0;

@@ -34,7 +34,7 @@
         @include('admin.public.footer')
     </section>
 
-    <script src="/admin/js/app.v2.js"></script>
+    <script type="text/javascript" src="/admin/js/app.v2.js"></script>
     @yield('after-js')
 </body>
 </html>

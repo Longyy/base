@@ -13,6 +13,7 @@ use App\Http\Helpers\Tools;
 use App\Models\Perm\UserGroup;
 use App\Models\User;
 use Request;
+use Log;
 
 class CustomAuth implements Auth
 {
@@ -21,10 +22,12 @@ class CustomAuth implements Auth
     {
         // 初始化用户信息
         $this->aUser = $this->user();
-        // 初始化用户组信息
-        $this->setUserGroup();
     }
 
+    /**
+     * 判断用户是否是游客
+     * @return bool
+     */
     public function guest()
     {
         return $this->aUser ? false : true;
@@ -35,40 +38,24 @@ class CustomAuth implements Auth
 
     }
 
+    /**
+     * 取用户基本信息
+     * @return array
+     */
     public function user()
     {
         // session
         if(! ($aUser = UserModules::getSessionUser())) {
             // remember token
             if(! ($aUser = UserModules::getRememberTokenUser())) {
+                // 设置用户组
+                $aUser = UserModules::initCurrentGroup($aUser);
+                // 恢复session
+                Request::session()->put(UserModules::SESSION_USER_KEY, $aUser);
                 // global token @todo
             }
         }
         return $aUser ?: [];
-    }
-
-    /**
-     * 设置用户组信息
-     * @return bool
-     */
-    private function setUserGroup()
-    {
-        $aGroup = [];
-        $oUserGroup = UserGroup::getUserGroup($this->getUserID());
-        if(count($oUserGroup)) {
-            foreach($oUserGroup as $oGroup) {
-                $aGroup[] = [
-                    'iGroupID' => $oGroup->iGroupID,
-                    'sGroupName' => $oGroup->sGroupName,
-                    'iGroupType' => $oGroup->iGroupType,
-                    'iExpireTime' => $oGroup->iExpireTime,
-                    'iPrepend' => $oGroup->iPrepend,
-                    'iMain' => 0,
-                ];
-            }
-        }
-        $this->aUser['aGroup'] = Tools::useFieldAsKey($aGroup, 'iGroupID');
-        return true;
     }
 
     public function getMainGroupID()
@@ -125,7 +112,7 @@ class CustomAuth implements Auth
         // 用户当前在临时用户组
         if(isset($aGroupInfo[$iCurrentGroupID])) {
             $aGroupInfo = array_where($aGroupInfo, function($sKey, $aValue) use ($iCurrentGroupID) {
-                return  $iCurrentGroupID != $sKey && $aValue['iPrepend'] == 1 ? true : false;
+                return  $iCurrentGroupID != $sKey && $aValue['iPrepend'] == UserGroup::PREPEND_NO ? true : false;
             });
             $aGroupInfo[$this->aUser['iGroupID']] = [
                 'iGroupID' => $this->aUser['iGroupID'],
@@ -151,17 +138,16 @@ class CustomAuth implements Auth
 
     public function changeGroup($iGroupID)
     {
+        // 用户已处在该用户组
         if($this->getCurrentGroupID() == $iGroupID) {
             return true;
         }
+        // 用户无权限访问该用户组
         if(!isset($this->getAvailableGroup()[$iGroupID])) {
             return false;
         }
-        // 更新session
-        UserModules::setSessionUser('iCurrentGroupID', $iGroupID);
-        // 更新数据库
-        UserModules::updateUserCurrentGroup($this->getUserID(), $iGroupID);
-        return true;
+        // 切换用户组
+        return UserModules::updateUserCurrentGroup($this->getUserID(), $iGroupID);
     }
 
 

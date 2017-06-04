@@ -16,8 +16,7 @@
                     <li><a href="index.html"><i class="fa fa-home"></i> 系统设置</a></li>
                     <li class="active">权限管理</li>
                 </ul>
-<form id="form" action="/backend/perm/user_group/update" method="post" data-parsley-validate>
-    <input type="hidden" name="iAutoID" value=""/>
+        <form id="form"  data-parsley-validate>
                 <section class="panel panel-default panel-rounded4">
                     <div class="panel-heading b-dark b-b bottom20">
                         <h3 class="panel-title">权限管理</h3>
@@ -43,11 +42,7 @@
                                     </select>
                                 </div>
                             </div>
-
-
-
                         </div>
-
 
                     </div>
 
@@ -68,7 +63,6 @@
 
 @endsection
 
-
 @section('before-css')
     <link rel="stylesheet" href="/admin/js/datetimepicker/bootstrap-datetimepicker.min.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/parsley/parsley.css" type="text/css" cache="false">
@@ -86,6 +80,13 @@
     <script src="/admin/js/datetimepicker/bootstrap-datetimepicker.zh-CN.js" cache="false"></script>
     <script src="/admin/js/custom/common.js"></script>
     <script>
+
+        var $alert = $('#alert'),
+            $msg = $('#msg'),
+            $submit = $('#submit'),
+            $span = $('#span'),
+            $cancel = $('#cancel');
+
         function submitData()
         {
             $form = $('#form');
@@ -112,5 +113,39 @@
             });
             return resultInfo;
         }
+
+        // 表单验证
+        $('#form').parsley().on('form:success', function() {
+            showLoading();
+        }).on('form:submit', function() {
+            var result = submitData();
+            $msg.text(result.msg);
+            if(result.code == 0) {
+                $alert.removeClass('alert-danger')
+                    .addClass('alert-success')
+                    .toggle()
+                    .animate({marginTop:"0"},500);
+                setTimeout(function(){
+                    $alert.fadeOut(300, function(){
+                        $alert.css({"margin-top":"-85px"});
+                        cancelLoading();
+                        goBack();
+                    });
+                }, 2000);
+
+            } else {
+                $alert.removeClass('alert-success')
+                    .addClass('alert-danger')
+                    .toggle()
+                    .animate({marginTop:"0"},100);
+                setTimeout(function(){
+                    $alert.fadeOut(300, function(){
+                        $alert.css({"margin-top":"-85px"});
+                        cancelLoading();
+                    });
+                }, 2000);
+            }
+            return false;
+        });
     </script>
 @endsection

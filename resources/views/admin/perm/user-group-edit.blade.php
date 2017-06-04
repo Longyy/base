@@ -5,8 +5,6 @@
     <section id="content">
         <section class="vbox">
 
-
-
             <section class="scrollable wrapper">
 
                 <div id="alert" role="alert" style="display:none;" class=" main-alert alert alert-danger center-block col-md-4 pull-right alert-dismissible fade in">
@@ -15,14 +13,16 @@
                 </div>
 
                 <ul class="breadcrumb">
-                    <li><a href="index.html"><i class="fa fa-home"></i> 系统设置</a></li>
-                    <li class="active">权限管理</li>
+                    @foreach($aPageMenu['aBreadMenu'] as $menu)
+                        <li class="@if($menu['iLevel'] == 3) active @endif"><a href="{{$menu['sUrl']}}">@if($menu['iLevel'] == 1) <i class="fa fa-home"></i> @endif  {{$menu['sName']}}</a></li>
+                    @endforeach
                 </ul>
-<form id="form" action="/backend/perm/user_group/update" method="post" data-parsley-validate>
+
+<form id="form" action="" method="post" data-parsley-validate>
     <input type="hidden" name="iAutoID" value="{{$data['user_group']['iAutoID']}}"/>
                 <section class="panel panel-default panel-rounded4">
                     <div class="panel-heading b-dark b-b bottom20">
-                        <h3 class="panel-title">权限管理</h3>
+                        <h3 class="panel-title">修改用户组</h3>
                     </div>
 
                     <div class="panel-body">
@@ -46,10 +46,7 @@
                                 </div>
                             </div>
 
-
-
                         </div>
-
 
                     </div>
 
@@ -88,6 +85,12 @@
     <script src="/admin/js/datetimepicker/bootstrap-datetimepicker.zh-CN.js" cache="false"></script>
     <script src="/admin/js/custom/common.js"></script>
     <script>
+        var $alert = $('#alert'),
+            $msg = $('#msg'),
+            $submit = $('#submit'),
+            $span = $('#span'),
+            $cancel = $('#cancel');
+
         function submitData()
         {
             $form = $('#form');
@@ -115,5 +118,39 @@
             });
             return resultInfo;
         }
+
+        // 表单验证
+        $('#form').parsley().on('form:success', function() {
+            showLoading();
+        }).on('form:submit', function() {
+            var result = submitData();
+            $msg.text(result.msg);
+            if(result.code == 0) {
+                $alert.removeClass('alert-danger')
+                    .addClass('alert-success')
+                    .toggle()
+                    .animate({marginTop:"0"},500);
+                setTimeout(function(){
+                    $alert.fadeOut(300, function(){
+                        $alert.css({"margin-top":"-85px"});
+                        cancelLoading();
+                        goBack();
+                    });
+                }, 2000);
+
+            } else {
+                $alert.removeClass('alert-success')
+                    .addClass('alert-danger')
+                    .toggle()
+                    .animate({marginTop:"0"},100);
+                setTimeout(function(){
+                    $alert.fadeOut(300, function(){
+                        $alert.css({"margin-top":"-85px"});
+                        cancelLoading();
+                    });
+                }, 2000);
+            }
+            return false;
+        });
     </script>
 @endsection

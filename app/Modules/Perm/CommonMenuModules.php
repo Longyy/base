@@ -16,6 +16,7 @@ class CommonMenuModules
     public static function getMenuInfoByID($aMenuID)
     {
         $oMenuInfo = CommonMenu::whereIn('iAutoID', $aMenuID)
+            ->where('iShow', 2)
             ->orderBy('iBusinessType', 'asc')
             ->orderBy('iLevel', 'asc')
             ->get();
@@ -29,6 +30,7 @@ class CommonMenuModules
                 $sKey = CommonMenu::$sWebPathKey;
                 break;
             default:
+                $sKey = '';
                 break;
         }
         return $sKey;

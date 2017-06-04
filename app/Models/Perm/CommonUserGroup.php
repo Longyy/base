@@ -23,14 +23,12 @@ class CommonUserGroup extends Model
      * @param array $aRanges
      * @return mixed
      */
-    public static function findAll(array $aWhere = [], $iPerPage = 10, array $aColumns = ['*'], array $aOrder = ['*'], array $aRanges = [])
+    public static function findAll(array $aWhere = [], $iPerPage = 10, array $aColumns = ['*'], array $aOrders = [], array $aRanges = [])
     {
         $oUserGroup = new Static;
         foreach($aWhere as $sKey => $mValue) {
             $oUserGroup = $oUserGroup->where($sKey, $mValue);
         }
-        return $oUserGroup->withOrder($aOrder)->withRange($aRanges)->paginate($iPerPage, $aColumns);
+        return $oUserGroup->withOrder($aOrders)->withRange($aRanges)->paginate($iPerPage, $aColumns);
     }
-
-
 }

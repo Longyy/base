@@ -8,11 +8,13 @@
 
 namespace App\Modules\Auth;
 
+use App\Models\Perm\UserGroup;
 use App\Models\User;
 use Estate\Exceptions\WebException;
 use Request;
 use Cookie;
 use Illuminate\Support\Str;
+use Log;
 
 class UserModules
 {
@@ -26,15 +28,15 @@ class UserModules
 
     public static function postLogin($aParam, $oRequest)
     {
-//        dd(bcrypt(123));
         // 用户名
         if($oUser = User::getUserByName($aParam['username'])) {
             // 密码
             if(bcrypt($aParam['password']) != $oUser->sPassword) {
-                // 初始化用户组
-                $oUser = self::initCurrentGroup($oUser);
+                // 设置用户组信息
+                $aUser = $oUser->toArray();
+                $aUser = self::initCurrentGroup($aUser);
                 // session
-                $oRequest->session()->put(self::SESSION_USER_KEY, $oUser->toArray());
+                $oRequest->session()->put(self::SESSION_USER_KEY, $aUser);
                 // 记住我
                 if(isset($aParam['remember'])) {
                     // 生成token
@@ -57,10 +59,41 @@ class UserModules
         }
     }
 
-    private static function initCurrentGroup($oUser)
+    /**
+     * 设置用户组信息
+     * @param $oUser
+     * @return mixed
+     */
+    public static function initCurrentGroup($aUser)
     {
-        $oUser->iCurrentGroupID = $oUser->iGroupID;
-        return $oUser;
+        // 默认用户组为用户的主用户组
+        if(empty($aUser['iCurrentGroupID'])) {
+            $aUser['iCurrentGroupID'] = $aUser['iGroupID'];
+        }
+        $aGroup = [];
+        // 取用户所属的其他用户组
+        $oUserGroup = UserGroup::getUserGroup($aUser['iAutoID']);
+        if(count($oUserGroup)) {
+            foreach ($oUserGroup as $oGroup) {
+                $aGroup[$oGroup->iGroupID] = [
+                    'iGroupID' => $oGroup->iGroupID,
+                    'sGroupName' => $oGroup->sGroupName,
+                    'iGroupType' => $oGroup->iGroupType,
+                    'iExpireTime' => $oGroup->iExpireTime,
+                    'iPrepend' => $oGroup->iPrepend,
+                    'iMain' => 0,
+                ];
+            }
+            // 用户无权访问当前用户组或者用户组被合并，则取默认用户组
+            if(!isset($aGroup[$aUser['iCurrentGroupID']])
+                || $aGroup[$aUser['iCurrentGroupID']]['iPrepend'] == UserGroup::PREPEND_YES) {
+                $aUser['iCurrentGroupID'] = $aUser['iGroupID'];
+            }
+        }
+
+        $aUser['aGroup'] = $aGroup;
+
+        return $aUser;
     }
 
     /**
@@ -112,7 +145,8 @@ class UserModules
     public static function updateUserCurrentGroup($iUserID, $mValue)
     {
         if($oUser = User::find($iUserID)) {
-            if($oUser->update(['iCurrentGroupID', $mValue])) {
+            $oUser->iCurrentGroupID = $mValue;
+            if($oUser->save()) {
                 return true;
             }
         }

@@ -9,8 +9,9 @@
         "laravel/framework": "5.1.*",
         "zizaco/entrust": "5.2.x-dev",
         "paf/estate": "master",
-        "paf/logservice": "master",
-        "predis/predis": "~1.0"
+        "predis/predis": "~1.0",
+        "php-amqplib/php-amqplib": "2.5.*",
+        "paf/logservice": "master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

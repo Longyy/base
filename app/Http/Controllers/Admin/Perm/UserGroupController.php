@@ -7,35 +7,64 @@ namespace App\Http\Controllers\Admin\Perm;
  * Time: 22:17
  */
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\RootController as Controller;
 use Illuminate\Http\Request;
 use App\Models\Perm\CommonUserGroup;
 use App\Modules\Perm\UserGroupModules;
+use Estate\Exceptions\MobiException;
 use Response;
+use Log;
 
 class UserGroupController extends Controller
 {
+    /**
+     * 列表页
+     * @param Request $oRequest
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index(Request $oRequest)
     {
         return view('admin.perm.user-group-list');
     }
 
+    /**
+     * 获取列表数据
+     * @param Request $oRequest
+     * @return mixed
+     */
     public function getList(Request $oRequest)
     {
-        $this->validate($oRequest, [
-            'sName' => 'string|max:20',
+        $aFieldValue = $this->validate($oRequest, [
+            'page_size' => 'integer|min:1',
         ]);
-        $data = CommonUserGroup::all()->toArray();
-        return Response::json(['total' => 6, 'rows' => $data]);
+        $aResult = CommonUserGroup::findAll(
+            array_except($aFieldValue, ['page_size']),
+            array_get($aFieldValue, 'page_size', 10),
+            CommonUserGroup::columns(),
+            CommonUserGroup::orders(),
+            CommonUserGroup::ranges()
+        )->toArray();
+        $aGroupType = UserGroupModules::getGroupType();
+        $aResult['data'] = array_map(function($aVal) use ($aGroupType) {
+            $aVal['sType'] = isset($aGroupType[$aVal['iType']]) ? $aGroupType[$aVal['iType']] : '';
+            return $aVal;
+        }, $aResult['data']);
+
+        return Response::mobi($aResult);
     }
 
+    /**
+     * 编辑页
+     * @param Request $oRequest
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function edit(Request $oRequest)
     {
-        $this->validate($oRequest, [
+        $aFieldValue = $this->validate($oRequest, [
             'iAutoID' => 'required|integer',
         ]);
 
-        $oUserGroup = CommonUserGroup::find($oRequest->get('iAutoID'));
+        $oUserGroup = CommonUserGroup::find($aFieldValue['iAutoID']);
         $aGroupType = UserGroupModules::getGroupType();
 
         return view('admin.perm.user-group-edit', [
@@ -45,77 +74,74 @@ class UserGroupController extends Controller
             ]]);
     }
 
+    /**
+     * 更新
+     * @param Request $oRequest
+     * @return mixed
+     */
     public function update(Request $oRequest)
     {
-        $this->validate($oRequest, [
+        $aFieldValue = $this->validate($oRequest, [
             'iAutoID' => 'required|integer',
             'sName' => 'required|string|min:1',
-            'iType' => 'integer',
+            'iType' => 'required|integer',
         ]);
 
-        $oUserGroup = CommonUserGroup::find($oRequest->get('iAutoID'));
-        if($oUserGroup->update($oRequest->all())) {
-            $aResult = [
-                'code' => 0,
-                'msg' => '更新成功！',
-            ];
-        } else {
-            $aResult = [
-                'code' => 1,
-                'msg' => '更新失败！',
-            ];
+        $oUserGroup = CommonUserGroup::find($aFieldValue['iAutoID']);
+        Log::info('update ', [$aFieldValue]);
+        if(! $oUserGroup->update($aFieldValue)) {
+            Log::info('update result ', [false]);
+
+            return Response::exceptionMobi(new MobiException('UPDATE_ERROR'));
         }
-        return Response::json($aResult);
+        return Response::mobi([]);
     }
 
+    /**
+     * 新增页
+     * @param Request $oRequest
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function create(Request $oRequest)
     {
-        $aGroupType = UserGroupModules::getGroupType();
-
         return view('admin.perm.user-group-add', [
             'data' => [
-                'group_type' => $aGroupType,
+                'group_type' => UserGroupModules::getGroupType(),
             ]]);
     }
 
+    /**
+     * 新增
+     * @param Request $oRequest
+     * @return mixed
+     */
     public function save(Request $oRequest)
     {
-        $this->validate($oRequest, [
+        $aFieldValue = $this->validate($oRequest, [
             'sName' => 'required|string|min:1|unique:common_usergroup,sName',
             'iType' => 'integer',
         ]);
-
-        if(CommonUserGroup::create($oRequest->all())) {
-            $aResult = [
-                'code' => 0,
-                'msg' => '新增成功！',
-            ];
-        } else {
-            $aResult = [
-                'code' => 1,
-                'msg' => '新增失败！',
-            ];
+        if(! CommonUserGroup::create($aFieldValue)) {
+            return Response::exceptionMobi(new MobiException('CREATE_ERROR'));
         }
-        return Response::json($aResult);
+
+        return Response::mobi([]);
     }
 
+    /**
+     * 删除
+     * @param Request $oRequest
+     * @return mixed
+     */
     public function delete(Request $oRequest)
     {
-        $this->validate($oRequest, [
+        $aFieldValue = $this->validate($oRequest, [
             'sAutoID' => 'required|string|min:1',
         ]);
-        if(CommonUserGroup::whereIn('iAutoID', explode(',', $oRequest->input('sAutoID')))->delete()) {
-            $aResult = [
-                'code' => 0,
-                'msg' => '删除成功！',
-            ];
-        } else {
-            $aResult = [
-                'code' => 1,
-                'msg' => '删除失败！',
-            ];
+        if(! CommonUserGroup::whereIn('iAutoID', explode(',', $aFieldValue['sAutoID']))->delete()) {
+            return Response::exceptionMobi(new MobiException('DELETE_ERROR'));
         }
-        return Response::json($aResult);
+        return Response::mobi([]);
     }
 
 }

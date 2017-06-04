@@ -137,6 +137,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+        Estate\Providers\CommonServiceProvider::class,
         /*
          * Application Service Providers...
          */

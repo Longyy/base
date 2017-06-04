@@ -8,11 +8,11 @@
 {{--                            {{dd($aPageMenu['aMenuLevel'])}}--}}
                             <!-- 二级和三级菜单 -->
                             @foreach ($aPageMenu['aMainMenu'] as $aVal)
-                                @if($aVal['iLevel'] == 2 && $aVal['iParentID'] == $aPageMenu['aMenuLevel'][0])
+                                @if($aVal['iLevel'] == 2 && $aVal['iParentID'] == $aPageMenu['aMenuLevel'][0] && $aVal['iDisplay'] == 1)
                                     <li @if($aVal['iActive'] == 1) class="active" @endif>
                                         <a href="{{$aVal['sUrl']}}"> <i class="fa {{$aVal['sIcon']}} icon"> <b class="b-b b-light"></b> </i> <span class="pull-right"> <i class="fa fa-angle-down text"></i> <i class="fa fa-angle-up text-active"></i> </span> <span>{{$aVal['sName']}}</span> </a>
                                     @foreach ($aPageMenu['aMainMenu'] as $aVVal)
-                                        @if($aVVal['iLevel'] == 3 && $aVVal['iParentID'] == $aVal['iAutoID'])
+                                        @if($aVVal['iLevel'] == 3 && $aVVal['iParentID'] == $aVal['iAutoID'] && $aVVal['iDisplay'] == 1)
                                                 <ul class="nav lt">
                                                     <li> <a href="{{$aVVal['sUrl']}}"> <i class="fa fa-angle-right"></i> <span>{{$aVVal['sName']}}</span> </a> </li>
                                                 </ul>
@@ -37,11 +37,8 @@
                         <header class="panel-heading b-b b-dark ">可用组别</header>
                         <div class="panel-body animated fadeInRight">
                             @foreach($aProfile['aTempGroup'] as $aItem)
-                                <p><a href="" data-id="{{$aItem['iGroupID']}}" onclick="submitGroupChange(this);" class="btn btn-sm btn-default"><i class="fa fa-circle text-success m-t-xs"></i>&nbsp;{{$aItem['sGroupName']}}</a></p>
+                                <p><a href="#" data-id="{{$aItem['iGroupID']}}" onclick="submitGroupChange(this);" class="btn btn-sm btn-default"><i class="fa fa-circle text-success m-t-xs"></i>&nbsp;{{$aItem['sGroupName']}}</a></p>
                             @endforeach
-                            <form id="form_change_group" method="post" action="/backend/change_group">
-                                <input type="hidden" id="group_id" value="" name="group_id"/>
-                            </form>
                         </div>
                     </section>
                 </section>

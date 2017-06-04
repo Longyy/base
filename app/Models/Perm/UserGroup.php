@@ -23,6 +23,9 @@ class UserGroup extends Model
     const GROUP_TYPE_TEMP = 1; // 临时用户组
     const GROUP_TYPE_EXT = 2; // 扩展用户组
 
+    const PREPEND_YES = 2; // 用户组合并
+    const PREPEND_NO = 1; // 用户组不合并
+
     public static function getUserGroup($iUserID)
     {
         return static::where('iUserID', $iUserID)->where('iExpireTime', '>', time())->get();
