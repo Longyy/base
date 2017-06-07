@@ -8,14 +8,14 @@ namespace App\Http\Controllers\Admin\Perm;
  */
 
 use App\Http\Controllers\RootController as Controller;
+use App\Models\Perm\CommonRoleMenu;
 use Illuminate\Http\Request;
-use App\Models\Perm\CommonUserGroup;
-use App\Modules\Perm\UserGroupModules;
+use App\Modules\Perm\CommonRoleMenuModules;
 use Estate\Exceptions\MobiException;
 use Response;
 use Log;
 
-class UserGroupController extends Controller
+class CommonRoleMenuController extends Controller
 {
     /**
      * 列表页
@@ -24,7 +24,7 @@ class UserGroupController extends Controller
      */
     public function index(Request $oRequest)
     {
-        return view('admin.perm.user-group-list');
+        return view('admin.perm.role-menu-list');
     }
 
     /**
@@ -37,18 +37,18 @@ class UserGroupController extends Controller
         $aFieldValue = $this->validate($oRequest, [
             'page_size' => 'integer|min:1',
         ]);
-        $aResult = CommonUserGroup::findAll(
+        $aResult = CommonRoleMenu::findAll(
             array_except($aFieldValue, ['page_size']),
             array_get($aFieldValue, 'page_size', 10),
-            CommonUserGroup::columns(),
-            CommonUserGroup::orders(),
-            CommonUserGroup::ranges()
+            CommonRoleMenu::columns(),
+            CommonRoleMenu::orders(),
+            CommonRoleMenu::ranges()
         )->toArray();
-        $aGroupType = UserGroupModules::getGroupType();
-        $aResult['data'] = array_map(function($aVal) use ($aGroupType) {
-            $aVal['sType'] = isset($aGroupType[$aVal['iType']]) ? $aGroupType[$aVal['iType']] : '';
-            return $aVal;
-        }, $aResult['data']);
+//        $aGroupType = CommonRoleMenuModules::getGroupType();
+//        $aResult['data'] = array_map(function($aVal) use ($aGroupType) {
+//            $aVal['sType'] = isset($aGroupType[$aVal['iType']]) ? $aGroupType[$aVal['iType']] : '';
+//            return $aVal;
+//        }, $aResult['data']);
 
         return Response::mobi($aResult);
     }
@@ -64,12 +64,12 @@ class UserGroupController extends Controller
             'iAutoID' => 'required|integer',
         ]);
 
-        $oUserGroup = CommonUserGroup::find($aFieldValue['iAutoID']);
-        $aGroupType = UserGroupModules::getGroupType();
+        $oCommonRoleMenu = CommonRoleMenu::find($aFieldValue['iAutoID']);
+        $aGroupType = CommonRoleMenuModules::getGroupType();
 
         return view('admin.perm.user-group-edit', [
             'data' => [
-                'user_group' => $oUserGroup->toArray(),
+                'user_group' => $oCommonRoleMenu->toArray(),
                 'group_type' => $aGroupType,
             ]]);
     }
@@ -87,9 +87,9 @@ class UserGroupController extends Controller
             'iType' => 'required|integer',
         ]);
 
-        $oUserGroup = CommonUserGroup::find($aFieldValue['iAutoID']);
+        $oCommonRoleMenu = CommonRoleMenu::find($aFieldValue['iAutoID']);
         Log::info('update ', [$aFieldValue]);
-        if(! $oUserGroup->update($aFieldValue)) {
+        if(! $oCommonRoleMenu->update($aFieldValue)) {
             Log::info('update result ', [false]);
 
             return Response::exceptionMobi(new MobiException('UPDATE_ERROR'));
@@ -106,7 +106,7 @@ class UserGroupController extends Controller
     {
         return view('admin.perm.user-group-add', [
             'data' => [
-                'group_type' => UserGroupModules::getGroupType(),
+                'group_type' => CommonRoleMenuModules::getGroupType(),
             ]]);
     }
 
@@ -118,10 +118,10 @@ class UserGroupController extends Controller
     public function save(Request $oRequest)
     {
         $aFieldValue = $this->validate($oRequest, [
-            'sName' => 'required|string|min:1|unique:common_usergroup,sName',
+            'sName' => 'required|string|min:1|unique:common_CommonRoleMenu,sName',
             'iType' => 'integer',
         ]);
-        if(! CommonUserGroup::create($aFieldValue)) {
+        if(! CommonRoleMenu::create($aFieldValue)) {
             return Response::exceptionMobi(new MobiException('CREATE_ERROR'));
         }
 
@@ -138,7 +138,7 @@ class UserGroupController extends Controller
         $aFieldValue = $this->validate($oRequest, [
             'sAutoID' => 'required|string|min:1',
         ]);
-        if(! CommonUserGroup::whereIn('iAutoID', explode(',', $aFieldValue['sAutoID']))->delete()) {
+        if(! CommonRoleMenu::whereIn('iAutoID', explode(',', $aFieldValue['sAutoID']))->delete()) {
             return Response::exceptionMobi(new MobiException('DELETE_ERROR'));
         }
         return Response::mobi([]);

@@ -24,4 +24,21 @@ class CommonResource extends Model
     protected $table = 'common_resource';
 
 
+    /**
+     * 查询
+     * @param array $aWhere
+     * @param int $iPerPage
+     * @param array $aColumns
+     * @param array $aOrder
+     * @param array $aRanges
+     * @return mixed
+     */
+    public static function findAll(array $aWhere = [], $iPerPage = 10, array $aColumns = ['*'], array $aOrders = [], array $aRanges = [])
+    {
+        $oUserGroup = new Static;
+        foreach($aWhere as $sKey => $mValue) {
+            $oUserGroup = $oUserGroup->where($sKey, $mValue);
+        }
+        return $oUserGroup->withOrder($aOrders)->withRange($aRanges)->paginate($iPerPage, $aColumns);
+    }
 }
