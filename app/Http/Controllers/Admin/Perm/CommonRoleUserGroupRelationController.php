@@ -9,6 +9,8 @@ namespace App\Http\Controllers\Admin\Perm;
 
 use App\Http\Controllers\RootController as Controller;
 use App\Models\Perm\CommonRoleUserGroupRelation;
+use App\Modules\Perm\CommonRoleModules;
+use App\Modules\Perm\CommonUserGroupModules;
 use Illuminate\Http\Request;
 use App\Modules\Perm\UserGroupModules;
 use Estate\Exceptions\MobiException;
@@ -44,11 +46,15 @@ class CommonRoleUserGroupRelationController extends Controller
             CommonRoleUserGroupRelation::orders(),
             CommonRoleUserGroupRelation::ranges()
         )->toArray();
-//        $aGroupType = UserGroupModules::getGroupType();
-//        $aResult['data'] = array_map(function($aVal) use ($aGroupType) {
-//            $aVal['sType'] = isset($aGroupType[$aVal['iType']]) ? $aGroupType[$aVal['iType']] : '';
-//            return $aVal;
-//        }, $aResult['data']);
+        $aGroupID = array_unique(array_column(array_get($aResult, 'data', []), 'iGroupID'));
+        $aGroupInfo = CommonUserGroupModules::getGroupName($aGroupID);
+        $aRoleID = array_unique(array_column(array_get($aResult, 'data', []), 'iRoleID'));
+        $aRoleInfo = CommonRoleModules::getRoleName($aRoleID);
+        $aResult['data'] = array_map(function($aVal) use ($aGroupInfo, $aRoleInfo) {
+            $aVal['sGroupName'] = isset($aGroupInfo[$aVal['iGroupID']]) ? $aGroupInfo[$aVal['iGroupID']]['sName'] : '';
+            $aVal['sRoleName'] = isset($aRoleInfo[$aVal['iRoleID']]) ? $aRoleInfo[$aVal['iRoleID']]['sName'] : '';
+            return $aVal;
+        }, $aResult['data']);
 
         return Response::mobi($aResult);
     }
@@ -64,12 +70,12 @@ class CommonRoleUserGroupRelationController extends Controller
             'iAutoID' => 'required|integer',
         ]);
 
-        $oUserGroup = CommonRoleUserGroupRelation::find($aFieldValue['iAutoID']);
+        $oUserGroupRole = CommonRoleUserGroupRelation::find($aFieldValue['iAutoID']);
         $aGroupType = UserGroupModules::getGroupType();
 
         return view('admin.perm.user-group-edit', [
             'data' => [
-                'user_group' => $oUserGroup->toArray(),
+                'user_group' => $oUserGroupRole->toArray(),
                 'group_type' => $aGroupType,
             ]]);
     }

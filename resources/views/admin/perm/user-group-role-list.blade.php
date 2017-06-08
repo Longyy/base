@@ -88,10 +88,10 @@
                 title: "ID",
                 sortable: true
             }, {
-                field: "iGroupID",
+                field: "sGroupName",
                 title: "用户组名称"
             }, {
-                field: "iRoleID",
+                field: "sRoleName",
                 title: "角色名称",
                 sortable: true
             }, {

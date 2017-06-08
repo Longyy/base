@@ -54,6 +54,8 @@
     <link rel="stylesheet" href="/admin/js/datetimepicker/bootstrap-datetimepicker.min.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/bootstraptable/bootstrap-table.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/jquery-confirm/jquery-confirm.css" type="text/css" cache="false">
+    <link rel="stylesheet" href="/admin/js/bootstraptable/tree-columns/bootstrap-table-tree-column.css" type="text/css" cache="false">
+
 @endsection
 
 @section('before-js')
@@ -69,6 +71,8 @@
     <!-- datatable -->
     <script src="/admin/js/bootstraptable/bootstrap-table.js" cache="false"></script>
     <script src="/admin/js/bootstraptable/bootstrap-table-zh-CN.js" cache="false"></script>
+    <script src="/admin/js/bootstraptable/tree-columns/bootstrap-table-tree-column.js" cache="false"></script>
+
     <script src="/admin/js/jquery-confirm/jquery-confirm.js" cache="false"></script>
     <script src="/admin/js/custom/common.js"></script>
 
@@ -82,11 +86,16 @@
                 checkbox: true
             }, {
                 field: "iAutoID",
-                title: "ID",
-                sortable: true
+                title: "ID"
+            }, {
+                field: "iParentID",
+                title: "PID"
             }, {
                 field: "sName",
                 title: "名称"
+            }, {
+                field: "iLevel",
+                title: "层级"
             }, {
                 field: "sType",
                 title: "类型",
@@ -124,7 +133,11 @@
                 ajax: "ajaxRequestData",
                 dataField: "rows",
                 totalFile: "total",
-                columns: tableColumns
+                columns: tableColumns,
+                treeShowField: 'sName'
+//                ,
+//                idField: "iAutoID",
+//                parentIdField: "iParentID"
             });
         });
         // 数据加载规则
@@ -256,4 +269,5 @@
         });
 
     </script>
+
 @endsection
