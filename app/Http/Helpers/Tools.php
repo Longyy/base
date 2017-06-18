@@ -59,4 +59,9 @@ class Tools
     {
         return Route::current()->getActionName();
     }
+
+    public static function addLeafNode($sBase, $sAdded, $sSeperator = ',')
+    {
+        return sprintf('%s%s%s', $sBase, $sAdded, $sSeperator);
+    }
 }

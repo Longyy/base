@@ -23,6 +23,10 @@ class CommonRole extends Model
 
     protected $table = 'common_role';
 
+    // 角色类型
+    const ROLE_TYPE_COMMON = 1;
+    const ROLE_TYPE_LINE1 = 2;
+
     /**
      * 查询
      * @param array $aWhere

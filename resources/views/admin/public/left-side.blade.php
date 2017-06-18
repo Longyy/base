@@ -5,6 +5,7 @@
             <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 493px;"><div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="5px" data-color="#333333" style="overflow: hidden; width: auto; height: 493px;"> <!-- nav -->
                     <nav class="nav-primary hidden-xs">
                         <ul class="nav">
+{{--                            {{dd($aPageMenu['aMainMenu'])}}--}}
 {{--                            {{dd($aPageMenu['aMenuLevel'])}}--}}
                             <!-- 二级和三级菜单 -->
                             @foreach ($aPageMenu['aMainMenu'] as $aVal)

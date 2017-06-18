@@ -16,6 +16,7 @@ class UserGroupModules
         1 => '系统用户组',
         2 => '普通用户组',
         3 => '特殊用户组',
+        4 => '扩展用户组',
     ];
 
     public static function getGroupType()

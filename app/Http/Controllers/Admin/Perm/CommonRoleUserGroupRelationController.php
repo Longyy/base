@@ -8,6 +8,7 @@ namespace App\Http\Controllers\Admin\Perm;
  */
 
 use App\Http\Controllers\RootController as Controller;
+use App\Models\Perm\CommonRole;
 use App\Models\Perm\CommonRoleUserGroupRelation;
 use App\Modules\Perm\CommonRoleModules;
 use App\Modules\Perm\CommonUserGroupModules;
@@ -26,7 +27,12 @@ class CommonRoleUserGroupRelationController extends Controller
      */
     public function index(Request $oRequest)
     {
-        return view('admin.perm.user-group-role-list');
+        $aGroupType = UserGroupModules::getGroupType();
+        return view('admin.perm.user-group-role-list', [
+            'data' => [
+                'group_type' => $aGroupType,
+            ]
+        ]);
     }
 
     /**
@@ -38,6 +44,7 @@ class CommonRoleUserGroupRelationController extends Controller
     {
         $aFieldValue = $this->validate($oRequest, [
             'page_size' => 'integer|min:1',
+            'iGroupID' => 'integer|min:1',
         ]);
         $aResult = CommonRoleUserGroupRelation::findAll(
             array_except($aFieldValue, ['page_size']),
@@ -71,12 +78,15 @@ class CommonRoleUserGroupRelationController extends Controller
         ]);
 
         $oUserGroupRole = CommonRoleUserGroupRelation::find($aFieldValue['iAutoID']);
-        $aGroupType = UserGroupModules::getGroupType();
+        $aGroupInfo = CommonUserGroupModules::getGroupName([$oUserGroupRole['iGroupID']]);
+        $oUserGroupRole->sGroupName = $aGroupInfo[$oUserGroupRole['iGroupID']]['sName'];
+        $oRole = CommonRole::find($oUserGroupRole->iRoleID);
+        $oUserGroupRole->iRoleType = $oRole->iType;
 
-        return view('admin.perm.user-group-edit', [
+        return view('admin.perm.user-group-role-edit', [
             'data' => [
-                'user_group' => $oUserGroupRole->toArray(),
-                'group_type' => $aGroupType,
+                'user_group_role' => $oUserGroupRole->toArray(),
+                'role_type' => CommonRoleModules::getRoleType(),
             ]]);
     }
 
@@ -148,6 +158,15 @@ class CommonRoleUserGroupRelationController extends Controller
             return Response::exceptionMobi(new MobiException('DELETE_ERROR'));
         }
         return Response::mobi([]);
+    }
+
+    public function getRoleTree(Request $oRequest)
+    {
+        $aFieldValue = $this->validate($oRequest, [
+            'iRoleType' => 'required|integer|min:1',
+            'iRoleID' => 'integer|min:0',
+        ]);
+        return Response::mobi(CommonRoleModules::getRoleTree($aFieldValue['iRoleType'], array_get($aFieldValue, 'iRoleID', 0)));
     }
 
 }

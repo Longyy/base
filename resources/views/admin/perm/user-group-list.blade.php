@@ -24,7 +24,12 @@
                                 <form  id="searchForm">
                                     <div class="form-inline" role="form">
                                         <div class="form-group">
-                                            <input name="sName" class="form-control input-sm " type="text" placeholder="名称">
+                                            <select name="iType" required class="form-control m-t">
+                                                <option value="">--请选择--</option>
+                                                @foreach($data['group_type'] as $key => $val)
+                                                    <option value="{{$key}}">{{$val}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="form-group">
                                             <button id="ok" type="submit" class="btn btn-sm btn-default">搜索</button>
@@ -121,13 +126,13 @@
                 dataLocale: "zh-CN",
                 pagination: true,
                 sidePagination: "server",
-                pageSize: 10,
+                pageSize: 50,
                 paginationFirstText: "首页",
                 paginationPreText: "上一页",
                 paginationNextText: "下一页",
                 paginationLastText: "尾页",
                 toolbar: "#toolbar",
-                clickToSelect: true,
+                clickToSelect: false,
                 queryParams: "queryParams",
                 cache: false,
                 ajax: "ajaxRequestData",

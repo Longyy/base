@@ -28,5 +28,7 @@ return [
         'UPDATE_SUCCESS' => ['更新成功', '10003'],
         'CREATE_ERROR' => ['创建失败', '10004'],
         'DELETE_ERROR' => ['删除失败', '10005'],
+        'PARENT_GROUP_NOT_EXIST' => ['父级用户组不存在', '10006'],
+        'USER_GROUP_NOT_EXIST' => ['用户组不存在', '10007'],
     ],
 ];

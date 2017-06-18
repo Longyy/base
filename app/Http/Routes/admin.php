@@ -16,6 +16,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'backend', 'middleware' => ['a
         $oRouter->get('user_group/create', 'CommonUserGroupController@create');
         $oRouter->post('user_group/save', 'CommonUserGroupController@save');
         $oRouter->post('user_group/delete', 'CommonUserGroupController@delete');
+        $oRouter->get('user_group/get_user_group_tree', 'CommonUserGroupController@getUserGroupTree');
 
         // 用户组角色管理
         $oRouter->get('user_group_role/list', 'CommonRoleUserGroupRelationController@index');
@@ -25,6 +26,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'backend', 'middleware' => ['a
         $oRouter->get('user_group_role/create', 'CommonRoleUserGroupRelationController@create');
         $oRouter->post('user_group_role/save', 'CommonRoleUserGroupRelationController@save');
         $oRouter->post('user_group_role/delete', 'CommonRoleUserGroupRelationController@delete');
+        $oRouter->get('user_group_role/get_role_tree', 'CommonRoleUserGroupRelationController@getRoleTree');
+
 
         // 用户组用户管理
         $oRouter->get('user_group_user/list', 'UserGroupUserController@index');

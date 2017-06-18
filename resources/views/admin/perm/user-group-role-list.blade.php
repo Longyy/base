@@ -3,10 +3,26 @@
 @section('content')
 
     <section id="content">
-        <section class="vbox">
+        <section class="hbox stretch">
 
-            <section class="scrollable wrapper">
+            <aside class="aside-md bg-white b-r stretch">
+                <section class="vbox">
+                    <header class="header wrapper b-b ">
+                        用户组结构
+                        <select id="iType" onchange="getUserGroupTree();">
+                            <option value="">选择用户组类型</option>
+                            @foreach($data['group_type'] as $key => $val)
+                                <option value="{{$key}}">{{$val}}</option>
+                            @endforeach
+                        </select>
+                    </header>
+                    <seciton>
+                        <div id="group-tree"></div>
+                    </seciton>
+                </section>
 
+            </aside>
+            <section class="scrollable wrapper stretch" style="padding:15px !important;">
                 <ul class="breadcrumb">
                     @foreach($aPageMenu['aBreadMenu'] as $menu)
                         <li class="@if($menu['iLevel'] == 3) active @endif"><a href="{{$menu['sUrl']}}">@if($menu['iLevel'] == 1) <i class="fa fa-home"></i> @endif  {{$menu['sName']}}</a></li>
@@ -15,7 +31,7 @@
 
                 <section class="panel panel-default panel-rounded4">
                     <div class="panel-heading b-dark b-b bottom20">
-                        <h3 class="panel-title">用户组管理</h3>
+                        <h3 class="panel-title">所属角色</h3>
                     </div>
 
                     <div id="toolbar">
@@ -39,8 +55,8 @@
                         </div>
 
                     </div>
-
                     <table id="table"></table>
+
 
                 </section>
             </section>
@@ -54,6 +70,8 @@
     <link rel="stylesheet" href="/admin/js/datetimepicker/bootstrap-datetimepicker.min.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/bootstraptable/bootstrap-table.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/jquery-confirm/jquery-confirm.css" type="text/css" cache="false">
+    <link rel="stylesheet" href="/admin/js/bootstraptreeview/bootstrap-treeview.css" type="text/css" cache="false">
+
 @endsection
 
 @section('before-js')
@@ -70,7 +88,9 @@
     <script src="/admin/js/bootstraptable/bootstrap-table.js" cache="false"></script>
     <script src="/admin/js/bootstraptable/bootstrap-table-zh-CN.js" cache="false"></script>
     <script src="/admin/js/jquery-confirm/jquery-confirm.js" cache="false"></script>
-    <script src="/admin/js/custom/common.js"></script>
+    <script src="/admin/js/bootstraptreeview/bootstrap-treeview.js" cache="false"></script>
+
+        <script src="/admin/js/custom/common.js"></script>
 
     <script>
         var $ok = $('#ok');
@@ -189,6 +209,11 @@
             $.each($('#searchForm').serializeArray(), function(i, field) {
                 search[field.name] = field.value;
             });
+            // 添加iGroupID
+            var iGroupID = $('#group-tree').treeview('getSelected')[0].id;
+            if(iGroupID > 0) {
+                search['iGroupID'] = iGroupID;
+            }
             params.search = search;
             return params;
         }
@@ -262,6 +287,51 @@
             goTo(tableNewUrl);
             return false;
         }
+
+        function getUserGroupTree()
+        {
+            var val = $("#iType").val();
+            if(val > 0) {
+                $.getJSON('/backend/perm/user_group/get_user_group_tree?iGroupType=' + val, function(res) {
+                    if(res.code == 0) {
+                        $group_tree = $('#group-tree').treeview({
+                            levels: 1,
+                            color: "#428bca",
+                            borderColor: "#d9d9d9",
+                            showTags: false,
+                            showCheckbox: false,
+                            highlightSelected: true,
+                            data: res.data,
+                            onNodeChecked: function(event, node) {
+                                $('#parent_id').val(node.id);
+                            },
+                            onNodeSelected: function(event, node) {
+                                console.log(node);
+                                loadTableData(node.id);
+                            }
+                        });
+//                        selectNode();
+                    }
+
+                });
+            }
+        }
+
+        function loadTableData(nodeId) {
+            $table.bootstrapTable('refresh');
+        }
+
+        function selectNode() {
+            var iParentID = parseInt($('#parent_id').val());
+            $group_tree.treeview('checkNode', [ iParentID, { silent: true } ]);
+            $group_tree.treeview('revealNode', [ iParentID, { silent: true } ]);
+        }
+
+
+        $(document).ready(function(){
+            // 初始化左侧用户组树结构
+            getUserGroupTree();
+        });
 
     </script>
 @endsection
