@@ -99,17 +99,22 @@ class CommonRoleUserGroupRelationController extends Controller
     {
         $aFieldValue = $this->validate($oRequest, [
             'iAutoID' => 'required|integer',
-            'sName' => 'required|string|min:1',
-            'iType' => 'required|integer',
+            'iGroupID' => 'required|integer|min:1',
+            'iRoleID' => 'required|integer|min:1',
         ]);
+        if(! $oUserGroup = CommonRoleUserGroupRelation::find($aFieldValue['iAutoID'])) {
+            return Response::exceptionMobi(new MobiException('RELATION_NOT_EXIST'));
+        }
 
-        $oUserGroup = CommonRoleUserGroupRelation::find($aFieldValue['iAutoID']);
-        Log::info('update ', [$aFieldValue]);
-        if(! $oUserGroup->update($aFieldValue)) {
-            Log::info('update result ', [false]);
+        if(CommonRoleUserGroupRelation::where(array_except($aFieldValue, 'iAutoID'))->count()) {
+            return Response::exceptionMobi(new MobiException('RELATION_DUPLICATE'));
+        }
 
+        $oUserGroup->iRoleID = $aFieldValue['iRoleID'];
+        if(! $oUserGroup->save()) {
             return Response::exceptionMobi(new MobiException('UPDATE_ERROR'));
         }
+
         return Response::mobi([]);
     }
 
@@ -120,9 +125,10 @@ class CommonRoleUserGroupRelationController extends Controller
      */
     public function create(Request $oRequest)
     {
-        return view('admin.perm.user-group-add', [
+        return view('admin.perm.user-group-role-add', [
             'data' => [
                 'group_type' => UserGroupModules::getGroupType(),
+                'role_type' => CommonRoleModules::getRoleType(),
             ]]);
     }
 
@@ -134,9 +140,12 @@ class CommonRoleUserGroupRelationController extends Controller
     public function save(Request $oRequest)
     {
         $aFieldValue = $this->validate($oRequest, [
-            'sName' => 'required|string|min:1|unique:common_usergroup,sName',
-            'iType' => 'integer',
+            'iGroupID' => 'required|integer|min:1',
+            'iRoleID' => 'required|integer|min:1',
         ]);
+        if(CommonRoleUserGroupRelation::where($aFieldValue)->get()->toArray()) {
+            return Response::exceptionMobi(new MobiException('RELATION_ALREADY_EXIST'));
+        }
         if(! CommonRoleUserGroupRelation::create($aFieldValue)) {
             return Response::exceptionMobi(new MobiException('CREATE_ERROR'));
         }

@@ -29,9 +29,10 @@
                         <div class="form-horizontal edit-form-width">
 
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">角色名称</label>
+                                <label class="col-sm-3 control-label">用户组名称</label>
                                 <div class="col-sm-9">
                                     <input type="text" name="sName" value="{{$data['user_group_role']['sGroupName']}}" required class="form-control" placeholder="">
+                                    <input type="hidden" name="iGroupID" value="{{$data['user_group_role']['iGroupID']}}" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -107,14 +108,13 @@
             $form = $('#form');
             var data = {
                 iAutoID: $form.find("input[name='iAutoID']").val(),
-                sName: $form.find("input[name='sName']").val(),
-                iType: $form.find("select[name='iType']").val(),
-                iParentID: $form.find("input[name='iParentID']").val()
+                iGroupID: $form.find("input[name='iGroupID']").val(),
+                iRoleID: $form.find("input[name='iRoleID']").val()
             };
             var resultInfo = {};
             $.ajax({
                 type: 'POST',
-                url: '/backend/perm/user_group/update',
+                url: '/backend/perm/user_group_role/update',
                 cache: false,
                 async: false,
                 dataType: 'json',
@@ -180,9 +180,14 @@
                             showTags: true,
                             showCheckbox: true,
                             highlightSelected: false,
+                            multiSelect: false,
                             data: res.data,
                             onNodeChecked: function(event, node) {
                                 $('#role_id').val(node.id);
+                                //
+                            },
+                            onNodeUnchecked: function(event, node) {
+                                $('#role_id').val(0);
                             }
                         });
                     }

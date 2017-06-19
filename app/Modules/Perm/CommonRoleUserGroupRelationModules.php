@@ -18,4 +18,6 @@ class CommonRoleUserGroupRelationModules
         $oRole = CommonRoleUserGroupRelation::getRoleIDByGroupIDs($aGroupID);
         return count($oRole) ? $oRole->toArray() : [];
     }
+
+
 }

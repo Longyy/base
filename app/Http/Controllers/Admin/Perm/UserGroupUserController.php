@@ -24,7 +24,12 @@ class UserGroupUserController extends Controller
      */
     public function index(Request $oRequest)
     {
-        return view('admin.perm.user-group-user-list');
+        $aGroupType = UserGroupModules::getGroupType();
+        return view('admin.perm.user-group-user-list', [
+            'data' => [
+                'group_type' => $aGroupType,
+            ]
+        ]);
     }
 
     /**

@@ -30,5 +30,9 @@ return [
         'DELETE_ERROR' => ['删除失败', '10005'],
         'PARENT_GROUP_NOT_EXIST' => ['父级用户组不存在', '10006'],
         'USER_GROUP_NOT_EXIST' => ['用户组不存在', '10007'],
+        'RELATION_NOT_EXIST' => ['关系不存在', '10008'],
+        'RELATION_DUPLICATE' => ['关系重复', '10009'],
+        'RELATION_ALREADY_EXIST' => ['用户组角色关系已存在', '10010'],
+
     ],
 ];

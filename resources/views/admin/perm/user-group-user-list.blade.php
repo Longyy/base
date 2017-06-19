@@ -3,9 +3,27 @@
 @section('content')
 
     <section id="content">
-        <section class="vbox">
+        <section class="hbox stretch">
 
-            <section class="scrollable wrapper">
+            <aside class="aside-md bg-white b-r stretch">
+                <section class="vbox">
+                    <header class="header wrapper b-b ">
+                        用户组结构
+                        <select id="iGroupType" onchange="getUserGroupTree();">
+                            <option value="">选择用户组类型</option>
+                            @foreach($data['group_type'] as $key => $val)
+                                <option value="{{$key}}">{{$val}}</option>
+                            @endforeach
+                        </select>
+                    </header>
+                    <seciton>
+                        <div id="group-tree"></div>
+                    </seciton>
+                </section>
+
+            </aside>
+
+            <section class="scrollable wrapper stretch" style="padding:15px !important;">
 
                 <ul class="breadcrumb">
                     @foreach($aPageMenu['aBreadMenu'] as $menu)
@@ -15,28 +33,45 @@
 
                 <section class="panel panel-default panel-rounded4">
                     <div class="panel-heading b-dark b-b bottom20">
-                        <h3 class="panel-title">用户组管理</h3>
+                        <h3 class="panel-title">用户组用户管理</h3>
                     </div>
 
                     <div id="toolbar">
-                        <div class="row">
-                            <div class="col-sm-8">
-                                <form  id="searchForm">
-                                    <div class="form-inline" role="form">
-                                        <div class="form-group">
-                                            <input name="sName" class="form-control input-sm " type="text" placeholder="名称">
-                                        </div>
-                                        <div class="form-group">
-                                            <button id="ok" type="submit" class="btn btn-sm btn-default">搜索</button>
-                                        </div>
-                                    </div>
-                                </form>
+                        <div class="row text-sm">
+                            <div class="col-sm-4 m-b-xs">
+                                <div class="btn-group">
+                                    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">批量设置 <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">过期时间</a></li>
+                                        <li><a href="#">权限合并</a></li>
+                                        <li><a href="#">添加用户组</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#">删除</a></li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="col-sm-4 text-right">
-                                <a href="#" onclick="gotoCreate();" class="btn btn-primary  btn-sm">新增</a>
-                                <a href="#" class="btn btn-danger btn-sm delete">删除</a>
+                            <div class="col-sm-4 m-b-xs">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-sm btn-default active">
+                                        <input type="radio" name="options" id="option1">
+                                        主用户组 </label>
+                                    <label class="btn btn-sm btn-default">
+                                        <input type="radio" name="options" id="option2">
+                                        临时用户组 </label>
+                                    <label class="btn btn-sm btn-default">
+                                        <input type="radio" name="options" id="option2">
+                                        扩展用户组 </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input type="text" class="input-sm form-control" placeholder="Search">
+                                    <span class="input-group-btn">
+                        <button class="btn btn-sm btn-default" type="button">Go!</button>
+                        </span> </div>
                             </div>
                         </div>
+
 
                     </div>
 
@@ -54,6 +89,8 @@
     <link rel="stylesheet" href="/admin/js/datetimepicker/bootstrap-datetimepicker.min.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/bootstraptable/bootstrap-table.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/jquery-confirm/jquery-confirm.css" type="text/css" cache="false">
+    <link rel="stylesheet" href="/admin/js/bootstraptreeview/bootstrap-treeview.css" type="text/css" cache="false">
+
 @endsection
 
 @section('before-js')
@@ -70,7 +107,9 @@
     <script src="/admin/js/bootstraptable/bootstrap-table.js" cache="false"></script>
     <script src="/admin/js/bootstraptable/bootstrap-table-zh-CN.js" cache="false"></script>
     <script src="/admin/js/jquery-confirm/jquery-confirm.js" cache="false"></script>
-    <script src="/admin/js/custom/common.js"></script>
+    <script src="/admin/js/bootstraptreeview/bootstrap-treeview.js" cache="false"></script>
+
+        <script src="/admin/js/custom/common.js"></script>
 
     <script>
         var $ok = $('#ok');
@@ -212,7 +251,8 @@
          * @returns {string}
          */
         function addActionBtn(value, row) {
-            return '<a href="'+tableEditUrl+'?iAutoID=' + row.iAutoID + '" class="btn btn-default btn-xs">编辑</a>';
+            return '<a href="'+tableEditUrl+'?iAutoID=' + row.iAutoID + '" class="btn btn-default btn-xs">编辑</a>'
+                + '&nbsp;<a href="'+tableEditUrl+'?iAutoID=' + row.iAutoID + '" class="btn btn-default btn-xs">查看用户组</a>';
         }
 
         // 删除操作
@@ -273,6 +313,39 @@
         {
             goTo(tableNewUrl);
             return false;
+        }
+
+        function getUserGroupTree()
+        {
+            var val = $("#iGroupType").val();
+            if(val > 0) {
+                $.getJSON('/backend/perm/user_group/get_user_group_tree?iGroupType=' + val, function(res) {
+                    if(res.code == 0) {
+                        $group_tree = $('#group-tree').treeview({
+                            levels: 1,
+                            color: "#428bca",
+                            borderColor: "#d9d9d9",
+                            showTags: false,
+                            showCheckbox: false,
+                            highlightSelected: true,
+                            data: res.data,
+                            onNodeChecked: function(event, node) {
+                                $('#parent_id').val(node.id);
+                            },
+                            onNodeSelected: function(event, node) {
+                                console.log(node);
+                                loadTableData(node.id);
+                            }
+                        });
+//                        selectNode();
+                    }
+
+                });
+            }
+        }
+
+        function loadTableData(nodeId) {
+            $table.bootstrapTable('refresh');
         }
 
     </script>
