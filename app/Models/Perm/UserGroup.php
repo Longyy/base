@@ -13,10 +13,10 @@ use Estate\Exceptions\ServiceException;
 
 class UserGroup extends Model
 {
-    protected $fillable   = ['iUserID', 'iGroupType', 'iGroupID', 'sGroupName', 'iExpireTime', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
+    protected $fillable   = ['iUserID', 'iGroupType', 'iGroupID', 'iPrepend', 'sGroupName', 'iExpireTime', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
     protected $orderable  = ['*'];
     protected $rangeable  = ['*'];
-    protected $columnable = ['iAutoID', 'iUserID', 'iGroupType', 'iGroupID', 'sGroupName', 'iExpireTime', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
+    protected $columnable = ['iAutoID', 'iUserID', 'iGroupType', 'iGroupID', 'iPrepend', 'sGroupName', 'iExpireTime', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
 
     protected $table = 'user_group';
 

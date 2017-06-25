@@ -42,24 +42,24 @@
                                 <div class="btn-group">
                                     <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">批量设置 <span class="caret"></span></button>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#">过期时间</a></li>
-                                        <li><a href="#">权限合并</a></li>
-                                        <li><a href="#">添加用户组</a></li>
+                                        <li><a href="#" id="setExpireTime">过期时间</a></li>
+                                        <li><a href="#" id="mergePerm">权限合并</a></li>
+                                        <li><a href="#" id="batchSetUserGroup">添加用户组</a></li>
                                         <li class="divider"></li>
                                         <li><a href="#">删除</a></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="col-sm-4 m-b-xs">
-                                <div class="btn-group" data-toggle="buttons">
-                                    <label class="btn btn-sm btn-default active">
-                                        <input type="radio" name="options" id="option1">
+                                <div class="btn-group" data-toggle="buttons" id="iUserGroupType">
+                                    <label class="btn btn-sm btn-default  active">
+                                        <input type="radio" name="iUserGroupType" id="option1" value="1">
                                         主用户组 </label>
                                     <label class="btn btn-sm btn-default">
-                                        <input type="radio" name="options" id="option2">
+                                        <input type="radio" name="iUserGroupType" id="option2" value="2">
                                         临时用户组 </label>
                                     <label class="btn btn-sm btn-default">
-                                        <input type="radio" name="options" id="option2">
+                                        <input type="radio" name="iUserGroupType" id="option3" value="3">
                                         扩展用户组 </label>
                                 </div>
                             </div>
@@ -114,43 +114,44 @@
     <script>
         var $ok = $('#ok');
         var $table = $('#table');
+        var $group_tree = null;
+        var holdConfirm = false;
         var tableListUrl = "/backend/perm/user_group_user/get_list";
         var tableEditUrl = "/backend/perm/user_group_user/edit";
         var tableDelUrl = "/backend/perm/user_group_user/delete";
         var tableNewUrl = "/backend/perm/user_group_user/create";
+        var setExpireTimeUrl = "/backend/perm/user_group_user/set_expire_time";
+        var setMergePermUrl = "/backend/perm/user_group_user/set_merge_perm";
         var tableColumns = [
             {
                 field: "state",
                 checkbox: true
             }, {
-                field: "iAutoID",
+                field: "iUserID",
                 title: "ID",
                 sortable: true
             }, {
-                field: "iUserID",
+                field: "sName",
                 title: "用户名称"
             }, {
-                field: "iGroupID",
-                title: "用户组名称",
-                sortable: true
+                field: "sGroupName",
+                title: "用户组名称"
             }, {
-                field: "iGroupType",
+                field: "sGroupType",
                 title: "用户组类型",
                 sortable: true
             }, {
-                field: "iExpireTime",
+                field: "sExpireTime",
                 title: "过期时间",
                 sortable: true
             }, {
                 field: "iPrepend",
-                title: "是否合并权限",
-                sortable: true
+                title: "是否合并权限"
             }, {
-                field: "iCreateTime",
-                title: "创建时间",
-                sortable: true
+                field: "sCreateTime",
+                title: "创建时间"
             }, {
-                field: "iUpdateTime",
+                field: "sUpdateTime",
                 title: "更新时间"
             }, {
                 title: "操作",
@@ -240,6 +241,19 @@
             $.each($('#searchForm').serializeArray(), function(i, field) {
                 search[field.name] = field.value;
             });
+            // 添加iGroupID
+            var iGroupID = $('#group-tree').treeview('getSelected')[0].id;
+            if(iGroupID > 0) {
+                search['iGroupID'] = iGroupID;
+            }
+            // 添加iUserGroupType
+            var iUserGroupType = $("input[name='iUserGroupType']:checked").val();
+            if(iUserGroupType == undefined) {
+                iUserGroupType = 0;
+            }
+            if(iUserGroupType > 0) {
+                search['iUserGroupType'] = iUserGroupType;
+            }
             params.search = search;
             return params;
         }
@@ -334,7 +348,7 @@
                             },
                             onNodeSelected: function(event, node) {
                                 console.log(node);
-                                loadTableData(node.id);
+                                loadTableData();
                             }
                         });
 //                        selectNode();
@@ -344,9 +358,200 @@
             }
         }
 
-        function loadTableData(nodeId) {
+        function loadTableData() {
             $table.bootstrapTable('refresh');
         }
+
+        function setExpireTime(param) {
+            $.post(setExpireTimeUrl, param, function(result){
+                if(result.code != 0) {
+                    alert(result.msg);
+                } else {
+                    loadTableData();
+                }
+            }, 'json');
+        }
+
+        function setMergePerm(param) {
+            $.post(setMergePermUrl, param, function(result){
+                if(result.code != 0) {
+                    alert(result.msg);
+                } else {
+                    loadTableData();
+                }
+            }, 'json');
+        }
+
+        $(document).ready(function(){
+            $("input[name='iUserGroupType']").change(function(){
+                loadTableData();
+            });
+
+            $('#setExpireTime').click(function(){
+                var selected = $table.bootstrapTable('getSelections');
+                if(selected.length == 0) {
+                    $.alert({
+                        title: '提示',
+                        content: '请先选择要执行的数据！'
+                    });
+                    return true;
+                }
+
+                // 添加iUserGroupType
+                var iUserGroupType = $("input[name='iUserGroupType']:checked").val();
+                if(iUserGroupType <= 0 || iUserGroupType === undefined) {
+                    $.alert({
+                        title: '提示',
+                        content: '请选择用户组类型！'
+                    });
+                    return true;
+                }
+                if(iUserGroupType == 1) {
+                    $.alert({
+                        title: '提示',
+                        content: '主用户组不能设置过期时间！'
+                    });
+                    return true;
+                }
+
+                if($group_tree == null) {
+                    $.alert({
+                        title: '提示',
+                        content: '请选择左侧用户组！'
+                    });
+                    return true;
+                }
+                var selectedGroup = $group_tree.treeview('getSelected');
+                if(selectedGroup.length == 0) {
+                    $.alert({
+                        title: '提示',
+                        content: '请选择左侧用户组！'
+                    });
+                    return true;
+                }
+
+                var selectedId = [];
+                $.each(selected, function(index,value){
+                    selectedId[index] = value.iUserID;
+                });
+                var data = {
+                    sUserID: selectedId.join(','),
+                    iGroupID: selectedGroup[0].id,
+                    iUserGroupType: iUserGroupType
+                };
+
+                $.confirm({
+                    title: '设置',
+                    content: function(){
+                        return '<div class="form-group">'+
+                            '<label>过期时间</label>'+
+                        '<input autofocus type="text" id="input-name" name="sExpireTime" placeholder="请选择" class="form-control">' +
+                            '</div>';
+                    },
+                    onOpen: function(){
+                        this.$content.find('input[name="sExpireTime"]').datetimepicker({
+                            format: "yyyy-mm-dd HH:ii:ss",
+                            autoclose: true,
+                            showMeridian: true,
+                            todayBtn: true,
+                            pickerPosition: "bottom-left",
+                            language: "zh-CN"
+                        });
+                    },
+                    onClose: function(){
+                    },
+                    onAction: function(action){
+                        var sExpireTime = this.$content.find('input[name="sExpireTime"]').val();
+                        data.sExpireTime = sExpireTime;
+                        console.log(data);
+                        setExpireTime(data);
+                    }
+                });
+            });
+            $('#mergePerm').click(function(){
+                var selected = $table.bootstrapTable('getSelections');
+                if(selected.length == 0) {
+                    $.alert({
+                        title: '提示',
+                        content: '请先选择要执行的数据！'
+                    });
+                    return true;
+                }
+
+                // 添加iUserGroupType
+                var iUserGroupType = $("input[name='iUserGroupType']:checked").val();
+                if(iUserGroupType <= 0 || iUserGroupType === undefined) {
+                    $.alert({
+                        title: '提示',
+                        content: '请选择用户组类型！'
+                    });
+                    return true;
+                }
+                if(iUserGroupType == 1) {
+                    $.alert({
+                        title: '提示',
+                        content: '主用户组不能不能合并权限！'
+                    });
+                    return true;
+                }
+
+                if($group_tree == null) {
+                    $.alert({
+                        title: '提示',
+                        content: '请选择左侧用户组！'
+                    });
+                    return true;
+                }
+                var selectedGroup = $group_tree.treeview('getSelected');
+                if(selectedGroup.length == 0) {
+                    $.alert({
+                        title: '提示',
+                        content: '请选择左侧用户组！'
+                    });
+                    return true;
+                }
+
+                var selectedId = [];
+                $.each(selected, function(index,value){
+                    selectedId[index] = value.iUserID;
+                });
+                var data = {
+                    sUserID: selectedId.join(','),
+                    iGroupID: selectedGroup[0].id,
+                    iUserGroupType: iUserGroupType
+                };
+
+                $.confirm({
+                    title: '设置',
+                    content: function(){
+                        return '<div class="radio">'+
+                            '<label class="radio-custom">'+
+                            '<input type="radio" name="iMergePerm" value="0">'+
+                            '<i class="fa fa-circle-o"></i> 否 </label>'+
+                            '</div>'+
+                            '<div class="radio">'+
+                            '<label class="radio-custom">'+
+                            '<input type="radio" name="iMergePerm" value="1">'+
+                            '<i class="fa fa-circle-o"></i> 是 </label>'+
+                            '</div>';
+                    },
+                    onOpen: function(){
+                    },
+                    onClose: function(){
+                    },
+                    onAction: function(action){
+                        var iMergePerm = this.$content.find('input[name="iMergePerm"]:checked').val();
+                        data.iMergePerm = iMergePerm;
+                        console.log(data);
+                        setMergePerm(data);
+                    }
+                });
+            });
+            $('#batchSetUserGroup').click(function(){
+
+            });
+
+        });
 
     </script>
 @endsection

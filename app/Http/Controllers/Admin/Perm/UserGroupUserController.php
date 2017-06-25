@@ -41,21 +41,14 @@ class UserGroupUserController extends Controller
     {
         $aFieldValue = $this->validate($oRequest, [
             'page_size' => 'integer|min:1',
+            'iGroupID' => 'integer|min:1',
+            'iUserGroupType' => 'integer|min:0',
         ]);
-        $aResult = UserGroup::findAll(
-            array_except($aFieldValue, ['page_size']),
-            array_get($aFieldValue, 'page_size', 10),
-            UserGroup::columns(),
-            UserGroup::orders(),
-            UserGroup::ranges()
-        )->toArray();
-//        $aGroupType = UserGroupModules::getGroupType();
-//        $aResult['data'] = array_map(function($aVal) use ($aGroupType) {
-//            $aVal['sType'] = isset($aGroupType[$aVal['iType']]) ? $aGroupType[$aVal['iType']] : '';
-//            return $aVal;
-//        }, $aResult['data']);
+        if(!isset($aFieldValue['iUserGroupType'])) {
+            $aFieldValue['iUserGroupType'] = 1;
+        }
 
-        return Response::mobi($aResult);
+        return UserGroupModules::getUserList($aFieldValue);
     }
 
     /**
@@ -147,6 +140,38 @@ class UserGroupUserController extends Controller
             return Response::exceptionMobi(new MobiException('DELETE_ERROR'));
         }
         return Response::mobi([]);
+    }
+
+    /**
+     * 设置过期时间
+     * @param Request $oRequest
+     * @return mixed
+     */
+    public function setExpireTime(Request $oRequest)
+    {
+        $aFieldValue = $this->validate($oRequest, [
+            'sUserID' => 'required|string|min:1',
+            'iGroupID' => 'required|integer|min:0',
+            'iUserGroupType' => 'required|integer|min:0',
+            'sExpireTime' => 'required|date',
+        ]);
+        return UserGroupModules::setExpireTime($aFieldValue);
+    }
+
+    /**
+     * 合并权限
+     * @param Request $oRequest
+     * @return mixed
+     */
+    public function mergePerm(Request $oRequest)
+    {
+        $aFieldValue = $this->validate($oRequest, [
+            'sUserID' => 'required|string|min:1',
+            'iGroupID' => 'required|integer|min:0',
+            'iUserGroupType' => 'required|integer|min:0',
+            'iMergePerm' => 'required|integer|min:0',
+        ]);
+        return UserGroupModules::mergePerm($aFieldValue);
     }
 
 }

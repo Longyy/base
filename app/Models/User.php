@@ -9,11 +9,11 @@ class User extends Model
 {
     protected $table = 'user';
 
-    protected $fillable = ['sName', 'sEmail', 'sMobile', 'sPassword', 'sRememberToken', 'iGroupID', 'iCurrentGroupID', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
+    protected $fillable = ['sName', 'sEmail', 'sMobile', 'sPassword', 'sRememberToken', 'iGroupID', 'sGroupName', 'iCurrentGroupID', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
     protected $hidden = ['sPassword', 'sRememberToken'];
     protected $orderable  = ['*'];
     protected $rangeable  = ['*'];
-    protected $columnable = ['iAutoID', 'sName', 'sEmail', 'sMobile', 'sPassword', 'sRememberToken', 'iGroupID', 'iCurrentGroupID', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
+    protected $columnable = ['iAutoID', 'sName', 'sEmail', 'sMobile', 'sPassword', 'sRememberToken', 'iGroupID', 'sGroupName', 'iCurrentGroupID', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
 
     /**
      * @param array $aWhere   option  条件值
