@@ -117,7 +117,6 @@ class CommonUserGroupController extends Controller
                 return Response::exceptionMobi(new MobiException('UPDATE_ERROR'));
             }
         } else {
-            Log::info('null');
             return Response::exceptionMobi(new MobiException('USER_GROUP_NOT_EXIST'));
         }
         return Response::mobi([]);
@@ -177,6 +176,12 @@ class CommonUserGroupController extends Controller
             'iGroupID' => 'integer|min:0',
         ]);
         return Response::mobi(CommonUserGroupModules::getGroupTree($aFieldValue['iGroupType'], array_get($aFieldValue, 'iGroupID', 0)));
+    }
+
+    public function getGroupType(Request $oRequest)
+    {
+        $aGroupType = UserGroupModules::getGroupType();
+        return Response::mobi($aGroupType);
     }
 
 }

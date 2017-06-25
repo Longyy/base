@@ -46,7 +46,7 @@
                                         <li><a href="#" id="mergePerm">权限合并</a></li>
                                         <li><a href="#" id="batchSetUserGroup">添加用户组</a></li>
                                         <li class="divider"></li>
-                                        <li><a href="#">删除</a></li>
+                                        <li><a href="#" id="batchDeleteUserGroup">删除</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -90,6 +90,8 @@
     <link rel="stylesheet" href="/admin/js/bootstraptable/bootstrap-table.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/jquery-confirm/jquery-confirm.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/bootstraptreeview/bootstrap-treeview.css" type="text/css" cache="false">
+    <link rel="stylesheet" href="/admin/js/fuelux/fuelux.css" type="text/css" cache="false">
+    <link rel="stylesheet" href="/admin/js/select2/select2.css" type="text/css" cache="false">
 
 @endsection
 
@@ -108,6 +110,8 @@
     <script src="/admin/js/bootstraptable/bootstrap-table-zh-CN.js" cache="false"></script>
     <script src="/admin/js/jquery-confirm/jquery-confirm.js" cache="false"></script>
     <script src="/admin/js/bootstraptreeview/bootstrap-treeview.js" cache="false"></script>
+    <script src="/admin/js/fuelux/fuelux.js" cache="false"></script>
+    <script src="/admin/js/select2/select2.min.js" cache="false"></script>
 
         <script src="/admin/js/custom/common.js"></script>
 
@@ -122,6 +126,8 @@
         var tableNewUrl = "/backend/perm/user_group_user/create";
         var setExpireTimeUrl = "/backend/perm/user_group_user/set_expire_time";
         var setMergePermUrl = "/backend/perm/user_group_user/set_merge_perm";
+        var batchDeleteUserGroupUrl = "/backend/perm/user_group_user/delete_user_group";
+        var getGroupTypeUrl = "/backend/perm/user_group/get_group_type";
         var tableColumns = [
             {
                 field: "state",
@@ -343,15 +349,11 @@
                             showCheckbox: false,
                             highlightSelected: true,
                             data: res.data,
-                            onNodeChecked: function(event, node) {
-                                $('#parent_id').val(node.id);
-                            },
                             onNodeSelected: function(event, node) {
                                 console.log(node);
                                 loadTableData();
                             }
                         });
-//                        selectNode();
                     }
 
                 });
@@ -381,6 +383,43 @@
                 }
             }, 'json');
         }
+
+        function deleteUserGroup(param) {
+            $.post(batchDeleteUserGroupUrl, param, function(result){
+                if(result.code != 0) {
+                    alert(result.msg);
+                } else {
+                    loadTableData();
+                }
+            }, 'json');
+        }
+
+        function getAlertUserGroupTree()
+        {
+            var val = $("#iType").val();
+            var iGroupID = $('#parent_id').val();
+            if(val > 0) {
+                $.getJSON('/backend/perm/user_group/get_user_group_tree?iGroupType=' + val + '&iGroupID=' + iGroupID, function(res) {
+                    if(res.code == 0) {
+                        $('#alertGroupTree').treeview({
+                            levels: 1,
+                            color: "#428bca",
+                            borderColor: "#d9d9d9",
+                            showTags: true,
+                            showCheckbox: true,
+                            highlightSelected: false,
+                            data: res.data,
+                            onNodeChecked: function(event, node) {
+                                $('#parent_id').val(node.id);
+                            }
+                        });
+                    }
+
+                });
+            }
+        }
+
+
 
         $(document).ready(function(){
             $("input[name='iUserGroupType']").change(function(){
@@ -536,6 +575,7 @@
                             '</div>';
                     },
                     onOpen: function(){
+                        $('input[name="iMergePerm"]').radio();
                     },
                     onClose: function(){
                     },
@@ -550,6 +590,156 @@
             $('#batchSetUserGroup').click(function(){
 
             });
+
+            $('#batchDeleteUserGroup').click(function(){
+                var selected = $table.bootstrapTable('getSelections');
+                if(selected.length == 0) {
+                    $.alert({
+                        title: '提示',
+                        content: '请先选择要执行的数据！'
+                    });
+                    return true;
+                }
+
+                // 添加iUserGroupType
+                var iUserGroupType = $("input[name='iUserGroupType']:checked").val();
+                if(iUserGroupType <= 0 || iUserGroupType === undefined) {
+                    $.alert({
+                        title: '提示',
+                        content: '请选择用户组类型！'
+                    });
+                    return true;
+                }
+
+                if($group_tree == null) {
+                    $.alert({
+                        title: '提示',
+                        content: '请选择左侧用户组！'
+                    });
+                    return true;
+                }
+                var selectedGroup = $group_tree.treeview('getSelected');
+                if(selectedGroup.length == 0) {
+                    $.alert({
+                        title: '提示',
+                        content: '请选择左侧用户组！'
+                    });
+                    return true;
+                }
+
+                var selectedId = [];
+                $.each(selected, function(index,value){
+                    selectedId[index] = value.iUserID;
+                });
+                var data = {
+                    sUserID: selectedId.join(','),
+                    iGroupID: selectedGroup[0].id,
+                    iUserGroupType: iUserGroupType
+                };
+
+                $.confirm({
+                    title: '设置',
+                    content: function(){
+                        return '确定删除？';
+                    },
+                    onOpen: function(){
+                    },
+                    onClose: function(){
+                    },
+                    onAction: function(action){
+                        deleteUserGroup(data);
+                    }
+                });
+            });
+
+            $('#batchSetUserGroup').click(function(){
+                var selected = $table.bootstrapTable('getSelections');
+                if(selected.length == 0) {
+                    $.alert({
+                        title: '提示',
+                        content: '请先选择要执行的数据！'
+                    });
+                    return true;
+                }
+                var selectedId = [];
+                $.each(selected, function(index,value){
+                    selectedId[index] = value.iUserID;
+                });
+                var data = {
+                    sUserID: selectedId.join(',')
+                };
+
+                $.confirm({
+                    title: '添加用户组',
+                    columnClass: 'col-md-6 col-md-offset-3',
+                    content: function(){
+                        return '<section class="panel panel-default">'+
+                            '<div class="wizard clearfix">'+
+                            '<ul class="steps">'+
+                            '<li data-target="#step1" class="active"><span class="badge badge-info">1</span>所属用户组</li>'+
+                            '<li data-target="#step2"><span class="badge">2</span>场景</li>'+
+                            '</ul>'+
+                            '<div class="actions">'+
+                            '<button type="button" class="btn btn-default btn-xs btn-prev" disabled="disabled">Prev</button>'+
+                            '<button type="button" class="btn btn-default btn-xs btn-next" data-last="Finish">Next</button>'+
+                            '</div>'+
+                            '</div>'+
+                            '<div class="step-content clearfix">'+
+                            '<div class="step-pane active" id="step1">'+
+                            '<div class="form-group">'+
+                            '<label class="col-sm-3 control-label">类型</label>'+
+                            '<div class="col-sm-9">'+
+                            '<select name="iType" class="form-control m-t" id="iType" onchange="getAlertUserGroupTree();">'+
+                            '<option value="">--请选择--</option>'+
+                            '</select>'+
+                            '</div>'+
+                            '</div>'+
+                            '<div class="form-group">'+
+                            '<input type="hidden" id="parent_id" name="iParentID" value=""/>'+
+                            '<label class="col-sm-3 control-label">用户组</label>'+
+                            '<div class="col-sm-9">'+
+                            '<div id="alertGroupTree"></div>'+
+                            '</div>'+
+                            '</div>'+
+                            '</div>'+
+                            '<div class="step-pane" id="step2">'+
+                            '<div class="radio">'+
+                            '<label class="radio-custom">'+
+                            '<input type="radio" name="iUserGroupType" checked="checked">'+
+                            '<i class="fa fa-circle-o"></i> 主用户组 </label>'+
+                            '</div>'+
+                            '<div class="radio">'+
+                            '<label class="radio-custom">'+
+                            '<input type="radio" name="iUserGroupType">'+
+                            '<i class="fa fa-circle-o"></i> 临时用户组 </label>'+
+                            '</div>'+
+                            '<div class="radio">'+
+                            '<label class="radio-custom">'+
+                            '<input type="radio" name="iUserGroupType">'+
+                            '<i class="fa fa-circle-o"></i> 扩展用户组 </label>'+
+                            '</div>'+
+                            '</div>'+
+                            '</div>'+
+                            '</section>';
+                    },
+                    onOpen: function(){
+                        $.get(getGroupTypeUrl, function(result) {
+                            if(result.code === 0) {
+                                $.each(result.data, function(key, value){
+                                    $('#iType').append('<option value="'+key+'">'+value+'</option>');
+                                });
+                            }
+                        });
+                        $('input[name="iUserGroupType"]').radio();
+                    },
+                    onClose: function(){
+                    },
+                    onAction: function(action){
+                    }
+                });
+            });
+
+
 
         });
 

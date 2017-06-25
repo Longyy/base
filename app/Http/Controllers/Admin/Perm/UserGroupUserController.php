@@ -174,4 +174,19 @@ class UserGroupUserController extends Controller
         return UserGroupModules::mergePerm($aFieldValue);
     }
 
+    /**
+     * 合并权限
+     * @param Request $oRequest
+     * @return mixed
+     */
+    public function delUserGroup(Request $oRequest)
+    {
+        $aFieldValue = $this->validate($oRequest, [
+            'sUserID' => 'required|string|min:1',
+            'iGroupID' => 'required|integer|min:0',
+            'iUserGroupType' => 'required|integer|min:0',
+        ]);
+        return UserGroupModules::delUserGroup($aFieldValue);
+    }
+
 }

@@ -152,4 +152,26 @@ class UserGroupModules
         }
         return Response::mobi([]);
     }
+
+    public static function delUserGroup($aParam)
+    {
+        $aUserID = array_unique(array_filter(explode(',', $aParam['sUserID'])));
+        if(!$aUserID) {
+            return Response::exceptionMobi(new MobiException('USER_IS_EMPTY'));
+        }
+        if($aParam['iUserGroupType'] == self::USER_GROUP_MAIN) {
+            $aResult = User::where('iGroupID', $aParam['iGroupID'])
+                ->whereIn('iAutoID', $aUserID)
+                ->update(['iGroupID' => 0, 'sGroupName' => '']);
+        } else {
+            $aResult = UserGroup::where('iGroupID', $aParam['iGroupID'])
+                ->where('iGroupType', $aParam['iUserGroupType'])
+                ->whereIn('iUserID', $aUserID)
+                ->delete();
+        }
+        if(!$aResult) {
+            return Response::exceptionMobi(new MobiException('DELETE_ERROR'));
+        }
+        return Response::mobi([]);
+    }
 }
