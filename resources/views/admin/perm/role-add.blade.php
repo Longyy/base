@@ -16,53 +16,52 @@
                     <li><a href="index.html"><i class="fa fa-home"></i> 系统设置</a></li>
                     <li class="active">权限管理</li>
                 </ul>
-        <form id="form"  data-parsley-validate>
-                <section class="panel panel-default panel-rounded4">
-                    <div class="panel-heading b-dark b-b bottom20">
-                        <h3 class="panel-title">添加用户组</h3>
-                    </div>
-
-                    <div class="panel-body">
-                        <div class="form-horizontal edit-form-width">
-
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">名称</label>
-                                <div class="col-sm-9">
-                                    <input type="text" name="sName" value="" required class="form-control" placeholder="">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">类型</label>
-                                <div class="col-sm-9">
-                                    <select name="iType" id="iType" required onchange="getUserGroupTree()" class="form-control m-t">
-                                        <option value="-1">--请选择--</option>
-                                        @foreach($data['group_type'] as $key => $val)
-                                            <option value="{{$key}}">{{$val}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <input type="hidden" id="parent_id" name="iParentID" value="0"/>
-                                <label class="col-sm-3 control-label">父级用户组</label>
-                                <div class="col-sm-9">
-                                    <div id="group-tree"></div>
-                                </div>
-                            </div>
+                <form id="form"  data-parsley-validate>
+                    <section class="panel panel-default panel-rounded4">
+                        <div class="panel-heading b-dark b-b bottom20">
+                            <h3 class="panel-title">添加角色</h3>
                         </div>
 
-                    </div>
+                        <div class="panel-body">
+                            <div class="form-horizontal edit-form-width">
 
-                    <footer class="panel-footer text-center bg-light lter">
-                        <button id="submit" type="submit" class="btn btn-success" >提交</button>
-                        <i class="fa fa-spin fa-spinner hide" id="spin"></i>
-                        <button id="cancel" class="btn btn-danger margin-left-20" onclick="goBack();">取消</button>
-                    </footer>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">名称</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="sName" value="" required class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">类型</label>
+                                    <div class="col-sm-9">
+                                        <select name="iType" id="iType" required onchange="getRoleTree()" class="form-control m-t">
+                                            <option value="">--请选择--</option>
+                                            @foreach($data['role_type'] as $key => $val)
+                                                <option value="{{$key}}">{{$val}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" id="parent_id" name="iParentID" value="0"/>
+                                    <label class="col-sm-3 control-label">父级用户组</label>
+                                    <div class="col-sm-9">
+                                        <div id="role-tree"></div>
+                                    </div>
+                                </div>
+                            </div>
 
-                </section>
+                        </div>
 
-</form>
+                        <footer class="panel-footer text-center bg-light lter">
+                            <button id="submit" type="submit" class="btn btn-success" >提交</button>
+                            <i class="fa fa-spin fa-spinner hide" id="spin"></i>
+                            <button id="cancel" class="btn btn-danger margin-left-20" onclick="goBack();">取消</button>
+                        </footer>
+
+                    </section>
+
+                </form>
             </section>
 
 
@@ -78,10 +77,10 @@
 
 @endsection
 
-    @section('before-js')
-    @endsection
+@section('before-js')
+@endsection
 
-    @section('after-js')
+@section('after-js')
     <!-- parsley -->
     <script src="/admin/js/parsley/parsley.js" cache="false"></script>
     <script src="/admin/js/parsley/i18n/zh_cn.js" cache="false"></script>
@@ -109,7 +108,7 @@
             var resultInfo = {};
             $.ajax({
                 type: 'POST',
-                url: '/backend/perm/user_group/save',
+                url: '/backend/perm/role/save',
                 cache: false,
                 async: false,
                 dataType: 'json',
@@ -160,14 +159,14 @@
             return false;
         });
 
-        function getUserGroupTree()
+        function getRoleTree()
         {
             var val = $("#iType").val();
-            var iGroupID = $('#parent_id').val();
+            var iRoleID = $('#parent_id').val();
             if(val > 0) {
-                $.getJSON('/backend/perm/user_group/get_user_group_tree?iGroupType=' + val + '&iGroupID=' + iGroupID, function(res) {
+                $.getJSON('/backend/perm/role/get_role_tree?iRoleType=' + val + '&iRoleID=' + iRoleID, function(res) {
                     if(res.code == 0) {
-                        $group_tree = $('#group-tree').treeview({
+                        $('#role-tree').treeview({
                             levels: 1,
                             color: "#428bca",
                             borderColor: "#d9d9d9",

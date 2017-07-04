@@ -9,6 +9,7 @@ namespace App\Http\Controllers\Admin\Perm;
 
 use App\Http\Controllers\RootController as Controller;
 use App\Models\Perm\CommonMenu;
+use App\Modules\Perm\CommonBusinessTypeModules;
 use Illuminate\Http\Request;
 use App\Modules\Perm\CommonMenuModules;
 use Estate\Exceptions\MobiException;
@@ -44,11 +45,16 @@ class CommonMenuController extends Controller
             CommonMenu::orders(),
             CommonMenu::ranges()
         )->toArray();
-//        $aGroupType = CommonMenuModules::getGroupType();
-//        $aResult['data'] = array_map(function($aVal) use ($aGroupType) {
-//            $aVal['sType'] = isset($aGroupType[$aVal['iType']]) ? $aGroupType[$aVal['iType']] : '';
-//            return $aVal;
-//        }, $aResult['data']);
+        $aMenuType = CommonMenuModules::getMenuType();
+        $aBusinessType = CommonBusinessTypeModules::getBusinessType();
+
+        $aResult['data'] = array_map(function($aVal) use ($aMenuType, $aBusinessType) {
+            $aVal['sType'] = isset($aMenuType[$aVal['iType']]) ? $aMenuType[$aVal['iType']] : '';
+            $aVal['sBusinessType'] = isset($aBusinessType[$aVal['iBusinessType']]) ? $aBusinessType[$aVal['iBusinessType']]['sName'] : '';
+
+            return $aVal;
+
+        }, $aResult['data']);
 
         return Response::mobi($aResult);
     }

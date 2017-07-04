@@ -189,4 +189,27 @@ class UserGroupUserController extends Controller
         return UserGroupModules::delUserGroup($aFieldValue);
     }
 
+    /**
+     * 批量设置用户组
+     * @param Request $oRequest
+     * @return mixed
+     */
+    public function batchSetUserGroup(Request $oRequest)
+    {
+        $aFieldValue = $this->validate($oRequest, [
+            'sUserID' => 'required|string|min:1',
+            'addToGroupID' => 'required|integer|min:0',
+            'iUserGroupType' => 'required|integer|min:0',
+        ]);
+        return UserGroupModules::batchSetUserGroup($aFieldValue);
+    }
+
+    public function getUserGroup(Request $oRequest)
+    {
+        $aFieldValue = $this->validate($oRequest, [
+            'iUserID' => 'required|integer|min:1',
+        ]);
+        return UserGroupModules::getUserAllGroup($aFieldValue['iUserID']);
+    }
+
 }

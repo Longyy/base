@@ -87,73 +87,56 @@
                 field: "iAutoID",
                 title: "ID",
                 sortable: true
-            }, {
+            },{
+                field: "iParentID",
+                title: "PID"
+            },{
                 field: "sName",
                 title: "菜单名称",
                 sortable: true
             }, {
-                field: "iType",
-                title: "菜单类型"
+                field: "iLevel",
+                title: "层级"
             }, {
-                field: "iBusinessType",
+                field: "sType",
+                title: "类型"
+            }, {
+                field: "sBusinessType",
                 title: "业务类型",
                 sortable: true
-            }, {
-                field: "iLevel",
-                title: "层级",
-                sortable: true
-            }, {
-                field: "iParentID",
-                title: "父级菜单名",
-                sortable: true
-            }, {
-                field: "sRelation",
-                title: "继承路径",
-                sortable: true
-            }, {
+            },{
                 field: "sAndroidPath",
-                title: "Android路径",
-                sortable: true
+                title: "Android路径"
             }, {
                 field: "sIosPath",
-                title: "IOS路径",
-                sortable: true
+                title: "IOS路径"
             }, {
                 field: "sH5Path",
-                title: "H5路径",
-                sortable: true
+                title: "H5路径"
             }, {
                 field: "sWebPath",
-                title: "Web路径",
-                sortable: true
+                title: "Web路径"
             }, {
                 field: "sParam",
-                title: "菜单参数",
-                sortable: true
+                title: "菜单参数"
             }, {
                 field: "iJumpType",
-                title: "跳转类型",
-                sortable: true
+                title: "跳转类型"
             }, {
                 field: "sRealUrl",
-                title: "真实地址",
-                sortable: true
+                title: "真实地址"
             }, {
                 field: "iLeaf",
-                title: "是否叶子结点",
-                sortable: true
+                title: "是否叶子结点"
             }, {
                 field: "iShow",
-                title: "是否有效",
-                sortable: true
+                title: "是否有效"
             }, {
                 field: "iDisplay",
-                title: "是否展示",
-                sortable: true
+                title: "是否展示"
             }, {
                 field: "sIcon",
-                title: "IconFont",
-                sortable: true
+                title: "IconFont"
             }, {
                 field: "iOrder",
                 title: "排序",

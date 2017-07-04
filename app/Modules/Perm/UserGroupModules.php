@@ -13,6 +13,7 @@ use App\Models\Perm\CommonUserGroup;
 use App\Models\Perm\UserGroup;
 use App\Models\User;
 use Response;
+use DB;
 use Estate\Exceptions\MobiException;
 
 class UserGroupModules
@@ -173,5 +174,101 @@ class UserGroupModules
             return Response::exceptionMobi(new MobiException('DELETE_ERROR'));
         }
         return Response::mobi([]);
+    }
+
+    public static function batchSetUserGroup($aParam)
+    {
+        $aUserID = array_filter(array_unique(explode(',', $aParam['sUserID'])));
+        // 用户必须存在
+        $iUserCount = User::whereIn('iAutoID', $aUserID)->count();
+        if($iUserCount != count($aUserID)) {
+            return Response::exceptionMobi(new MobiException('ALL_USER_MUST_EXIST'));
+        }
+        switch($aParam['iUserGroupType']) {
+            case self::USER_GROUP_MAIN:
+                $iUserCount = User::whereIn('iAutoID', $aUserID)
+                    ->where('iGroupID', $aParam['addToGroupID'])
+                    ->count();
+                if($iUserCount) {
+                    return Response::exceptionMobi(new MobiException('SOME_USER_HAS_HOLD_THE_GROUP'));
+                }
+                $oUserGroup = CommonUserGroup::find($aParam['addToGroupID']);
+                if($oUserGroup == null) {
+                    return Response::exceptionMobi(new MobiException('USER_GROUP_NOT_EXIST'));
+                }
+                $mResult = User::whereIn('iAutoID', $aUserID)
+                    ->update(['iGroupID' => $aParam['addToGroupID'], 'sGroupName' => $oUserGroup->sName]);
+                if(!$mResult) {
+                    return Response::exceptionMobi(new MobiException('ADD_ERROR'));
+                }
+                // 取消用户对该用户组在其他场景的权限
+                $mDelResult = UserGroup::whereIn('iUserID', $aUserID)
+                    ->where('iGroupID', $aParam['addToGroupID'])
+                    ->delete();
+                if(!$mDelResult){
+                    return Response::exceptionMobi(new MobiException('DEL_OLD_RELATION_ERROR'));
+                }
+                break;
+            case self::USER_GROUP_TEMP:
+            case self::USER_GROUP_EXT:
+                $iUserCount = UserGroup::where('iUserID', $aUserID)
+                    ->where('iGroupID', $aParam['addToGroupID'])
+                    ->count();
+                if($iUserCount) {
+                    return Response::exceptionMobi(new MobiException('SOME_USER_HAS_HOLD_THE_GROUP'));
+                }
+                // 用户的主用户组如果是该用户组，则报错
+                $iUserMainCount = User::whereIn('iAutoID', $aUserID)
+                    ->where('iGroupID', $aParam['addToGroupID'])
+                    ->count();
+                if($iUserMainCount) {
+                    return Response::exceptionMobi(new MobiException('USER_MAIN_GROUP_HAS_CONTAINED'));
+                }
+                $oUserGroup = CommonUserGroup::find($aParam['addToGroupID']);
+                if($oUserGroup == null) {
+                    return Response::exceptionMobi(new MobiException('USER_GROUP_NOT_EXIST'));
+                }
+                $aData = array_map(function($iUserID) use ($oUserGroup, $aParam) {
+                    return [
+                        'iUserID' => $iUserID,
+                        'iGroupType' => $aParam['iUserGroupType'],
+                        'iGroupID' => $oUserGroup->iAutoID,
+                        'sGroupName' => $oUserGroup->sName,
+                    ];
+                }, $aUserID);
+                $mResult = DB::table('user_group')->insert($aData);
+                if(!$mResult) {
+                    return Response::exceptionMobi(new MobiException('ADD_ERROR'));
+                }
+
+                break;
+            default:
+                break;
+        }
+        return Response::mobi([]);
+    }
+
+    public static function getUserAllGroup($iUserID)
+    {
+        $aResult = [];
+        // 取主用户组
+        $oUser = User::find($iUserID);
+        $aResult[self::USER_GROUP_MAIN][] = [
+            'iGroupID' => $oUser->iGroupID,
+            'sGroupName' => $oUser->sGroupName,
+        ];
+
+        // 取临时和扩展用户组(未过期)
+        $oUserGroup = UserGroup::where('iUserID', $iUserID)
+            ->where('iExpireTime', '>', time())
+            ->get();
+
+        foreach($oUserGroup as $aGroup) {
+            $aResult[$aGroup->iGroupType][] = [
+                'iGroupID' => $aGroup->iGroupID,
+                'sGroupName' => $aGroup->sGroupName,
+            ];
+        }
+        return Response::mobi($aResult);
     }
 }

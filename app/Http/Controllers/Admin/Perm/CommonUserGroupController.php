@@ -144,10 +144,18 @@ class CommonUserGroupController extends Controller
     {
         $aFieldValue = $this->validate($oRequest, [
             'sName' => 'required|string|min:1|unique:common_usergroup,sName',
-            'iType' => 'integer',
+            'iType' => 'integer|min:1',
+            'iParentID' => 'integer|min:0'
         ]);
-        if(! CommonUserGroup::create($aFieldValue)) {
-            return Response::exceptionMobi(new MobiException('CREATE_ERROR'));
+        if(! is_null( $oUserGroup = CommonUserGroup::find($aFieldValue['iParentID']))) {
+            $aFieldValue['iLevel'] = $oUserGroup->iLevel + 1;
+            if(! ($oNewGroup = CommonUserGroup::create($aFieldValue))) {
+                return Response::exceptionMobi(new MobiException('CREATE_ERROR'));
+            }
+            $oNewGroup->sRelation = sprintf('%s%s,', $oUserGroup->sRelation, $oNewGroup->iAutoID);
+            if(! $oNewGroup->save()) {
+                return Response::exceptionMobi(new MobiException('UPDATE_ERROR'));
+            }
         }
 
         return Response::mobi([]);

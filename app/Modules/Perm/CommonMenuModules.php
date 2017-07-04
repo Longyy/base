@@ -13,6 +13,10 @@ use App\Models\Perm\CommonMenu;
 
 class CommonMenuModules
 {
+    private static $aMenuTypeMap = [
+        1 => '菜单',
+        2 => '按钮',
+    ];
     public static function getMenuInfoByID($aMenuID)
     {
         $oMenuInfo = CommonMenu::whereIn('iAutoID', $aMenuID)
@@ -34,5 +38,10 @@ class CommonMenuModules
                 break;
         }
         return $sKey;
+    }
+
+    public static function getMenuType()
+    {
+        return self::$aMenuTypeMap;
     }
 }

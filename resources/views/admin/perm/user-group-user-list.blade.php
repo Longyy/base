@@ -128,6 +128,8 @@
         var setMergePermUrl = "/backend/perm/user_group_user/set_merge_perm";
         var batchDeleteUserGroupUrl = "/backend/perm/user_group_user/delete_user_group";
         var getGroupTypeUrl = "/backend/perm/user_group/get_group_type";
+        var batchSetUserGroupUrl = "/backend/perm/user_group_user/batch_set_user_group";
+        var getUserGroupUrl = "/backend/perm/user_group_user/get_user_group";
         var tableColumns = [
             {
                 field: "state",
@@ -272,7 +274,7 @@
          */
         function addActionBtn(value, row) {
             return '<a href="'+tableEditUrl+'?iAutoID=' + row.iAutoID + '" class="btn btn-default btn-xs">编辑</a>'
-                + '&nbsp;<a href="'+tableEditUrl+'?iAutoID=' + row.iAutoID + '" class="btn btn-default btn-xs">查看用户组</a>';
+                + '&nbsp;<a href="javascript:void(0)" onclick="checkUserAllGroup('+row.iAutoID+')" class="btn btn-default btn-xs">用户状态</a>';
         }
 
         // 删除操作
@@ -397,7 +399,7 @@
         function getAlertUserGroupTree()
         {
             var val = $("#iType").val();
-            var iGroupID = $('#parent_id').val();
+            var iGroupID = $('#addToGroupID').val();
             if(val > 0) {
                 $.getJSON('/backend/perm/user_group/get_user_group_tree?iGroupType=' + val + '&iGroupID=' + iGroupID, function(res) {
                     if(res.code == 0) {
@@ -410,7 +412,7 @@
                             highlightSelected: false,
                             data: res.data,
                             onNodeChecked: function(event, node) {
-                                $('#parent_id').val(node.id);
+                                $('#addToGroupID').val(node.id);
                             }
                         });
                     }
@@ -418,6 +420,72 @@
                 });
             }
         }
+
+        function batchSetUserGroup(param) {
+            $.post(batchSetUserGroupUrl, param, function(result){
+                if(result.code != 0) {
+                    alert(result.msg);
+                } else {
+                    loadTableData();
+                }
+            }, 'json');
+        }
+
+        function checkUserAllGroup(iUserID) {
+            $.confirm({
+                title: '用户状态',
+                columnClass: 'col-md-6 col-md-offset-3',
+                content: function(){
+                    return '<section class="panel panel-default">'+
+                        '<header class="panel-heading bg-light">'+
+                        '<ul class="nav nav-tabs nav-justified">'+
+                        '<li class="active"><a href="#userGroup_1" id="userGroupTab_1" data-toggle="tab">主用户组<span class="badge">0</span></a></li>'+
+                        '<li><a href="#userGroup_2" id="userGroupTab_2" data-toggle="tab">临时用户组<span class="badge">0</span></a></li>'+
+                        '<li><a href="#userGroup_3" id="userGroupTab_3" data-toggle="tab">扩展用户组<span class="badge">0</span></a></li>'+
+                        '</ul>'+
+                        '</header>'+
+                        '<div class="panel-body">'+
+                        '<div class="tab-content">'+
+                        '<div class="tab-pane active" id="userGroup_1"></div>'+
+                        '<div class="tab-pane" id="userGroup_2"></div>'+
+                        '<div class="tab-pane" id="userGroup_3"></div>'+
+                        '</div>'+
+                        '</div>'+
+                        '</section>';
+                },
+                onOpen: function(){
+                    $.getJSON(getUserGroupUrl + '?iUserID=' + iUserID, function(result) {
+                        if(result.code === 0) {
+                            $.each(result.data, function(key, value){
+                                if(value.length > 0) {
+                                    $('#userGroupTab_' + key).find('span').addClass('bg-primary').text(value.length);
+                                }
+                                $.each(value, function(key2, value2) {
+                                    $('#userGroup_' + key).text(value2.sGroupName + '<br/>');
+                                });
+                            });
+                        }
+                    });
+//                    this.$content.find('input[name="sExpireTime"]').datetimepicker({
+//                        format: "yyyy-mm-dd HH:ii:ss",
+//                        autoclose: true,
+//                        showMeridian: true,
+//                        todayBtn: true,
+//                        pickerPosition: "bottom-left",
+//                        language: "zh-CN"
+//                    });
+                },
+                onClose: function(){
+                },
+                onAction: function(action){
+//                    var sExpireTime = this.$content.find('input[name="sExpireTime"]').val();
+//                    data.sExpireTime = sExpireTime;
+//                    console.log(data);
+//                    setExpireTime(data);
+                }
+            });
+        }
+
 
 
 
@@ -587,9 +655,7 @@
                     }
                 });
             });
-            $('#batchSetUserGroup').click(function(){
 
-            });
 
             $('#batchDeleteUserGroup').click(function(){
                 var selected = $table.bootstrapTable('getSelections');
@@ -695,7 +761,7 @@
                             '</div>'+
                             '</div>'+
                             '<div class="form-group">'+
-                            '<input type="hidden" id="parent_id" name="iParentID" value=""/>'+
+                            '<input type="hidden" id="addToGroupID" name="addToGroupID" value=""/>'+
                             '<label class="col-sm-3 control-label">用户组</label>'+
                             '<div class="col-sm-9">'+
                             '<div id="alertGroupTree"></div>'+
@@ -705,17 +771,17 @@
                             '<div class="step-pane" id="step2">'+
                             '<div class="radio">'+
                             '<label class="radio-custom">'+
-                            '<input type="radio" name="iUserGroupType" checked="checked">'+
+                            '<input type="radio" name="iAddUserGroupType" value="1" checked="checked">'+
                             '<i class="fa fa-circle-o"></i> 主用户组 </label>'+
                             '</div>'+
                             '<div class="radio">'+
                             '<label class="radio-custom">'+
-                            '<input type="radio" name="iUserGroupType">'+
+                            '<input type="radio" name="iAddUserGroupType" value="2">'+
                             '<i class="fa fa-circle-o"></i> 临时用户组 </label>'+
                             '</div>'+
                             '<div class="radio">'+
                             '<label class="radio-custom">'+
-                            '<input type="radio" name="iUserGroupType">'+
+                            '<input type="radio" name="iAddUserGroupType" value="3">'+
                             '<i class="fa fa-circle-o"></i> 扩展用户组 </label>'+
                             '</div>'+
                             '</div>'+
@@ -730,11 +796,26 @@
                                 });
                             }
                         });
-                        $('input[name="iUserGroupType"]').radio();
+                        $('input[name="iAddUserGroupType"]').radio();
                     },
                     onClose: function(){
                     },
-                    onAction: function(action){
+                    onAction: function(){
+                        var iUserGroupType = $('input[name="iAddUserGroupType"]:checked').val();
+                        if(iUserGroupType === undefined || iUserGroupType === '' || iUserGroupType < 1) {
+                            $.alert('请选择场景');
+                            return false;
+                        }
+
+                        var addToGroupID = $('#addToGroupID').val();
+                        if(addToGroupID === undefined || addToGroupID === '' || addToGroupID < 1) {
+                            $.alert('请选择用户组');
+                            return false;
+                        }
+                        data.iUserGroupType = iUserGroupType;
+                        data.addToGroupID = addToGroupID;
+                        console.log(data);
+                        batchSetUserGroup(data);
                     }
                 });
             });

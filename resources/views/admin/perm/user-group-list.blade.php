@@ -85,6 +85,7 @@
         var $ok = $('#ok');
         var $table = $('#table');
         var tableListUrl = "/backend/perm/user_group/get_list";
+        var tableDelUrl = "/backend/perm/user_group/delete";
         var tableColumns = [
             {
                 field: "state",
@@ -119,7 +120,6 @@
         ];
         // 定义搜索规则
         var searchField = {"sName": "sName-like"};
-        var tableDelUrl = "/backend/perm/user_group/delete";
         // 表格
         $(document).ready( function () {
             $table.bootstrapTable({

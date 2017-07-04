@@ -9,6 +9,7 @@ namespace App\Http\Controllers\Admin\Perm;
 
 use App\Http\Controllers\RootController as Controller;
 use App\Models\Perm\CommonRole;
+use App\Modules\Perm\CommonUserGroupModules;
 use Illuminate\Http\Request;
 use App\Modules\Perm\CommonRoleModules;
 use Estate\Exceptions\MobiException;
@@ -24,7 +25,12 @@ class CommonRoleController extends Controller
      */
     public function index(Request $oRequest)
     {
-        return view('admin.perm.role-list');
+        $aGroupType = CommonRoleModules::getRoleType();
+        return view('admin.perm.role-list', [
+            'data' => [
+                'role_type' => $aGroupType,
+            ]
+        ]);
     }
 
     /**
@@ -36,6 +42,7 @@ class CommonRoleController extends Controller
     {
         $aFieldValue = $this->validate($oRequest, [
             'page_size' => 'integer|min:1',
+            'iType' => 'integer|min:1',
         ]);
         $aResult = CommonRole::findAll(
             array_except($aFieldValue, ['page_size']),
@@ -44,12 +51,12 @@ class CommonRoleController extends Controller
             CommonRole::orders(),
             CommonRole::ranges()
         )->toArray();
-//        $aGroupType = CommonRoleModules::getGroupType();
-//        $aResult['data'] = array_map(function($aVal) use ($aGroupType) {
-//            $aVal['sType'] = isset($aGroupType[$aVal['iType']]) ? $aGroupType[$aVal['iType']] : '';
-//            return $aVal;
-//        }, $aResult['data']);
-
+        $aRoleType = CommonRoleModules::getRoleType();
+        $aResult['data'] = array_map(function($aVal) use ($aRoleType) {
+            $aVal['sType'] = isset($aRoleType[$aVal['iType']]) ? $aRoleType[$aVal['iType']] : '';
+            return $aVal;
+        }, $aResult['data']);
+        $aResult['data'] = CommonUserGroupModules::buildGroupTree($aResult['data'], [], 1, 0);
         return Response::mobi($aResult);
     }
 
@@ -65,12 +72,12 @@ class CommonRoleController extends Controller
         ]);
 
         $oCommonRole = CommonRole::find($aFieldValue['iAutoID']);
-        $aGroupType = CommonRoleModules::getGroupType();
+        $aRoleType = CommonRoleModules::getRoleType();
 
-        return view('admin.perm.user-group-edit', [
+        return view('admin.perm.role-edit', [
             'data' => [
-                'user_group' => $oCommonRole->toArray(),
-                'group_type' => $aGroupType,
+                'role' => $oCommonRole->toArray(),
+                'role_type' => $aRoleType,
             ]]);
     }
 
@@ -85,15 +92,28 @@ class CommonRoleController extends Controller
             'iAutoID' => 'required|integer',
             'sName' => 'required|string|min:1',
             'iType' => 'required|integer',
+            'iParentID' => 'required|integer',
         ]);
 
-        $oCommonRole = CommonRole::find($aFieldValue['iAutoID']);
-        Log::info('update ', [$aFieldValue]);
-        if(! $oCommonRole->update($aFieldValue)) {
-            Log::info('update result ', [false]);
+        if(is_null($oRole = CommonRole::find($aFieldValue['iAutoID']))) {
+            return Response::exceptionMobi(new MobiException('ROLE_NOT_EXIST'));
+        }
 
+        if($aFieldValue['iParentID']) {
+            if(is_null( $oParentRole = CommonRole::find($aFieldValue['iParentID']))) {
+                return Response::exceptionMobi(new MobiException('PARENT_ROLE_NOT_EXIST'));
+            }
+            $aFieldValue['iLevel'] = $oParentRole->iLevel + 1;
+            $aFieldValue['sRelation'] = sprintf('%s%s,', $oParentRole->sRelation, $aFieldValue['iAutoID']);
+        } else {
+            $aFieldValue['iLevel'] = 1;
+            $aFieldValue['sRelation'] = sprintf(',%s,', $oRole->iAutoID);
+        }
+
+        if(! $oRole->update($aFieldValue)) {
             return Response::exceptionMobi(new MobiException('UPDATE_ERROR'));
         }
+
         return Response::mobi([]);
     }
 
@@ -104,9 +124,9 @@ class CommonRoleController extends Controller
      */
     public function create(Request $oRequest)
     {
-        return view('admin.perm.user-group-add', [
+        return view('admin.perm.role-add', [
             'data' => [
-                'group_type' => CommonRoleModules::getGroupType(),
+                'role_type' => CommonRoleModules::getRoleType(),
             ]]);
     }
 
@@ -118,11 +138,31 @@ class CommonRoleController extends Controller
     public function save(Request $oRequest)
     {
         $aFieldValue = $this->validate($oRequest, [
-            'sName' => 'required|string|min:1|unique:common_CommonRole,sName',
-            'iType' => 'integer',
+            'sName' => 'required|string|min:1|unique:common_role,sName',
+            'iType' => 'integer|min:1',
+            'iParentID' => 'integer|min:0',
         ]);
-        if(! CommonRole::create($aFieldValue)) {
+
+        if($aFieldValue['iParentID']) {
+            if(is_null( $oRole = CommonRole::find($aFieldValue['iParentID']))) {
+                return Response::exceptionMobi(new MobiException('PARENT_ROLE_NOT_EXIST'));
+            }
+        }
+
+        if(! ($oNewRole = CommonRole::create($aFieldValue))) {
             return Response::exceptionMobi(new MobiException('CREATE_ERROR'));
+        }
+
+        if(!empty($oRole)) {
+            $oNewRole->iLevel = $oRole->iLevel + 1;
+            $oNewRole->sRelation = sprintf('%s%s,', $oRole->sRelation, $oNewRole->iAutoID);
+        } else {
+            $oNewRole->iLevel = 1;
+            $oNewRole->sRelation = sprintf(',%s,', $oNewRole->iAutoID);
+        }
+
+        if(! $oNewRole->save()) {
+            return Response::exceptionMobi(new MobiException('UPDATE_ERROR'));
         }
 
         return Response::mobi([]);
@@ -142,6 +182,15 @@ class CommonRoleController extends Controller
             return Response::exceptionMobi(new MobiException('DELETE_ERROR'));
         }
         return Response::mobi([]);
+    }
+
+    public function getRoleTree(Request $oRequest)
+    {
+        $aFieldValue = $this->validate($oRequest, [
+            'iRoleType' => 'required|integer|min:1',
+            'iRoleID' => 'integer|min:0',
+        ]);
+        return Response::mobi(CommonRoleModules::getRoleTree($aFieldValue['iRoleType'], array_get($aFieldValue, 'iRoleID', 0)));
     }
 
 }

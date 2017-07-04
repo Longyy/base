@@ -24,7 +24,12 @@
                                 <form  id="searchForm">
                                     <div class="form-inline" role="form">
                                         <div class="form-group">
-                                            <input name="sName" class="form-control input-sm " type="text" placeholder="名称">
+                                            <select name="iType" required class="form-control m-t">
+                                                <option value="">--请选择--</option>
+                                                @foreach($data['role_type'] as $key => $val)
+                                                    <option value="{{$key}}">{{$val}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="form-group">
                                             <button id="ok" type="submit" class="btn btn-sm btn-default">搜索</button>
@@ -33,7 +38,7 @@
                                 </form>
                             </div>
                             <div class="col-sm-4 text-right">
-                                <a href="#" onclick="gotoCreate();" class="btn btn-primary  btn-sm">新增</a>
+                                <a href="/backend/perm/role/create" class="btn btn-primary  btn-sm">新增</a>
                                 <a href="#" class="btn btn-danger btn-sm delete">删除</a>
                             </div>
                         </div>
@@ -54,6 +59,8 @@
     <link rel="stylesheet" href="/admin/js/datetimepicker/bootstrap-datetimepicker.min.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/bootstraptable/bootstrap-table.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/jquery-confirm/jquery-confirm.css" type="text/css" cache="false">
+    <link rel="stylesheet" href="/admin/js/bootstraptable/tree-columns/bootstrap-table-tree-column.css" type="text/css" cache="false">
+
 @endsection
 
 @section('before-js')
@@ -69,6 +76,7 @@
     <!-- datatable -->
     <script src="/admin/js/bootstraptable/bootstrap-table.js" cache="false"></script>
     <script src="/admin/js/bootstraptable/bootstrap-table-zh-CN.js" cache="false"></script>
+    <script src="/admin/js/bootstraptable/tree-columns/bootstrap-table-tree-column.js" cache="false"></script>
     <script src="/admin/js/jquery-confirm/jquery-confirm.js" cache="false"></script>
     <script src="/admin/js/custom/common.js"></script>
 
@@ -88,23 +96,18 @@
                 title: "ID",
                 sortable: true
             }, {
+                field: "iParentID",
+                title: "PID",
+            }, {
                 field: "sName",
                 title: "角色名称",
-                sortable: true
-            }, {
-                field: "iParentID",
-                title: "父级角色"
             }, {
                 field: "iLevel",
                 title: "层级",
                 sortable: true
             }, {
-                field: "sRelation",
-                title: "继承关系",
-                sortable: true
-            }, {
-                field: "iType",
-                title: "角色类型",
+                field: "sType",
+                title: "类型",
                 sortable: true
             }, {
                 field: "iCreateTime",
@@ -138,7 +141,8 @@
                 ajax: "ajaxRequestData",
                 dataField: "rows",
                 totalFile: "total",
-                columns: tableColumns
+                columns: tableColumns,
+                treeShowField: 'sName'
             });
         });
         // 数据加载规则
@@ -269,11 +273,7 @@
             });
         });
 
-        function gotoCreate()
-        {
-            goTo(tableNewUrl);
-            return false;
-        }
+
 
     </script>
 @endsection
