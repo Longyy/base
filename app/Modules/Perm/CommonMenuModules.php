@@ -44,4 +44,40 @@ class CommonMenuModules
     {
         return self::$aMenuTypeMap;
     }
+
+    public static function getMenuTree($iType, $iBusinessID, $iCheckID = 0)
+    {
+        $aMenuInfo = CommonMenu::select('iAutoID', 'iParentID', 'iLevel', 'sName')
+            ->where('iType', $iType)
+            ->where('iBusinessType', $iBusinessID)
+            ->orderBy('iLevel', 'asc')
+            ->orderBy('iAutoID', 'asc')
+            ->get()
+            ->toArray();
+        return self::formatMenuTree($aMenuInfo, [], 1, 0, $iCheckID);
+    }
+
+    public static function formatMenuTree($aData, $aRes, $iLevel, $iParentID, $iCheckID = 0)
+    {
+        $aData1 = $aData;
+        foreach($aData as $aVal) {
+            $aTree = [];
+            if($aVal['iLevel'] == $iLevel && $aVal['iParentID'] == $iParentID) {
+                $aTree['text'] = $aVal['sName'];
+                $aTree['id'] = $aVal['iAutoID'];
+                if($iCheckID && $aVal['iAutoID'] == $iCheckID) {
+                    $aTree['state']['checked'] = true;
+                    $iCheckID = 0;
+                }
+                foreach($aData1 as $aVVal) {
+                    if($aVVal['iLevel'] == ($iLevel + 1) && $aVVal['iParentID'] == $aVal['iAutoID']) {
+                        $aTree['nodes'] = self::formatMenuTree($aData, [], $iLevel + 1, $aVal['iAutoID'], $iCheckID);
+                        $aTree['tags'] = [count($aTree['nodes'])];
+                    }
+                }
+                $aRes[] = $aTree;
+            }
+        }
+        return $aRes;
+    }
 }

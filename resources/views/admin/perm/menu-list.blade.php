@@ -33,7 +33,7 @@
                                 </form>
                             </div>
                             <div class="col-sm-4 text-right">
-                                <a href="#" onclick="gotoCreate();" class="btn btn-primary  btn-sm">新增</a>
+                                <a href="/backend/perm/menu/create" class="btn btn-primary  btn-sm">新增</a>
                                 <a href="#" class="btn btn-danger btn-sm delete">删除</a>
                             </div>
                         </div>
@@ -54,6 +54,8 @@
     <link rel="stylesheet" href="/admin/js/datetimepicker/bootstrap-datetimepicker.min.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/bootstraptable/bootstrap-table.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/jquery-confirm/jquery-confirm.css" type="text/css" cache="false">
+    <link rel="stylesheet" href="/admin/js/bootstraptable/tree-columns/bootstrap-table-tree-column.css" type="text/css" cache="false">
+
 @endsection
 
 @section('before-js')
@@ -70,6 +72,8 @@
     <script src="/admin/js/bootstraptable/bootstrap-table.js" cache="false"></script>
     <script src="/admin/js/bootstraptable/bootstrap-table-zh-CN.js" cache="false"></script>
     <script src="/admin/js/jquery-confirm/jquery-confirm.js" cache="false"></script>
+    <script src="/admin/js/bootstraptable/tree-columns/bootstrap-table-tree-column.js" cache="false"></script>
+
     <script src="/admin/js/custom/common.js"></script>
 
     <script>
@@ -86,17 +90,14 @@
             }, {
                 field: "iAutoID",
                 title: "ID",
-                sortable: true
-            },{
-                field: "iParentID",
-                title: "PID"
+                sortable: true,
+                switchable: false
             },{
                 field: "sName",
                 title: "菜单名称",
-                sortable: true
-            }, {
-                field: "iLevel",
-                title: "层级"
+                width: "20%",
+                sortable: true,
+                switchable: false
             }, {
                 field: "sType",
                 title: "类型"
@@ -104,15 +105,18 @@
                 field: "sBusinessType",
                 title: "业务类型",
                 sortable: true
-            },{
-                field: "sAndroidPath",
-                title: "Android路径"
+//            },{
+//                field: "sAndroidPath",
+//                title: "Android路径"
+//            }, {
+//                field: "sIosPath",
+//                title: "IOS路径"
+//            }, {
+//                field: "sH5Path",
+//                title: "H5路径"
             }, {
-                field: "sIosPath",
-                title: "IOS路径"
-            }, {
-                field: "sH5Path",
-                title: "H5路径"
+                field: "iGroup",
+                title: "分组"
             }, {
                 field: "sWebPath",
                 title: "Web路径"
@@ -121,19 +125,23 @@
                 title: "菜单参数"
             }, {
                 field: "iJumpType",
-                title: "跳转类型"
+                title: "跳转类型",
+                formatter: function(value,row,index){return value==1 ? "内页" : "新页";}
             }, {
                 field: "sRealUrl",
                 title: "真实地址"
             }, {
                 field: "iLeaf",
-                title: "是否叶子结点"
+                title: "是否叶子结点",
+                formatter: function(value,row,index){return value==1 ? "否" : "是";}
             }, {
                 field: "iShow",
-                title: "是否有效"
+                title: "是否有效",
+                formatter: function(value,row,index){return value==1 ? "否" : "是";}
             }, {
                 field: "iDisplay",
-                title: "是否展示"
+                title: "是否展示",
+                formatter: function(value,row,index){return value==1 ? "是" : "否";}
             }, {
                 field: "sIcon",
                 title: "IconFont"
@@ -144,17 +152,20 @@
             }, {
                 field: "iHome",
                 title: "是否是首页",
-                sortable: true
+                formatter: function(value,row,index){return value==2 ? "是" : "否";}
             }, {
                 field: "iCreateTime",
                 title: "创建时间",
-                sortable: true
+                sortable: true,
+                visible: false
             }, {
                 field: "iUpdateTime",
-                title: "更新时间"
+                title: "更新时间",
+                visible: false
             }, {
                 title: "操作",
-                formatter: "addActionBtn"
+                formatter: "addActionBtn",
+                switchable: false
             }
         ];
         // 定义搜索规则
@@ -177,7 +188,9 @@
                 ajax: "ajaxRequestData",
                 dataField: "rows",
                 totalFile: "total",
-                columns: tableColumns
+                columns: tableColumns,
+                treeShowField: 'sName',
+                showColumns: true
             });
         });
         // 数据加载规则

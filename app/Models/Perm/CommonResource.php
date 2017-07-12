@@ -18,7 +18,7 @@ class CommonResource extends Model
         'iShow', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
     protected $orderable  = ['*'];
     protected $rangeable  = ['*'];
-    protected $columnable = [ 'sName', 'iType', 'iBusinessType', 'sControllerName', 'sFunctionName', 'sPath',
+    protected $columnable = [ 'iAutoID', 'sName', 'iType', 'iBusinessType', 'sControllerName', 'sFunctionName', 'sPath',
         'iShow', 'iCreateTime', 'iUpdateTime', 'iDeleteTime', 'iStatus'];
 
     protected $table = 'common_resource';

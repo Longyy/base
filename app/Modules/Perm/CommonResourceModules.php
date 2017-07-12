@@ -18,6 +18,16 @@ class CommonResourceModules
 
     const BUSINESS_TYPE_WEB = 1;
 
+    private static $aResourceType = [
+        1 => '命名空间',
+        2 => '路径',
+    ];
+
+    private static $aResourceBusinessType = [
+        1 => '通用后台管理',
+        2 => 'c端业务',
+    ];
+
     public static function getResourceByController($sController, $sAction = '')
     {
         $oResource = CommonResource::where('iType', self::SOURCE_TYPE_NAMESPACE )
@@ -44,5 +54,15 @@ class CommonResourceModules
                 break;
         }
         return $iType;
+    }
+
+    public static function getResourceType()
+    {
+        return self::$aResourceType;
+    }
+
+    public static function getResourceBusinessType()
+    {
+        return self::$aResourceBusinessType;
     }
 }

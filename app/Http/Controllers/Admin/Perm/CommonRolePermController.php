@@ -8,7 +8,11 @@ namespace App\Http\Controllers\Admin\Perm;
  */
 
 use App\Http\Controllers\RootController as Controller;
+use App\Http\Helpers\Tools;
+use App\Models\Perm\CommonResource;
+use App\Models\Perm\CommonRole;
 use App\Models\Perm\CommonRolePerm;
+use App\Modules\Perm\PermModules;
 use Illuminate\Http\Request;
 use App\Modules\Perm\CommonRolePermModules;
 use Estate\Exceptions\MobiException;
@@ -44,11 +48,27 @@ class CommonRolePermController extends Controller
             CommonRolePerm::orders(),
             CommonRolePerm::ranges()
         )->toArray();
-//        $aGroupType = CommonRolePermModules::getGroupType();
-//        $aResult['data'] = array_map(function($aVal) use ($aGroupType) {
-//            $aVal['sType'] = isset($aGroupType[$aVal['iType']]) ? $aGroupType[$aVal['iType']] : '';
-//            return $aVal;
-//        }, $aResult['data']);
+        $aRoleID = array_unique(array_column($aResult['data'], 'iRoleID'));
+        $aResourceID = array_unique(array_column($aResult['data'], 'iResourceID'));
+
+        $aRole = CommonRole::whereIn('iAutoID', $aRoleID)->select('iAutoID', 'sName')->get()->toArray();
+        $aResource = CommonResource::whereIn('iAutoID', $aResourceID)->select('iAutoID', 'sName')->get()->toArray();
+
+        $aRole = Tools::useFieldAsKey($aRole, 'iAutoID');
+        $aResource = Tools::useFieldAsKey($aResource, 'iAutoID');
+        $aPermInfo = PermModules::$aPermIntroMap;
+        $aResult['data'] = array_map(function($aVal) use ($aRole, $aResource, $aPermInfo) {
+            $aVal['sRoleName'] = isset($aRole[$aVal['iRoleID']]) ? $aRole[$aVal['iRoleID']]['sName'] : '';
+            $aVal['sResourceName'] = isset($aResource[$aVal['iResourceID']]) ? $aResource[$aVal['iResourceID']]['sName'] : '';
+            $aPerm = [];
+            foreach($aPermInfo as $iKey => $sVal) {
+                if(PermModules::hasPerm($aVal['iPerm'], $iKey)) {
+                    $aPerm[] = $sVal;
+                }
+            }
+            $aVal['sPerm'] = implode(',', $aPerm);
+            return $aVal;
+        }, $aResult['data']);
 
         return Response::mobi($aResult);
     }

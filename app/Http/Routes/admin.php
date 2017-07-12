@@ -80,6 +80,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'backend', 'middleware' => ['a
         $oRouter->get('menu/create', 'CommonMenuController@create');
         $oRouter->post('menu/save', 'CommonMenuController@save');
         $oRouter->post('menu/delete', 'CommonMenuController@delete');
+        $oRouter->get('menu/get_menu_tree', 'CommonMenuController@getMenuTree');
+
 
         // 角色权限管理
         $oRouter->get('role_perm/list', 'CommonRolePermController@index');

@@ -92,10 +92,10 @@
                 title: "资源名称",
                 sortable: true
             }, {
-                field: "iType",
+                field: "sType",
                 title: "资源类型"
             }, {
-                field: "iBusinessType",
+                field: "sBusinessType",
                 title: "业务类型",
                 sortable: true
             }, {

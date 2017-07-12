@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Admin\Perm;
 use App\Http\Controllers\RootController as Controller;
 use App\Models\Perm\CommonMenu;
 use App\Modules\Perm\CommonBusinessTypeModules;
+use App\Modules\Perm\CommonUserGroupModules;
 use Illuminate\Http\Request;
 use App\Modules\Perm\CommonMenuModules;
 use Estate\Exceptions\MobiException;
@@ -51,10 +52,9 @@ class CommonMenuController extends Controller
         $aResult['data'] = array_map(function($aVal) use ($aMenuType, $aBusinessType) {
             $aVal['sType'] = isset($aMenuType[$aVal['iType']]) ? $aMenuType[$aVal['iType']] : '';
             $aVal['sBusinessType'] = isset($aBusinessType[$aVal['iBusinessType']]) ? $aBusinessType[$aVal['iBusinessType']]['sName'] : '';
-
             return $aVal;
-
         }, $aResult['data']);
+        $aResult['data'] = CommonUserGroupModules::buildGroupTree($aResult['data'], [], 1, 0);
 
         return Response::mobi($aResult);
     }
@@ -71,12 +71,12 @@ class CommonMenuController extends Controller
         ]);
 
         $oCommonMenu = CommonMenu::find($aFieldValue['iAutoID']);
-        $aGroupType = CommonMenuModules::getGroupType();
 
-        return view('admin.perm.user-group-edit', [
+        return view('admin.perm.menu-edit', [
             'data' => [
-                'user_group' => $oCommonMenu->toArray(),
-                'group_type' => $aGroupType,
+                'menu' => $oCommonMenu->toArray(),
+                'menu_type' => CommonMenuModules::getMenuType(),
+                'business_type' => CommonBusinessTypeModules::getBusinessType(),
             ]]);
     }
 
@@ -90,16 +90,40 @@ class CommonMenuController extends Controller
         $aFieldValue = $this->validate($oRequest, [
             'iAutoID' => 'required|integer',
             'sName' => 'required|string|min:1',
-            'iType' => 'required|integer',
+            'iType' => 'integer',
+            'iBusinessType' => 'integer',
+            'iParentID' => 'integer',
+            'sWebPath' => 'string',
+            'sParam' => 'string',
+            'iJumpType' => 'integer',
+            'sRealUrl' => 'string',
+            'iLeaf' => 'integer',
+            'iShow' => 'integer',
+            'iDisplay' => 'integer',
+            'sIcon' => 'string',
+            'iOrder' => 'integer',
+            'iHome' => 'integer',
         ]);
 
-        $oCommonMenu = CommonMenu::find($aFieldValue['iAutoID']);
-        Log::info('update ', [$aFieldValue]);
-        if(! $oCommonMenu->update($aFieldValue)) {
-            Log::info('update result ', [false]);
+        if(is_null($oMenu = CommonMenu::find($aFieldValue['iAutoID']))) {
+            return Response::exceptionMobi(new MobiException('MENU_NOT_EXIST'));
+        }
 
+        if($aFieldValue['iParentID']) {
+            if(is_null( $oParentMenu = CommonMenu::find($aFieldValue['iParentID']))) {
+                return Response::exceptionMobi(new MobiException('PARENT_MENU_NOT_EXIST'));
+            }
+            $aFieldValue['iLevel'] = $oParentMenu->iLevel + 1;
+            $aFieldValue['sRelation'] = sprintf('%s%s,', $oParentMenu->sRelation, $aFieldValue['iAutoID']);
+        } else {
+            $aFieldValue['iLevel'] = 1;
+            $aFieldValue['sRelation'] = sprintf(',%s,', $oMenu->iAutoID);
+        }
+
+        if(! $oMenu->update($aFieldValue)) {
             return Response::exceptionMobi(new MobiException('UPDATE_ERROR'));
         }
+
         return Response::mobi([]);
     }
 
@@ -110,9 +134,10 @@ class CommonMenuController extends Controller
      */
     public function create(Request $oRequest)
     {
-        return view('admin.perm.user-group-add', [
+        return view('admin.perm.menu-add', [
             'data' => [
-                'group_type' => CommonMenuModules::getGroupType(),
+                'menu_type' => CommonMenuModules::getMenuType(),
+                'business_type' => CommonBusinessTypeModules::getBusinessType(),
             ]]);
     }
 
@@ -124,11 +149,31 @@ class CommonMenuController extends Controller
     public function save(Request $oRequest)
     {
         $aFieldValue = $this->validate($oRequest, [
-            'sName' => 'required|string|min:1|unique:common_CommonMenu,sName',
+            'sName' => 'required|string|min:1',
             'iType' => 'integer',
+            'iBusinessType' => 'integer',
+            'iParentID' => 'integer',
+            'sWebPath' => 'string',
+            'sParam' => 'string',
+            'iJumpType' => 'integer',
+            'sRealUrl' => 'string',
+            'iLeaf' => 'integer',
+            'iShow' => 'integer',
+            'iDisplay' => 'integer',
+            'sIcon' => 'string',
+            'iOrder' => 'integer',
+            'iHome' => 'integer',
         ]);
-        if(! CommonMenu::create($aFieldValue)) {
-            return Response::exceptionMobi(new MobiException('CREATE_ERROR'));
+
+        if(! is_null( $oMenu = CommonMenu::find($aFieldValue['iParentID']))) {
+            $aFieldValue['iLevel'] = $oMenu->iLevel + 1;
+            if(! ($oNewGroup = CommonMenu::create($aFieldValue))) {
+                return Response::exceptionMobi(new MobiException('CREATE_ERROR'));
+            }
+            $oNewGroup->sRelation = sprintf('%s%s,', $oMenu->sRelation, $oNewGroup->iAutoID);
+            if(! $oNewGroup->save()) {
+                return Response::exceptionMobi(new MobiException('UPDATE_ERROR'));
+            }
         }
 
         return Response::mobi([]);
@@ -148,6 +193,22 @@ class CommonMenuController extends Controller
             return Response::exceptionMobi(new MobiException('DELETE_ERROR'));
         }
         return Response::mobi([]);
+    }
+
+    public function getMenuTree(Request $oRequest)
+    {
+        $aFieldValue = $this->validate($oRequest, [
+            'iType' => 'required|integer|min:1',
+            'iBusinessType' => 'required|integer|min:1',
+            'iParentID' => 'integer|min:1',
+        ]);
+        return Response::mobi(
+            CommonMenuModules::getMenuTree(
+                $aFieldValue['iType'],
+                $aFieldValue['iBusinessType'],
+                array_get($aFieldValue, 'iParentID', 0)
+            )
+        );
     }
 
 }

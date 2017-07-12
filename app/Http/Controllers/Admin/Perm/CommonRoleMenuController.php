@@ -8,6 +8,9 @@ namespace App\Http\Controllers\Admin\Perm;
  */
 
 use App\Http\Controllers\RootController as Controller;
+use App\Http\Helpers\Tools;
+use App\Models\Perm\CommonMenu;
+use App\Models\Perm\CommonRole;
 use App\Models\Perm\CommonRoleMenu;
 use Illuminate\Http\Request;
 use App\Modules\Perm\CommonRoleMenuModules;
@@ -44,11 +47,17 @@ class CommonRoleMenuController extends Controller
             CommonRoleMenu::orders(),
             CommonRoleMenu::ranges()
         )->toArray();
-//        $aGroupType = CommonRoleMenuModules::getGroupType();
-//        $aResult['data'] = array_map(function($aVal) use ($aGroupType) {
-//            $aVal['sType'] = isset($aGroupType[$aVal['iType']]) ? $aGroupType[$aVal['iType']] : '';
-//            return $aVal;
-//        }, $aResult['data']);
+        $aRoleID = array_unique(array_column($aResult['data'], 'iRoleID'));
+        $aMenuID = array_unique(array_column($aResult['data'], 'iMenuID'));
+        $aRole = CommonRole::whereIn('iAutoID', $aRoleID)->select('iAutoID', 'sName')->get()->toArray();
+        $aMenu = CommonMenu::whereIn('iAutoID', $aMenuID)->select('iAutoID', 'sName')->get()->toArray();
+        $aRole = Tools::useFieldAsKey($aRole, 'iAutoID');
+        $aMenu = Tools::useFieldAsKey($aMenu, 'iAutoID');
+        $aResult['data'] = array_map(function($aVal) use ($aRole, $aMenu) {
+            $aVal['sRoleName'] = isset($aRole[$aVal['iRoleID']]) ? $aRole[$aVal['iRoleID']]['sName'] : '';
+            $aVal['sMenuName'] = isset($aMenu[$aVal['iMenuID']]) ? $aMenu[$aVal['iMenuID']]['sName'] : '';
+            return $aVal;
+        }, $aResult['data']);
 
         return Response::mobi($aResult);
     }

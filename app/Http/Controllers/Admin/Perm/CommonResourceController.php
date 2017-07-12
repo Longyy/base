@@ -44,11 +44,13 @@ class CommonResourceController extends Controller
             CommonResource::orders(),
             CommonResource::ranges()
         )->toArray();
-//        $aGroupType = CommonResourceModules::getGroupType();
-//        $aResult['data'] = array_map(function($aVal) use ($aGroupType) {
-//            $aVal['sType'] = isset($aGroupType[$aVal['iType']]) ? $aGroupType[$aVal['iType']] : '';
-//            return $aVal;
-//        }, $aResult['data']);
+        $aResourceType = CommonResourceModules::getResourceType();
+        $aResourceBusinessType = CommonResourceModules::getResourceBusinessType();
+        $aResult['data'] = array_map(function($aVal) use ($aResourceType, $aResourceBusinessType) {
+            $aVal['sType'] = isset($aResourceType[$aVal['iType']]) ? $aResourceType[$aVal['iType']] : '';
+            $aVal['sBusinessType'] = isset($aResourceBusinessType[$aVal['iBusinessType']]) ? $aResourceBusinessType[$aVal['iBusinessType']] : '';
+            return $aVal;
+        }, $aResult['data']);
 
         return Response::mobi($aResult);
     }
@@ -65,12 +67,14 @@ class CommonResourceController extends Controller
         ]);
 
         $oCommonResource = CommonResource::find($aFieldValue['iAutoID']);
-        $aGroupType = CommonResourceModules::getGroupType();
+        $aResourceType = CommonResourceModules::getResourceType();
+        $aResourceBusinessType = CommonResourceModules::getResourceBusinessType();
 
-        return view('admin.perm.user-group-edit', [
+        return view('admin.perm.resource-edit', [
             'data' => [
-                'user_group' => $oCommonResource->toArray(),
-                'group_type' => $aGroupType,
+                'resource' => $oCommonResource->toArray(),
+                'resource_type' => $aResourceType,
+                'resource_business_type' => $aResourceBusinessType,
             ]]);
     }
 
@@ -85,13 +89,15 @@ class CommonResourceController extends Controller
             'iAutoID' => 'required|integer',
             'sName' => 'required|string|min:1',
             'iType' => 'required|integer',
+            'iBusinessType' => 'integer',
+            'sControllerName' => 'string',
+            'sFunctionName' => 'string',
+            'sPath' => 'string',
+            'iShow' => 'integer',
         ]);
 
         $oCommonResource = CommonResource::find($aFieldValue['iAutoID']);
-        Log::info('update ', [$aFieldValue]);
         if(! $oCommonResource->update($aFieldValue)) {
-            Log::info('update result ', [false]);
-
             return Response::exceptionMobi(new MobiException('UPDATE_ERROR'));
         }
         return Response::mobi([]);
@@ -104,9 +110,12 @@ class CommonResourceController extends Controller
      */
     public function create(Request $oRequest)
     {
-        return view('admin.perm.user-group-add', [
+        $aResourceType = CommonResourceModules::getResourceType();
+        $aResourceBusinessType = CommonResourceModules::getResourceBusinessType();
+        return view('admin.perm.resource-add', [
             'data' => [
-                'group_type' => CommonResourceModules::getGroupType(),
+                'resource_type' => $aResourceType,
+                'resource_business_type' => $aResourceBusinessType,
             ]]);
     }
 
@@ -118,8 +127,13 @@ class CommonResourceController extends Controller
     public function save(Request $oRequest)
     {
         $aFieldValue = $this->validate($oRequest, [
-            'sName' => 'required|string|min:1|unique:common_CommonResource,sName',
-            'iType' => 'integer',
+            'sName' => 'required|string|min:1|unique:common_resource,sName',
+            'iType' => 'required|integer',
+            'iBusinessType' => 'integer',
+            'sControllerName' => 'string',
+            'sFunctionName' => 'string',
+            'sPath' => 'string',
+            'iShow' => 'integer',
         ]);
         if(! CommonResource::create($aFieldValue)) {
             return Response::exceptionMobi(new MobiException('CREATE_ERROR'));

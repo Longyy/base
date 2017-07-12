@@ -88,11 +88,11 @@
                 title: "ID",
                 sortable: true
             }, {
-                field: "iRoleID",
+                field: "sRoleName",
                 title: "角色名称",
                 sortable: true
             }, {
-                field: "iMenuID",
+                field: "sMenuName",
                 title: "菜单名称"
             }, {
                 field: "iCreateTime",

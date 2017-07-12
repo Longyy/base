@@ -33,6 +33,12 @@ class PermModules
         'update'  => self::PERM_TYPE_U,
         'destroy' => self::PERM_TYPE_D,
     ];
+    public static $aPermIntroMap = [
+        self::PERM_TYPE_R => '查看',
+        self::PERM_TYPE_C => '新增',
+        self::PERM_TYPE_U => '修改',
+        self::PERM_TYPE_D => '删除',
+    ];
     const PERM_TYPE_R = 1; // 0001
     const PERM_TYPE_C = 2; // 0010
     const PERM_TYPE_U = 4; // 0100

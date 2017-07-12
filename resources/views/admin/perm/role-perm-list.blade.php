@@ -15,7 +15,7 @@
 
                 <section class="panel panel-default panel-rounded4">
                     <div class="panel-heading b-dark b-b bottom20">
-                        <h3 class="panel-title">角色权限管理</h3>
+                        <h3 class="panel-title">角色资源管理</h3>
                     </div>
 
                     <div id="toolbar">
@@ -88,79 +88,15 @@
                 title: "ID",
                 sortable: true
             }, {
-                field: "sName",
-                title: "菜单名称",
+                field: "sRoleName",
+                title: "角色名称",
                 sortable: true
             }, {
-                field: "iType",
-                title: "菜单类型"
+                field: "sResourceName",
+                title: "资源名称"
             }, {
-                field: "iBusinessType",
-                title: "业务类型",
-                sortable: true
-            }, {
-                field: "iLevel",
-                title: "层级",
-                sortable: true
-            }, {
-                field: "iParentID",
-                title: "父级菜单名",
-                sortable: true
-            }, {
-                field: "sRelation",
-                title: "继承路径",
-                sortable: true
-            }, {
-                field: "sAndroidPath",
-                title: "Android路径",
-                sortable: true
-            }, {
-                field: "sIosPath",
-                title: "IOS路径",
-                sortable: true
-            }, {
-                field: "sH5Path",
-                title: "H5路径",
-                sortable: true
-            }, {
-                field: "sWebPath",
-                title: "Web路径",
-                sortable: true
-            }, {
-                field: "sParam",
-                title: "菜单参数",
-                sortable: true
-            }, {
-                field: "iJumpType",
-                title: "跳转类型",
-                sortable: true
-            }, {
-                field: "sRealUrl",
-                title: "真实地址",
-                sortable: true
-            }, {
-                field: "iLeaf",
-                title: "是否叶子结点",
-                sortable: true
-            }, {
-                field: "iShow",
-                title: "是否有效",
-                sortable: true
-            }, {
-                field: "iDisplay",
-                title: "是否展示",
-                sortable: true
-            }, {
-                field: "sIcon",
-                title: "IconFont",
-                sortable: true
-            }, {
-                field: "iOrder",
-                title: "排序",
-                sortable: true
-            }, {
-                field: "iHome",
-                title: "是否是首页",
+                field: "sPerm",
+                title: "权限",
                 sortable: true
             }, {
                 field: "iCreateTime",
