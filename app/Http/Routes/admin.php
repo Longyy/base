@@ -5,6 +5,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'backend', 'middleware' => ['a
     $oRouter->get('/', 'IndexController@index');
     $oRouter->post('/change_group', 'IndexController@changeGroup');
 
+    // 用户管理
+    $oRouter->get('user/list', 'AdminUserController@index');
+    $oRouter->get('user/get_list', 'AdminUserController@getList');
+
     // 权限管理
     $oRouter->group(['namespace' => 'Perm', 'prefix' => 'perm'], function($oRouter){
 
