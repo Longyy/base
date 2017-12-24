@@ -5,21 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aee89d9f-da29-4573-8263-7fbd05e12ab7" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/perm/role-menu-add.blade.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/perm/role-menu-edit.blade.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/perm/user-add.blade.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/vendor/paf/estate" afterPath="$PROJECT_DIR$/vendor/paf/estate" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/base.iml" afterPath="$PROJECT_DIR$/.idea/base.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/AdminUserController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/AdminUserController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/Perm/CommonRoleMenuController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/Perm/CommonRoleMenuController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/Perm/CommonUserGroupController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/Perm/CommonUserGroupController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Routes/admin.php" afterPath="$PROJECT_DIR$/app/Http/Routes/admin.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Modules/Auth/CustomAuth.php" afterPath="$PROJECT_DIR$/app/Modules/Auth/CustomAuth.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Modules/Auth/UserModules.php" afterPath="$PROJECT_DIR$/app/Modules/Auth/UserModules.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/perm/role-menu-list.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/perm/role-menu-list.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/perm/user-group-edit.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/perm/user-group-edit.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/perm/user-group-role-list.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/perm/user-group-role-list.blade.php" />
     </list>
     <ignored path="base.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -74,8 +61,8 @@
       <file leaf-file-name="PermModules.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Modules/Perm/PermModules.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="361">
-              <caret line="118" column="20" lean-forward="true" selection-start-line="118" selection-start-column="20" selection-end-line="118" selection-end-column="20" />
+            <state relative-caret-position="323">
+              <caret line="116" column="11" lean-forward="false" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -263,7 +250,6 @@
         <option value="$PROJECT_DIR$/resources/views/admin/perm/resource-edit.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/Perm/CommonResourceController.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/perm/resource-add.blade.php" />
-        <option value="$PROJECT_DIR$/app/Modules/Perm/PermModules.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/Perm/CommonRolePermController.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/perm/role-perm-list.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/perm/role-perm-edit.blade.php" />
@@ -290,6 +276,7 @@
         <option value="$PROJECT_DIR$/resources/views/admin/perm/role-menu-edit.blade.php" />
         <option value="$PROJECT_DIR$/app/Modules/Auth/CustomAuth.php" />
         <option value="$PROJECT_DIR$/app/Modules/Auth/UserModules.php" />
+        <option value="$PROJECT_DIR$/app/Modules/Perm/PermModules.php" />
       </list>
     </option>
   </component>
@@ -486,46 +473,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="base" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="base" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Modules" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Perm" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="base" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="base" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Modules" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -768,12 +715,12 @@
       <workItem from="1513559469668" duration="860000" />
       <workItem from="1513645882096" duration="1269000" />
       <workItem from="1513905733290" duration="1197000" />
-      <workItem from="1514079671955" duration="626000" />
+      <workItem from="1514079671955" duration="2278000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="675662000" />
+    <option name="totallyTimeSpent" value="677314000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -785,8 +732,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="1378" height="773" extended-state="1" />
-    <editor active="true" />
+    <frame x="-7" y="0" width="1378" height="773" extended-state="0" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24743778" sideWeight="0.5053111" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30837005" sideWeight="0.49468893" order="0" side_tool="false" content_ui="combo" />
@@ -795,7 +741,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32704404" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962063" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5341074" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.533052" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30484116" sideWeight="0.5062893" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1221,8 +1167,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Modules/Perm/PermModules.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="118" column="20" lean-forward="true" selection-start-line="118" selection-start-column="20" selection-end-line="118" selection-end-column="20" />
+        <state relative-caret-position="323">
+          <caret line="116" column="11" lean-forward="false" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
           <folding />
         </state>
       </provider>
