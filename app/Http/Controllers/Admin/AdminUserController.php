@@ -9,8 +9,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\RootController as Controller;
+use App\Models\Perm\CommonUserGroup;
 use App\Models\User;
 use App\Modules\Perm\CommonUserGroupModules;
+use App\Modules\Perm\UserGroupModules;
 use Illuminate\Http\Request;
 use Response;
 
@@ -48,5 +50,44 @@ class AdminUserController extends Controller
         }, $aResult['data']);
 
         return Response::mobi($aResult);
+    }
+
+    /**
+     * 新增页
+     * @param Request $oRequest
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function create(Request $oRequest)
+    {
+        return view('admin.perm.user-add', [
+            'data' => [
+                'group_type' => UserGroupModules::getGroupType(),
+            ]]);
+    }
+
+    /**
+     * 新增
+     * @param Request $oRequest
+     * @return mixed
+     */
+    public function save(Request $oRequest)
+    {
+        $aFieldValue = $this->validate($oRequest, [
+            'sName' => 'required|string|min:1',
+            'sMobile' => 'required|string|unique:user,sMobile',
+            'sEmail' => 'required|string',
+            'iGroupID' => 'integer|min:0',
+        ]);
+        if(! is_null( $oUserGroup = CommonUserGroup::find($aFieldValue['iGroupID']))) {
+            $aFieldValue['sGroupName'] = $oUserGroup->sName;
+        }
+        // 设置初始密码
+        $aFieldValue['sPassword'] = bcrypt('123456');
+
+        if(! ($oUser = User::create($aFieldValue))) {
+            return Response::exceptionMobi(new MobiException('CREATE_ERROR'));
+        }
+
+        return Response::mobi([]);
     }
 }

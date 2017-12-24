@@ -47,7 +47,7 @@ class CustomAuth implements Auth
         // session
         if(! ($aUser = UserModules::getSessionUser())) {
             // remember token
-            if(! ($aUser = UserModules::getRememberTokenUser())) {
+            if($aUser = UserModules::getRememberTokenUser()) {
                 // 设置用户组
                 $aUser = UserModules::initCurrentGroup($aUser);
                 // 恢复session
@@ -55,6 +55,7 @@ class CustomAuth implements Auth
                 // global token @todo
             }
         }
+
         return $aUser ?: [];
     }
 

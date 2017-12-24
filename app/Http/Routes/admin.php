@@ -8,6 +8,12 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'backend', 'middleware' => ['a
     // 用户管理
     $oRouter->get('user/list', 'AdminUserController@index');
     $oRouter->get('user/get_list', 'AdminUserController@getList');
+    $oRouter->get('user/edit', 'AdminUserController@edit');
+    $oRouter->post('user/update', 'AdminUserController@update');
+    $oRouter->get('user/create', 'AdminUserController@create');
+    $oRouter->post('user/save', 'AdminUserController@save');
+    $oRouter->post('user/delete', 'AdminUserController@delete');
+
 
     // 权限管理
     $oRouter->group(['namespace' => 'Perm', 'prefix' => 'perm'], function($oRouter){

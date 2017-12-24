@@ -3,10 +3,26 @@
 @section('content')
 
     <section id="content">
-        <section class="vbox">
+        <section class="hbox stretch">
 
-            <section class="scrollable wrapper">
+            <aside class="aside-md bg-white b-r stretch">
+                <section class="vbox">
+                    <header class="header wrapper b-b ">
+                        角色结构
+                        <select id="iType" onchange="getRoleTree();">
+                            <option value="">选择角色类型</option>
+                            @foreach($data['role_type'] as $key => $val)
+                                <option value="{{$key}}">{{$val}}</option>
+                            @endforeach
+                        </select>
+                    </header>
+                    <seciton>
+                        <div id="role_tree"></div>
+                    </seciton>
+                </section>
 
+            </aside>
+            <section class="scrollable wrapper stretch" style="padding:15px !important;">
                 <ul class="breadcrumb">
                     @foreach($aPageMenu['aBreadMenu'] as $menu)
                         <li class="@if($menu['iLevel'] == 3) active @endif"><a href="{{$menu['sUrl']}}">@if($menu['iLevel'] == 1) <i class="fa fa-home"></i> @endif  {{$menu['sName']}}</a></li>
@@ -39,14 +55,15 @@
                         </div>
 
                     </div>
-
                     <table id="table"></table>
+
 
                 </section>
             </section>
 
         </section>
-        <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+        <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a>
+    </section>
 
 @endsection
 
@@ -54,6 +71,8 @@
     <link rel="stylesheet" href="/admin/js/datetimepicker/bootstrap-datetimepicker.min.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/bootstraptable/bootstrap-table.css" type="text/css" cache="false">
     <link rel="stylesheet" href="/admin/js/jquery-confirm/jquery-confirm.css" type="text/css" cache="false">
+    <link rel="stylesheet" href="/admin/js/bootstraptreeview/bootstrap-treeview.css" type="text/css" cache="false">
+
 @endsection
 
 @section('before-js')
@@ -70,6 +89,7 @@
     <script src="/admin/js/bootstraptable/bootstrap-table.js" cache="false"></script>
     <script src="/admin/js/bootstraptable/bootstrap-table-zh-CN.js" cache="false"></script>
     <script src="/admin/js/jquery-confirm/jquery-confirm.js" cache="false"></script>
+    <script src="/admin/js/bootstraptreeview/bootstrap-treeview.js" cache="false"></script>
     <script src="/admin/js/custom/common.js"></script>
 
     <script>
@@ -189,6 +209,11 @@
             $.each($('#searchForm').serializeArray(), function(i, field) {
                 search[field.name] = field.value;
             });
+            // 添加iGroupID
+            var iRoleID = $('#role_tree').treeview('getSelected')[0].id;
+            if(iRoleID > 0) {
+                search['iRoleID'] = iRoleID;
+            }
             params.search = search;
             return params;
         }
@@ -261,6 +286,38 @@
         {
             goTo(tableNewUrl);
             return false;
+        }
+
+        function getRoleTree()
+        {
+            var val = $("#iType").val();
+            if(val > 0) {
+                $.getJSON('/backend/perm/role/get_role_tree?iRoleType=' + val, function(res) {
+                    if(res.code == 0) {
+                        $role_tree = $('#role_tree').treeview({
+                            levels: 1,
+                            color: "#428bca",
+                            borderColor: "#d9d9d9",
+                            showTags: false,
+                            showCheckbox: false,
+                            highlightSelected: true,
+                            data: res.data,
+                            onNodeChecked: function(event, node) {
+                                $('#parent_id').val(node.id);
+                            },
+                            onNodeSelected: function(event, node) {
+                                console.log(node);
+                                loadTableData(node.id);
+                            }
+                        });
+                    }
+
+                });
+            }
+        }
+
+        function loadTableData(nodeId) {
+            $table.bootstrapTable('refresh');
         }
 
     </script>

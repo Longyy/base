@@ -12,6 +12,8 @@ use App\Http\Helpers\Tools;
 use App\Models\Perm\CommonMenu;
 use App\Models\Perm\CommonRole;
 use App\Models\Perm\CommonRoleMenu;
+use App\Modules\Perm\CommonBusinessTypeModules;
+use App\Modules\Perm\CommonRoleModules;
 use Illuminate\Http\Request;
 use App\Modules\Perm\CommonRoleMenuModules;
 use Estate\Exceptions\MobiException;
@@ -27,7 +29,11 @@ class CommonRoleMenuController extends Controller
      */
     public function index(Request $oRequest)
     {
-        return view('admin.perm.role-menu-list');
+        return view('admin.perm.role-menu-list', [
+            'data' => [
+                'role_type' => CommonRoleModules::getRoleType(),
+            ]
+        ]);
     }
 
     /**
@@ -39,6 +45,7 @@ class CommonRoleMenuController extends Controller
     {
         $aFieldValue = $this->validate($oRequest, [
             'page_size' => 'integer|min:1',
+            'iRoleID' => 'integer|min:0',
         ]);
         $aResult = CommonRoleMenu::findAll(
             array_except($aFieldValue, ['page_size']),
@@ -74,12 +81,15 @@ class CommonRoleMenuController extends Controller
         ]);
 
         $oCommonRoleMenu = CommonRoleMenu::find($aFieldValue['iAutoID']);
-        $aGroupType = CommonRoleMenuModules::getGroupType();
+        $oCommonRole = CommonRole::find($oCommonRoleMenu->iRoleID);
+        $oCommonMenu = CommonMenu::find($oCommonRoleMenu->iMenuID);
 
-        return view('admin.perm.user-group-edit', [
+        return view('admin.perm.role-menu-edit', [
             'data' => [
-                'user_group' => $oCommonRoleMenu->toArray(),
-                'group_type' => $aGroupType,
+                'role' => $oCommonRole->toArray(),
+                'menu' => $oCommonMenu->toArray(),
+                'role_menu' => $oCommonRoleMenu->toArray(),
+                'business_type' => CommonBusinessTypeModules::getBusinessType(),
             ]]);
     }
 
@@ -92,15 +102,24 @@ class CommonRoleMenuController extends Controller
     {
         $aFieldValue = $this->validate($oRequest, [
             'iAutoID' => 'required|integer',
-            'sName' => 'required|string|min:1',
-            'iType' => 'required|integer',
+            'iRoleID' => 'required|integer',
+            'iMenuID' => 'required|integer',
         ]);
 
-        $oCommonRoleMenu = CommonRoleMenu::find($aFieldValue['iAutoID']);
-        Log::info('update ', [$aFieldValue]);
-        if(! $oCommonRoleMenu->update($aFieldValue)) {
-            Log::info('update result ', [false]);
+        if(is_null($oCommonRoleMenu = CommonRoleMenu::find($aFieldValue['iAutoID']))) {
+            return Response::exceptionMobi(new MobiException('RECORD_NOT_EXIST'));
+        }
 
+        $aCommonRoleMenu = $oCommonRoleMenu->toArray();
+        if($aFieldValue == array_only($aCommonRoleMenu, ['iAutoID', 'iRoleID', 'iMenuID'])) {
+            return Response::exceptionMobi(new MobiException('NOTHING_CHANGED'));
+        }
+
+        if(1 < CommonRoleMenu::where(array_except($aFieldValue, ['iAutoID']))->count()) {
+            return Response::exceptionMobi(new MobiException('REPLICATED_RECORD'));
+        }
+
+        if(! $oCommonRoleMenu->update($aFieldValue)) {
             return Response::exceptionMobi(new MobiException('UPDATE_ERROR'));
         }
         return Response::mobi([]);
@@ -113,9 +132,10 @@ class CommonRoleMenuController extends Controller
      */
     public function create(Request $oRequest)
     {
-        return view('admin.perm.user-group-add', [
+        return view('admin.perm.role-menu-add', [
             'data' => [
-                'group_type' => CommonRoleMenuModules::getGroupType(),
+                'role_type' => CommonRoleModules::getRoleType(),
+                'business_type' => CommonBusinessTypeModules::getBusinessType(),
             ]]);
     }
 
@@ -127,9 +147,12 @@ class CommonRoleMenuController extends Controller
     public function save(Request $oRequest)
     {
         $aFieldValue = $this->validate($oRequest, [
-            'sName' => 'required|string|min:1|unique:common_CommonRoleMenu,sName',
-            'iType' => 'integer',
+            'iRoleID' => 'required|integer',
+            'iMenuID' => 'required|integer',
         ]);
+        if(CommonRoleMenu::where($aFieldValue)->count()) {
+            return Response::exceptionMobi(new MobiException('RELATION_HAS_EXISTED'));
+        }
         if(! CommonRoleMenu::create($aFieldValue)) {
             return Response::exceptionMobi(new MobiException('CREATE_ERROR'));
         }

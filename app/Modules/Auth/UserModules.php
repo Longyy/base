@@ -13,6 +13,7 @@ use App\Models\User;
 use Estate\Exceptions\WebException;
 use Request;
 use Cookie;
+
 use Illuminate\Support\Str;
 use Log;
 
@@ -31,7 +32,7 @@ class UserModules
         // 用户名
         if($oUser = User::getUserByName($aParam['username'])) {
             // 密码
-            if(bcrypt($aParam['password']) != $oUser->sPassword) {
+            if(sha1($aParam['password']) === $oUser->sPassword) {
                 // 设置用户组信息
                 $aUser = $oUser->toArray();
                 $aUser = self::initCurrentGroup($aUser);
@@ -45,7 +46,6 @@ class UserModules
                     if($oUser->update(['sRememberToken' => $sRememberToken])) {
                         // 发送给客户端
                         Cookie::queue('remember_token', $sRememberToken, self::REMEMBER_EXPIRE_TIME);
-                        return true;
                     } else {
                         throw new WebException('REMEMBER_ERROR');
                     }
@@ -57,6 +57,7 @@ class UserModules
         } else {
             throw new WebException('USER_OR_PASSWORD_ERROR');
         }
+        return true;
     }
 
     /**
@@ -139,7 +140,7 @@ class UserModules
 
     public static function getRememberToken()
     {
-        return Request::cookie()->get(self::REMEMBER_TOKEN_NAME);
+        return Request::cookie(self::REMEMBER_TOKEN_NAME);
     }
 
     public static function updateUserCurrentGroup($iUserID, $mValue)

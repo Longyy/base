@@ -19,40 +19,42 @@
                 </ul>
 
 <form id="form" action="" method="post" data-parsley-validate>
-
-                <input type="hidden" name="iAutoID" value="{{$data['user_group']['iAutoID']}}"/>
-
                 <section class="panel panel-default panel-rounded4">
                     <div class="panel-heading b-dark b-b bottom20">
-                        <h3 class="panel-title">修改用户组</h3>
+                        <h3 class="panel-title">修改角色菜单</h3>
                     </div>
 
                     <div class="panel-body">
                         <div class="form-horizontal edit-form-width">
 
+                            <input type="hidden" name="iAutoID" value="{{$data['role_menu']['iAutoID']}}"/>
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">名称</label>
                                 <div class="col-sm-9">
-                                    <input type="text" name="sName" value="{{$data['user_group']['sName']}}" required class="form-control" placeholder="">
+                                    <input type="text" name="sName" value="{{$data['role']['sName']}}" required readonly class="form-control" placeholder="">
+                                    <input type="hidden" name="iRoleID" value="{{$data['role_menu']['iRoleID']}}"/>
+
                                 </div>
                             </div>
+
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">类型</label>
+                                <label class="col-sm-3 control-label">菜单类型</label>
                                 <div class="col-sm-9">
-                                    <select name="iType" required class="form-control m-t" id="iType" onchange="getUserGroupTree();">
+                                    <select name="iBusinessType" required class="form-control m-t" id="iBusinessType" onchange="getMenuTree();">
                                         <option value="">--请选择--</option>
-                                        @foreach($data['group_type'] as $key => $val)
-                                            <option value="{{$key}}" @if($key == $data['user_group']['iType'])selected @endif>{{$val}}</option>
+                                        @foreach($data['business_type'] as $key => $val)
+                                            <option value="{{$key}}" @if($key == $data['menu']['iBusinessType']) selected @endif>{{$val['sName']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <input type="hidden" id="parent_id" name="iParentID" value="{{$data['user_group']['iParentID']}}"/>
-                                <label class="col-sm-3 control-label">父级用户组</label>
+                                <input type="hidden" id="iMenuID" name="iMenuID" required value="{{$data['menu']['iAutoID']}}"/>
+                                <label class="col-sm-3 control-label">菜单</label>
                                 <div class="col-sm-9">
-                                    <div id="group-tree"></div>
+                                    <div id="menu_tree"></div>
                                 </div>
                             </div>
 
@@ -102,21 +104,20 @@
             $submit = $('#submit'),
             $span = $('#span'),
             $cancel = $('#cancel');
-        var $group_tree = null;
+        var $role_tree = null;
 
         function submitData()
         {
             $form = $('#form');
             var data = {
                 iAutoID: $form.find("input[name='iAutoID']").val(),
-                sName: $form.find("input[name='sName']").val(),
-                iType: $form.find("select[name='iType']").val(),
-                iParentID: $form.find("input[name='iParentID']").val()
+                iRoleID: $form.find("input[name='iRoleID']").val(),
+                iMenuID: $form.find("input[name='iMenuID']").val()
             };
             var resultInfo = {};
             $.ajax({
                 type: 'POST',
-                url: '/backend/perm/user_group/update',
+                url: '/backend/perm/role_menu/update',
                 cache: false,
                 async: false,
                 dataType: 'json',
@@ -168,23 +169,27 @@
             return false;
         });
 
-        function getUserGroupTree()
+        function getRoleTree()
         {
-            var val = $("#iType").val();
-            var iGroupID = $('#parent_id').val();
+            var val = $("#iRoleType").val();
+            var iRoleId = $('#role_id').val();
             if(val > 0) {
-                $.getJSON('/backend/perm/user_group/get_user_group_tree?iGroupType=' + val + '&iGroupID=' + iGroupID, function(res) {
+                $.getJSON('/backend/perm/user_group_role/get_role_tree?iRoleType=' + val, function(res) {
                     if(res.code == 0) {
-                        $group_tree = $('#group-tree').treeview({
+                        $role_tree = $('#role_tree').treeview({
                             levels: 1,
                             color: "#428bca",
                             borderColor: "#d9d9d9",
                             showTags: true,
                             showCheckbox: true,
                             highlightSelected: false,
+                            multiSelect: false,
                             data: res.data,
                             onNodeChecked: function(event, node) {
-                                $('#parent_id').val(node.id);
+                                $('#role_id').val(node.id);
+                            },
+                            onNodeUnchecked: function(event, node) {
+                                $('#role_id').val(0);
                             }
                         });
                     }
@@ -193,8 +198,36 @@
             }
         }
 
+        function getMenuTree()
+        {
+            var iType = 1; // 目前只取菜单
+            var iBusinessType = $("#iBusinessType").val();
+            var iMenuID = $("#iMenuID").val();
+            if(iType > 0 && iBusinessType > 0) {
+                $.getJSON('/backend/perm/menu/get_menu_tree?iType=' + iType + '&iBusinessType=' + iBusinessType + '&iParentID=' + iMenuID, function(res) {
+                    if(res.code == 0) {
+                        $('#menu_tree').treeview({
+                            levels: 1,
+                            color: "#428bca",
+                            borderColor: "#d9d9d9",
+                            showTags: true,
+                            showCheckbox: true,
+                            highlightSelected: false,
+                            data: res.data,
+                            onNodeChecked: function(event, node) {
+                                $('#iMenuID').val(node.id);
+                            }
+                        });
+                    }
+
+                });
+            }
+
+        }
+
         $(document).ready(function(){
-            getUserGroupTree();
+            getMenuTree();
         });
+
     </script>
 @endsection

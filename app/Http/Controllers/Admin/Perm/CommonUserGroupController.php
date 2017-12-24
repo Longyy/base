@@ -9,6 +9,7 @@ namespace App\Http\Controllers\Admin\Perm;
 
 use App\Http\Controllers\RootController as Controller;
 use App\Http\Helpers\Tools;
+use App\Models\User;
 use App\Modules\Perm\CommonUserGroupModules;
 use Illuminate\Http\Request;
 use App\Models\Perm\CommonUserGroup;
@@ -96,7 +97,6 @@ class CommonUserGroupController extends Controller
             'iParentID' => 'integer'
         ]);
         if(! is_null( $oUserGroup = CommonUserGroup::find($aFieldValue['iAutoID']))) {
-            Log::info('not null');
             $oUserGroup->iType = $aFieldValue['iType'];
             $oUserGroup->sName = trim($aFieldValue['sName']);
             if(array_get($aFieldValue, 'iParentID') > 0) {
@@ -114,6 +114,10 @@ class CommonUserGroupController extends Controller
                 $oUserGroup->sRelation = '';
             }
             if (!$oUserGroup->save()) {
+                return Response::exceptionMobi(new MobiException('UPDATE_ERROR'));
+            }
+            // 更新用户表中用户组名称
+            if(!User::where('iGroupID', $oUserGroup->iAutoID)->update(['sGroupName' => $oUserGroup->sName])) {
                 return Response::exceptionMobi(new MobiException('UPDATE_ERROR'));
             }
         } else {
